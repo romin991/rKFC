@@ -17,48 +17,64 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Background" translatesAutoresizingMaskIntoConstraints="NO" id="fZx-Q9-Ntf">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Background" translatesAutoresizingMaskIntoConstraints="NO" id="Op4-5Q-kvI">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="-400" y="0.0" width="800" height="800"/>
+                                </variation>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="Tdh-1q-nEV">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="204" id="sWz-Cd-nSL"/>
+                                    <constraint firstAttribute="width" constant="202" id="vjz-nE-cud"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="sWz-Cd-nSL"/>
+                                        <exclude reference="vjz-nE-cud"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="sWz-Cd-nSL"/>
+                                        <include reference="vjz-nE-cud"/>
+                                    </mask>
+                                </variation>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="fZx-Q9-Ntf" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="Co3-76-FAD"/>
-                            <constraint firstItem="fZx-Q9-Ntf" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="Pck-Lo-Qvx"/>
-                            <constraint firstItem="fZx-Q9-Ntf" firstAttribute="bottom" secondItem="xb3-aO-Qok" secondAttribute="top" id="SmB-nD-sIy"/>
-                            <constraint firstItem="Tdh-1q-nEV" firstAttribute="centerY" secondItem="fZx-Q9-Ntf" secondAttribute="centerY" id="f8r-CT-JA3"/>
-                            <constraint firstItem="fZx-Q9-Ntf" firstAttribute="centerX" secondItem="Tdh-1q-nEV" secondAttribute="centerX" id="ohe-z0-04O"/>
-                            <constraint firstAttribute="trailing" secondItem="fZx-Q9-Ntf" secondAttribute="trailing" id="zMB-ho-hrJ"/>
+                            <constraint firstItem="Tdh-1q-nEV" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="3KG-pJ-8bG"/>
+                            <constraint firstAttribute="bottom" secondItem="Op4-5Q-kvI" secondAttribute="bottom" id="QIz-sh-jj2"/>
+                            <constraint firstItem="Tdh-1q-nEV" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="QMt-py-Kgn"/>
+                            <constraint firstAttribute="trailing" secondItem="Op4-5Q-kvI" secondAttribute="trailing" id="WUw-hB-VUT"/>
+                            <constraint firstItem="Op4-5Q-kvI" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="X1a-zE-0Db"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
-                                <exclude reference="fZx-Q9-Ntf"/>
+                                <exclude reference="Op4-5Q-kvI"/>
                                 <exclude reference="Tdh-1q-nEV"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="f8r-CT-JA3"/>
-                                <exclude reference="Co3-76-FAD"/>
-                                <exclude reference="Pck-Lo-Qvx"/>
-                                <exclude reference="SmB-nD-sIy"/>
-                                <exclude reference="ohe-z0-04O"/>
-                                <exclude reference="zMB-ho-hrJ"/>
+                                <exclude reference="3KG-pJ-8bG"/>
+                                <exclude reference="QMt-py-Kgn"/>
+                                <exclude reference="QIz-sh-jj2"/>
+                                <exclude reference="WUw-hB-VUT"/>
+                                <exclude reference="X1a-zE-0Db"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
                             <mask key="subviews">
-                                <include reference="fZx-Q9-Ntf"/>
+                                <include reference="Op4-5Q-kvI"/>
                                 <include reference="Tdh-1q-nEV"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="f8r-CT-JA3"/>
-                                <include reference="Co3-76-FAD"/>
-                                <include reference="Pck-Lo-Qvx"/>
-                                <include reference="SmB-nD-sIy"/>
-                                <include reference="ohe-z0-04O"/>
-                                <include reference="zMB-ho-hrJ"/>
+                                <include reference="3KG-pJ-8bG"/>
+                                <include reference="QMt-py-Kgn"/>
+                                <include reference="QIz-sh-jj2"/>
+                                <include reference="WUw-hB-VUT"/>
+                                <include reference="X1a-zE-0Db"/>
                             </mask>
                         </variation>
                     </view>
@@ -69,7 +85,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Background" width="360" height="640"/>
+        <image name="Background" width="640" height="640"/>
         <image name="Logo" width="202" height="204"/>
     </resources>
 </document>

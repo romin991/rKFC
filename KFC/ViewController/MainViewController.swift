@@ -93,7 +93,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
 //MARK: SearchAddressDelegate
     func navigateTo(address: Address) {
         //create GMSCamera based on new long lat
-        let target:CLLocationCoordinate2D = CLLocationCoordinate2DMake(address.lat, address.long)
+        let target:CLLocationCoordinate2D = CLLocationCoordinate2DMake(address.lat!, address.long!)
         let camera = GMSCameraUpdate.setTarget(target, zoom: 10)
         
         //set mapView camera with new camera

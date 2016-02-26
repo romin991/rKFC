@@ -10,9 +10,9 @@ import Foundation
 import GoogleMaps
 
 class Address: NSObject {
-    let address:String
-    let long:Double
-    let lat:Double
+    let address:String?
+    let long:Double?
+    let lat:Double?
     
     init(address: String, long: Double, lat: Double) {
         self.address = address

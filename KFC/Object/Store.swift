@@ -9,11 +9,11 @@
 import Foundation
 
 class Store: NSObject {
-    let code: String
-    let name: String
-    let id: String
-    let long: String
-    let lat: String
+    let code: String?
+    let name: String?
+    let id: String?
+    let long: String?
+    let lat: String?
     
     init(code: String, name: String, id: String, long: String, lat: String) {
         self.code = code
