@@ -1,0 +1,27 @@
+PODS:
+  - Alamofire (3.2.0)
+  - DrawerController (1.1.0):
+    - DrawerController/Core (= 1.1.0)
+    - DrawerController/DrawerVisualStates (= 1.1.0)
+  - DrawerController/Core (1.1.0)
+  - DrawerController/DrawerVisualStates (1.1.0):
+    - DrawerController/Core
+  - GoogleMaps (1.12.2)
+  - MBProgressHUD (0.9.2)
+  - SwiftyJSON (2.3.2)
+
+DEPENDENCIES:
+  - Alamofire (~> 3.0)
+  - DrawerController (~> 1.0)
+  - GoogleMaps (~> 1.12.2)
+  - MBProgressHUD (~> 0.9.2)
+  - SwiftyJSON (~> 2.3.2)
+
+SPEC CHECKSUMS:
+  Alamofire: 4da478599fccddff361205c8929333d7fe18dceb
+  DrawerController: 8fd56e6238399a08c4af054fbea0ef8669cd81f3
+  GoogleMaps: cc76edaa94a4284e80ecd7089ed319d1cca5f37e
+  MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
+  SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
+
+COCOAPODS: 0.39.0

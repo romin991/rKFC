@@ -7,21 +7,42 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A57C416F428E182D7B0FED7 /* Pods_KFC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D75EA3A83EE73FEDA917AAD /* Pods_KFC.framework */; };
+		481589AC1C7D47D400C41B0D /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481589AB1C7D47D400C41B0D /* LoginViewController.swift */; };
+		481589AE1C7D481900C41B0D /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481589AD1C7D481900C41B0D /* SplashViewController.swift */; };
+		481589B01C7D4F4600C41B0D /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481589AF1C7D4F4600C41B0D /* LoginModel.swift */; };
+		481589B71C7D826000C41B0D /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481589B61C7D826000C41B0D /* MainViewController.swift */; };
+		481589B91C7D8BD900C41B0D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 481589B81C7D8BD900C41B0D /* CoreLocation.framework */; };
+		481A33861C7ED7E50074FD23 /* MainModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481A33851C7ED7E50074FD23 /* MainModel.swift */; };
+		481A33881C7EF2B30074FD23 /* SearchAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481A33871C7EF2B30074FD23 /* SearchAddressViewController.swift */; };
+		481A338A1C7F00920074FD23 /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481A33891C7F00920074FD23 /* Address.swift */; };
+		48BDE1381C7D9FC300D6619E /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BDE1371C7D9FC300D6619E /* Store.swift */; };
 		48F785961C7C459F00D5D3E3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F785951C7C459F00D5D3E3 /* AppDelegate.swift */; };
-		48F785981C7C459F00D5D3E3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F785971C7C459F00D5D3E3 /* ViewController.swift */; };
 		48F7859B1C7C459F00D5D3E3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48F785991C7C459F00D5D3E3 /* Main.storyboard */; };
 		48F7859D1C7C459F00D5D3E3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48F7859C1C7C459F00D5D3E3 /* Assets.xcassets */; };
 		48F785A01C7C459F00D5D3E3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48F7859E1C7C459F00D5D3E3 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		481589AB1C7D47D400C41B0D /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = ViewController/LoginViewController.swift; sourceTree = "<group>"; };
+		481589AD1C7D481900C41B0D /* SplashViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SplashViewController.swift; path = ViewController/SplashViewController.swift; sourceTree = "<group>"; };
+		481589AF1C7D4F4600C41B0D /* LoginModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginModel.swift; path = Model/LoginModel.swift; sourceTree = "<group>"; };
+		481589B61C7D826000C41B0D /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainViewController.swift; path = ViewController/MainViewController.swift; sourceTree = "<group>"; };
+		481589B81C7D8BD900C41B0D /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		481A33851C7ED7E50074FD23 /* MainModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainModel.swift; path = Model/MainModel.swift; sourceTree = "<group>"; };
+		481A33871C7EF2B30074FD23 /* SearchAddressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchAddressViewController.swift; path = ViewController/SearchAddressViewController.swift; sourceTree = "<group>"; };
+		481A33891C7F00920074FD23 /* Address.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Address.swift; path = Object/Address.swift; sourceTree = "<group>"; };
+		48BDE1371C7D9FC300D6619E /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Store.swift; path = Object/Store.swift; sourceTree = "<group>"; };
+		48F570561C7F1DEB00DC2C2A /* KFC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KFC-Bridging-Header.h"; sourceTree = "<group>"; };
 		48F785921C7C459F00D5D3E3 /* KFC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KFC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		48F785951C7C459F00D5D3E3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		48F785971C7C459F00D5D3E3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		48F7859A1C7C459F00D5D3E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		48F7859C1C7C459F00D5D3E3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		48F7859F1C7C459F00D5D3E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		48F785A11C7C459F00D5D3E3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5FE55E9AFDDB67CCE5715E72 /* Pods-KFC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KFC.release.xcconfig"; path = "Pods/Target Support Files/Pods-KFC/Pods-KFC.release.xcconfig"; sourceTree = "<group>"; };
+		7D75EA3A83EE73FEDA917AAD /* Pods_KFC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KFC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA8A2E18D2FAD783C6C0285D /* Pods-KFC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KFC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KFC/Pods-KFC.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,17 +50,59 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				481589B91C7D8BD900C41B0D /* CoreLocation.framework in Frameworks */,
+				2A57C416F428E182D7B0FED7 /* Pods_KFC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		481589A81C7D46C900C41B0D /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				48F785991C7C459F00D5D3E3 /* Main.storyboard */,
+				48F7859E1C7C459F00D5D3E3 /* LaunchScreen.storyboard */,
+			);
+			name = Storyboard;
+			sourceTree = "<group>";
+		};
+		481589A91C7D46D800C41B0D /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				481589AD1C7D481900C41B0D /* SplashViewController.swift */,
+				481589AB1C7D47D400C41B0D /* LoginViewController.swift */,
+				481589B61C7D826000C41B0D /* MainViewController.swift */,
+				481A33871C7EF2B30074FD23 /* SearchAddressViewController.swift */,
+			);
+			name = ViewController;
+			sourceTree = "<group>";
+		};
+		481589AA1C7D46EB00C41B0D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				481589AF1C7D4F4600C41B0D /* LoginModel.swift */,
+				481A33851C7ED7E50074FD23 /* MainModel.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		48BDE1361C7D9F9800D6619E /* Object */ = {
+			isa = PBXGroup;
+			children = (
+				48BDE1371C7D9FC300D6619E /* Store.swift */,
+				481A33891C7F00920074FD23 /* Address.swift */,
+			);
+			name = Object;
+			sourceTree = "<group>";
+		};
 		48F785891C7C459F00D5D3E3 = {
 			isa = PBXGroup;
 			children = (
 				48F785941C7C459F00D5D3E3 /* KFC */,
 				48F785931C7C459F00D5D3E3 /* Products */,
+				7FF1BA89473AC5E44D289ADC /* Pods */,
+				BC22EB27D63561CE6FEAC4B8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -54,14 +117,34 @@
 		48F785941C7C459F00D5D3E3 /* KFC */ = {
 			isa = PBXGroup;
 			children = (
+				48BDE1361C7D9F9800D6619E /* Object */,
+				481589AA1C7D46EB00C41B0D /* Model */,
+				481589A91C7D46D800C41B0D /* ViewController */,
+				481589A81C7D46C900C41B0D /* Storyboard */,
 				48F785951C7C459F00D5D3E3 /* AppDelegate.swift */,
-				48F785971C7C459F00D5D3E3 /* ViewController.swift */,
-				48F785991C7C459F00D5D3E3 /* Main.storyboard */,
 				48F7859C1C7C459F00D5D3E3 /* Assets.xcassets */,
-				48F7859E1C7C459F00D5D3E3 /* LaunchScreen.storyboard */,
 				48F785A11C7C459F00D5D3E3 /* Info.plist */,
+				48F570561C7F1DEB00DC2C2A /* KFC-Bridging-Header.h */,
 			);
 			path = KFC;
+			sourceTree = "<group>";
+		};
+		7FF1BA89473AC5E44D289ADC /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				BA8A2E18D2FAD783C6C0285D /* Pods-KFC.debug.xcconfig */,
+				5FE55E9AFDDB67CCE5715E72 /* Pods-KFC.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		BC22EB27D63561CE6FEAC4B8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				481589B81C7D8BD900C41B0D /* CoreLocation.framework */,
+				7D75EA3A83EE73FEDA917AAD /* Pods_KFC.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -71,9 +154,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 48F785A41C7C459F00D5D3E3 /* Build configuration list for PBXNativeTarget "KFC" */;
 			buildPhases = (
+				110F31A232B431A0D1EBC524 /* Check Pods Manifest.lock */,
 				48F7858E1C7C459F00D5D3E3 /* Sources */,
 				48F7858F1C7C459F00D5D3E3 /* Frameworks */,
 				48F785901C7C459F00D5D3E3 /* Resources */,
+				B3A1CAF815A5A8DDCB520E26 /* Embed Pods Frameworks */,
+				BFE114284769BCDBE41728F3 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -96,6 +182,7 @@
 				TargetAttributes = {
 					48F785911C7C459F00D5D3E3 = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 567F68XJDN;
 					};
 				};
 			};
@@ -130,13 +217,68 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		110F31A232B431A0D1EBC524 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		B3A1CAF815A5A8DDCB520E26 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-KFC/Pods-KFC-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BFE114284769BCDBE41728F3 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-KFC/Pods-KFC-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		48F7858E1C7C459F00D5D3E3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48F785981C7C459F00D5D3E3 /* ViewController.swift in Sources */,
+				481A338A1C7F00920074FD23 /* Address.swift in Sources */,
+				481589AC1C7D47D400C41B0D /* LoginViewController.swift in Sources */,
+				481589B01C7D4F4600C41B0D /* LoginModel.swift in Sources */,
 				48F785961C7C459F00D5D3E3 /* AppDelegate.swift in Sources */,
+				481A33861C7ED7E50074FD23 /* MainModel.swift in Sources */,
+				48BDE1381C7D9FC300D6619E /* Store.swift in Sources */,
+				481A33881C7EF2B30074FD23 /* SearchAddressViewController.swift in Sources */,
+				481589AE1C7D481900C41B0D /* SplashViewController.swift in Sources */,
+				481589B71C7D826000C41B0D /* MainViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -245,23 +387,36 @@
 		};
 		48F785A51C7C459F00D5D3E3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BA8A2E18D2FAD783C6C0285D /* Pods-KFC.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = KFC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = net.roodie.KFC;
+				PRODUCT_BUNDLE_IDENTIFIER = com.infomedia.kfc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "KFC/KFC-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		48F785A61C7C459F00D5D3E3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5FE55E9AFDDB67CCE5715E72 /* Pods-KFC.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = KFC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = net.roodie.KFC;
+				PRODUCT_BUNDLE_IDENTIFIER = com.infomedia.kfc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "KFC/KFC-Bridging-Header.h";
 			};
 			name = Release;
 		};
@@ -284,6 +439,7 @@
 				48F785A61C7C459F00D5D3E3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
