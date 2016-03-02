@@ -25,4 +25,8 @@ class LoginModel: NSObject {
                 completion(result: true, message: "");
 //        }
     }
+    
+    class func loginWithFacebook(){
+        
+    }
 }

@@ -17,6 +17,7 @@
 		481A33881C7EF2B30074FD23 /* SearchAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481A33871C7EF2B30074FD23 /* SearchAddressViewController.swift */; };
 		481A338A1C7F00920074FD23 /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481A33891C7F00920074FD23 /* Address.swift */; };
 		48BDE1381C7D9FC300D6619E /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BDE1371C7D9FC300D6619E /* Store.swift */; };
+		48ECEA411C8690C500CC33BE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 48ECEA401C8690C500CC33BE /* GoogleService-Info.plist */; };
 		48F785961C7C459F00D5D3E3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F785951C7C459F00D5D3E3 /* AppDelegate.swift */; };
 		48F7859B1C7C459F00D5D3E3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48F785991C7C459F00D5D3E3 /* Main.storyboard */; };
 		48F7859D1C7C459F00D5D3E3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48F7859C1C7C459F00D5D3E3 /* Assets.xcassets */; };
@@ -33,6 +34,7 @@
 		481A33871C7EF2B30074FD23 /* SearchAddressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchAddressViewController.swift; path = ViewController/SearchAddressViewController.swift; sourceTree = "<group>"; };
 		481A33891C7F00920074FD23 /* Address.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Address.swift; path = Object/Address.swift; sourceTree = "<group>"; };
 		48BDE1371C7D9FC300D6619E /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Store.swift; path = Object/Store.swift; sourceTree = "<group>"; };
+		48ECEA401C8690C500CC33BE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		48F570561C7F1DEB00DC2C2A /* KFC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KFC-Bridging-Header.h"; sourceTree = "<group>"; };
 		48F785921C7C459F00D5D3E3 /* KFC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KFC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		48F785951C7C459F00D5D3E3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				48F785951C7C459F00D5D3E3 /* AppDelegate.swift */,
 				48F7859C1C7C459F00D5D3E3 /* Assets.xcassets */,
 				48F785A11C7C459F00D5D3E3 /* Info.plist */,
+				48ECEA401C8690C500CC33BE /* GoogleService-Info.plist */,
 				48F570561C7F1DEB00DC2C2A /* KFC-Bridging-Header.h */,
 			);
 			path = KFC;
@@ -210,6 +213,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				48F785A01C7C459F00D5D3E3 /* LaunchScreen.storyboard in Resources */,
+				48ECEA411C8690C500CC33BE /* GoogleService-Info.plist in Resources */,
 				48F7859D1C7C459F00D5D3E3 /* Assets.xcassets in Resources */,
 				48F7859B1C7C459F00D5D3E3 /* Main.storyboard in Resources */,
 			);

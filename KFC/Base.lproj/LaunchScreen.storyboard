@@ -19,15 +19,16 @@
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Background" translatesAutoresizingMaskIntoConstraints="NO" id="Op4-5Q-kvI">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="-400" y="0.0" width="800" height="800"/>
-                                </variation>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="Tdh-1q-nEV">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="204" id="sWz-Cd-nSL"/>
-                                    <constraint firstAttribute="width" constant="202" id="vjz-nE-cud"/>
+                                    <constraint firstAttribute="height" constant="204" id="sWz-Cd-nSL">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="200"/>
+                                    </constraint>
+                                    <constraint firstAttribute="width" constant="202" id="vjz-nE-cud">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="200"/>
+                                    </constraint>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -57,11 +58,11 @@
                                 <exclude reference="Tdh-1q-nEV"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="3KG-pJ-8bG"/>
-                                <exclude reference="QMt-py-Kgn"/>
                                 <exclude reference="QIz-sh-jj2"/>
                                 <exclude reference="WUw-hB-VUT"/>
                                 <exclude reference="X1a-zE-0Db"/>
+                                <exclude reference="3KG-pJ-8bG"/>
+                                <exclude reference="QMt-py-Kgn"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -70,11 +71,11 @@
                                 <include reference="Tdh-1q-nEV"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="3KG-pJ-8bG"/>
-                                <include reference="QMt-py-Kgn"/>
                                 <include reference="QIz-sh-jj2"/>
                                 <include reference="WUw-hB-VUT"/>
                                 <include reference="X1a-zE-0Db"/>
+                                <include reference="3KG-pJ-8bG"/>
+                                <include reference="QMt-py-Kgn"/>
                             </mask>
                         </variation>
                     </view>
@@ -86,6 +87,6 @@
     </scenes>
     <resources>
         <image name="Background" width="640" height="640"/>
-        <image name="Logo" width="202" height="204"/>
+        <image name="Logo" width="199" height="200"/>
     </resources>
 </document>
