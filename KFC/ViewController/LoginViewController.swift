@@ -10,6 +10,7 @@ import UIKit
 import MBProgressHUD
 import FBSDKLoginKit
 import FBSDKShareKit
+import TwitterKit
 
 class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate {
 
@@ -79,6 +80,13 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
     
     
     @IBAction func loginWithTwitterButtonClicked(sender: AnyObject) {
+        Twitter.sharedInstance().logInWithCompletion { session, error in
+            if (session != nil) {
+                print("signed in as \(session!.userName)");
+            } else {
+                print("error: \(error!.localizedDescription)");
+            }
+        }
     }
     
 //MARK: GIDSignInDelegate

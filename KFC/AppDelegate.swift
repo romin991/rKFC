@@ -10,6 +10,8 @@ import UIKit
 import GoogleMaps
 import FBSDKLoginKit
 import FBSDKShareKit
+import Fabric
+import TwitterKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -32,6 +34,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //For Facebook
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        //End
+        
+        //For Twitter
+        Fabric.with([Twitter.self])
         //End
         
         return true
