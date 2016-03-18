@@ -3,7 +3,7 @@ use_frameworks!
 
 target 'KFC' do
   pod 'Alamofire', '~> 3.0'
-  pod 'DrawerController', '~> 1.0'
+  pod 'MMDrawerController', '~> 0.5.7'
   pod 'GoogleMaps', '~> 1.12.2'
   pod 'SwiftyJSON', '~> 2.3.2'
   pod 'MBProgressHUD', '~> 0.9.2'
@@ -13,4 +13,5 @@ target 'KFC' do
   pod 'Google/SignIn', '~> 1.3.2'
   pod 'Fabric', '~> 1.6.6'
   pod 'TwitterKit', '~> 1.15.1'
+  pod 'TPKeyboardAvoiding', '~> 1.2.11'
 end

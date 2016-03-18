@@ -22,6 +22,8 @@ class SplashViewController: UIViewController {
     @IBOutlet weak var trailingBackgroundConstraint: NSLayoutConstraint!
     @IBOutlet weak var bottomBackgroundConstraint: NSLayoutConstraint!
     
+    var loopAnimation : Bool = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -38,7 +40,12 @@ class SplashViewController: UIViewController {
     }
 
     @IBAction func logoButtonClicked(sender: AnyObject) {
-        self.performSegueWithIdentifier("LoginSegue", sender: nil)
+        let user:User = UserModel.getUser()
+        if (user.customerId != ""){
+            self.performSegueWithIdentifier("DrawerSegue", sender: nil)
+        } else {
+            self.performSegueWithIdentifier("LoginSegue", sender: nil)
+        }
     }
     
     func animateBackground(){
@@ -57,7 +64,9 @@ class SplashViewController: UIViewController {
             self.backgroundImageView.layoutIfNeeded()
             self.view.layoutIfNeeded()
         }, completion: { finished in
-            self.animateBackground()
+            if (self.loopAnimation){
+                self.animateBackground()
+            }
         })
     }
 
@@ -74,6 +83,13 @@ class SplashViewController: UIViewController {
     func randomYPosition(zoomGap: CGFloat) -> CGFloat{
         let limit = (zoomGap - self.view.frame.size.height) / 2
         return CGFloat(arc4random_uniform(UInt32(limit * 2))) - limit
+    }
+    
+//MARK: Segue
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if (segue.identifier == "LoginSegue"){
+            loopAnimation = false
+        }
     }
 }
 

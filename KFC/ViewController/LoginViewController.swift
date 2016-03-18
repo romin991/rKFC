@@ -11,6 +11,7 @@ import MBProgressHUD
 import FBSDKLoginKit
 import FBSDKShareKit
 import TwitterKit
+import MBProgressHUD
 
 class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate {
 
@@ -29,6 +30,8 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
         
         GIDSignIn.sharedInstance().uiDelegate = self
         GIDSignIn.sharedInstance().delegate = self
+        
+        CustomView.custom(self.loginButton, borderColor: self.loginButton.backgroundColor!, cornerRadius: 28, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
     }
 
     override func didReceiveMemoryWarning() {
@@ -38,26 +41,36 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
     
 
     @IBAction func loginButtonClicked(sender: AnyObject) {
-        LoginModel.loginWithBlock { (result, message) -> Void in
-            if (result == true){
+        //show activity indicator
+        let activityIndicator = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        activityIndicator.mode = MBProgressHUDMode.Indeterminate;
+        activityIndicator.labelText = "Loading";
+        
+        let user:User = User.init(username: self.usernameField.text, password: self.passwordField.text, type: LoginType.Email)
+        LoginModel.login(user, completion: { (status, message, user) -> Void in
+            //TODO: need to check, if user already verified, then go to MainSegue, if not, then go to ValidationSegue
+            
+            if (status == Status.Success){
                 self .performSegueWithIdentifier("MainSegue", sender: nil)
             } else {
                 //should show alert error
-                let alert: UIAlertController = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
                 self.presentViewController(alert, animated: true, completion: nil)
             }
-        };
+            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+        })
     }
     
     @IBAction func registerButtonClicked(sender: AnyObject) {
+        self.performSegueWithIdentifier("RegisterSegue", sender: nil)
     }
     
     @IBAction func forgotPasswordButtonClicked(sender: AnyObject) {
     }
     
     @IBAction func skipButtonClicked(sender: AnyObject) {
-        self.performSegueWithIdentifier("MainSegue", sender: nil)
+//        self.performSegueWithIdentifier("MainSegue", sender: nil)
     }
     
     @IBAction func loginWithFacebookButtonClicked(sender: AnyObject) {

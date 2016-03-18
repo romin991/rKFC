@@ -9,19 +9,25 @@
 import Foundation
 
 class Store: NSObject {
-    let code: String?
-    let name: String?
-    let id: String?
-    let long: String?
-    let lat: String?
+    var code: String? = ""
+    var name: String? = ""
+    var id: String? = ""
+    var long: String? = ""
+    var lat: String? = ""
+    var priceId: String? = ""
     
-    init(code: String, name: String, id: String, long: String, lat: String) {
+    init(code: String, name: String, id: String, long: String, lat: String, priceId: String?) {
         self.code = code
         self.name = name
         self.id = id
         self.long = long
         self.lat = lat
+        self.priceId = priceId
         
+        super.init()
+    }
+    
+    override init() {
         super.init()
     }
 }
