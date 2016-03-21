@@ -20,7 +20,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Background" translatesAutoresizingMaskIntoConstraints="NO" id="tpv-ig-x9i">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="GradientBackground" translatesAutoresizingMaskIntoConstraints="NO" id="tpv-ig-x9i">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="800" id="E0c-yT-nUF">
@@ -43,7 +43,7 @@
                                     </mask>
                                 </variation>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UCU-Mc-tSk">
+                            <button opaque="NO" alpha="0.29999999999999999" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UCU-Mc-tSk">
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="gGw-l0-xbF"/>
@@ -71,15 +71,14 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="UCU-Mc-tSk" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="7ut-2x-LsP"/>
-                            <constraint firstItem="UCU-Mc-tSk" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="K9n-zW-S7v"/>
-                            <constraint firstItem="tpv-ig-x9i" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Rv8-pd-LTx"/>
-                            <constraint firstAttribute="trailing" secondItem="tpv-ig-x9i" secondAttribute="trailing" id="d0U-DR-f4T"/>
-                            <constraint firstAttribute="bottom" secondItem="tpv-ig-x9i" secondAttribute="bottom" id="fNR-lV-fTI"/>
-                            <constraint firstItem="tpv-ig-x9i" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="gxH-Ci-Zlf">
-                                <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
+                            <constraint firstAttribute="bottom" secondItem="tpv-ig-x9i" secondAttribute="bottom" id="0bi-o8-b7S"/>
+                            <constraint firstItem="UCU-Mc-tSk" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="7ut-2x-LsP">
+                                <variation key="heightClass=regular-widthClass=compact" constant="50"/>
                             </constraint>
-                            <constraint firstItem="tpv-ig-x9i" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="tPe-j3-3fg"/>
+                            <constraint firstItem="UCU-Mc-tSk" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="K9n-zW-S7v"/>
+                            <constraint firstItem="tpv-ig-x9i" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="N5t-ZK-0bT"/>
+                            <constraint firstItem="tpv-ig-x9i" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Oln-TC-zH6"/>
+                            <constraint firstAttribute="trailing" secondItem="tpv-ig-x9i" secondAttribute="trailing" id="egz-k1-gpO"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
@@ -87,13 +86,12 @@
                                 <exclude reference="UCU-Mc-tSk"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="0bi-o8-b7S"/>
+                                <exclude reference="N5t-ZK-0bT"/>
+                                <exclude reference="Oln-TC-zH6"/>
+                                <exclude reference="egz-k1-gpO"/>
                                 <exclude reference="7ut-2x-LsP"/>
                                 <exclude reference="K9n-zW-S7v"/>
-                                <exclude reference="Rv8-pd-LTx"/>
-                                <exclude reference="d0U-DR-f4T"/>
-                                <exclude reference="fNR-lV-fTI"/>
-                                <exclude reference="gxH-Ci-Zlf"/>
-                                <exclude reference="tPe-j3-3fg"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -102,26 +100,20 @@
                                 <include reference="UCU-Mc-tSk"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="0bi-o8-b7S"/>
+                                <include reference="N5t-ZK-0bT"/>
+                                <include reference="Oln-TC-zH6"/>
+                                <include reference="egz-k1-gpO"/>
                                 <include reference="7ut-2x-LsP"/>
                                 <include reference="K9n-zW-S7v"/>
-                                <include reference="Rv8-pd-LTx"/>
-                                <include reference="d0U-DR-f4T"/>
-                                <include reference="fNR-lV-fTI"/>
-                                <exclude reference="gxH-Ci-Zlf"/>
-                                <exclude reference="tPe-j3-3fg"/>
                             </mask>
                         </variation>
                     </view>
                     <navigationItem key="navigationItem" id="gWy-Wp-9MN"/>
                     <connections>
                         <outlet property="backgroundImageView" destination="tpv-ig-x9i" id="BUQ-zm-srY"/>
-                        <outlet property="bottomBackgroundConstraint" destination="fNR-lV-fTI" id="0Rd-7u-V1O"/>
-                        <outlet property="heightBackgroundConstraint" destination="E0c-yT-nUF" id="xz7-3u-V14"/>
-                        <outlet property="horizontalBackgroundConstraint" destination="gxH-Ci-Zlf" id="ya4-48-Dn7"/>
-                        <outlet property="topBackgroundConstraint" destination="Rv8-pd-LTx" id="Jnx-oJ-9K5"/>
-                        <outlet property="trailingBackgroundConstraint" destination="d0U-DR-f4T" id="AiT-aM-dVv"/>
-                        <outlet property="verticalBackgroundConstraint" destination="tPe-j3-3fg" id="z2a-ZD-y2z"/>
-                        <outlet property="widthBackgroundConstraint" destination="ad3-Mj-tyf" id="8YT-yl-a0u"/>
+                        <outlet property="logoButton" destination="UCU-Mc-tSk" id="CbG-zH-5QC"/>
+                        <outlet property="logoButtonYPositionConstraint" destination="7ut-2x-LsP" id="9NQ-t4-d9h"/>
                         <segue destination="YEK-BO-C3q" kind="show" identifier="LoginSegue" id="vcZ-Qe-Xbh"/>
                         <segue destination="1R4-dj-HXK" kind="show" identifier="DrawerSegue" id="3gu-vP-96J"/>
                     </connections>
@@ -3950,6 +3942,23 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Bh-FU-h5C" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-471" y="3408"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="Ick-7x-5Ni">
+            <objects>
+                <viewController id="f6h-Xv-hwO" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Ftg-hg-MJa"/>
+                        <viewControllerLayoutGuide type="bottom" id="WM4-dF-3pc"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="jSA-tC-V1K">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jcJ-tq-cOZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-466.5" y="4133.25"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="gqt-Oh-ZRI">
@@ -9214,7 +9223,6 @@
     </scenes>
     <resources>
         <image name="BackButton" width="10" height="18"/>
-        <image name="Background" width="640" height="640"/>
         <image name="Facebook" width="50" height="50"/>
         <image name="Google" width="50" height="50"/>
         <image name="GradientBackground" width="375" height="667"/>
@@ -9233,8 +9241,8 @@
         <image name="Twitter" width="52" height="52"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ZW6-X2-1cE"/>
+        <segue reference="vcZ-Qe-Xbh"/>
+        <segue reference="3gu-vP-96J"/>
         <segue reference="Tqj-Jx-V4R"/>
-        <segue reference="WxG-yF-uXU"/>
     </inferredMetricsTieBreakers>
 </document>
