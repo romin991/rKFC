@@ -28,6 +28,9 @@ class UserModel: NSObject {
         cdUser.setValue(user.handphone, forKey: "handphone")
         cdUser.setValue(user.languageId, forKey: "languageId")
         cdUser.setValue(user.customerId, forKey: "customerId")
+        cdUser.setValue(user.gender, forKey: "gender")
+        cdUser.setValue(user.address, forKey: "address")
+        cdUser.setValue(user.birthdate, forKey: "birthdate")
         
         let addresses:NSMutableSet = NSMutableSet()
         for address in user.addresses{
@@ -73,6 +76,9 @@ class UserModel: NSObject {
             cdUser.setValue(user.handphone, forKey: "handphone")
             cdUser.setValue(user.languageId, forKey: "languageId")
             cdUser.setValue(user.customerId, forKey: "customerId")
+            cdUser.setValue(user.gender, forKey: "gender")
+            cdUser.setValue(user.address, forKey: "address")
+            cdUser.setValue(user.birthdate, forKey: "birthdate")
             
             let setAddresses = cdUser.mutableSetValueForKey("addresses")
             for address in user.addresses{
@@ -118,7 +124,10 @@ class UserModel: NSObject {
                     username: (cdUser.valueForKey("username") as? String)!,
                     handphone: (cdUser.valueForKey("handphone") as? String)!,
                     languageId: (cdUser.valueForKey("languageId") as? String)!,
-                    customerId: (cdUser.valueForKey("customerId") as? String)!
+                    customerId: (cdUser.valueForKey("customerId") as? String)!,
+                    gender: (cdUser.valueForKey("gender") as? String)!,
+                    address: (cdUser.valueForKey("address") as? String)!,
+                    birthdate: (cdUser.valueForKey("birthdate") as? NSDate)!
                 )
                 
                 let cdAddresses = cdUser.mutableSetValueForKey("addresses")
@@ -154,6 +163,7 @@ class UserModel: NSObject {
             for cdUser in cdUsers{
                 managedContext.deleteObject(cdUser)
             }
+            try managedContext.save()
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }

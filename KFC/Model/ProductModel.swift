@@ -152,6 +152,7 @@ class ProductModel: NSObject {
                 }
                 managedContext.deleteObject(cdProduct)
             }
+            try managedContext.save()
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }

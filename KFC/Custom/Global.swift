@@ -25,7 +25,7 @@ struct Menu {
     static let Main = "Set Location"
     static let History = "Order History"
     static let Menu = "Menu"
-    static let ChangeLanguage = "Change Language"
+    static let ChangeLanguage = "Language"
     static let Account = "Account"
     static let Promo = "Promo"
     static let Logout = "Logout"
@@ -41,7 +41,7 @@ struct Status {
     static let Invalid = "Invalid"
 }
 
-struct LanguangeID {
+struct LanguageID {
     static let Indonesia = "ID"
     static let English = "EN"
 }
@@ -51,4 +51,9 @@ struct LoginType {
     static let Google = "google"
     static let Facebook = "facebook"
     static let Twitter = "twitter"
+}
+
+struct Gender {
+    static let Male = "Male"
+    static let Female = "Female"
 }

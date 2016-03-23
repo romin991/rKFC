@@ -311,6 +311,7 @@ class CartModel: NSObject {
             for cdCart in cdCarts{
                 managedContext.deleteObject(cdCart)
             }
+            try managedContext.save()
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }
@@ -328,6 +329,7 @@ class CartModel: NSObject {
             for cdCart in cdCarts{
                 managedContext.deleteObject(cdCart)
             }
+            try managedContext.save()
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }

@@ -26,7 +26,7 @@ class LeftViewController: UIViewController, UITableViewDelegate, UITableViewData
     //MARK: TableViewDataSource & TableViewDelegate
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if (indexPath.section == 0){
-            return 127
+            return 191
         } else if (indexPath.section == 1){
             return 56
         } else {

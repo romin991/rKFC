@@ -73,7 +73,9 @@ class DrawerViewController: UIViewController, DrawerDelegate {
             
         } else if (menu == Menu.Logout){
             LoginModel.logout()
+            let rootViewController = self.navigationController?.viewControllers.first
             self.navigationController?.popToRootViewControllerAnimated(false)
+            rootViewController?.performSegueWithIdentifier("LoginSegue", sender: nil)
         }
         self.drawerController?.closeDrawerAnimated(true, completion: nil)
     }

@@ -44,6 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    @available(iOS 9.0, *)
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
         if (url.scheme == "com.googleusercontent.apps.775290173412-oq2b75tmh408iuc63fbaqk5immmj7sg6") {
             return GIDSignIn.sharedInstance().handleURL(url,
@@ -61,14 +62,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     //for iOS 8 and older
+    @available(iOS 8.0, *)
     func application(application: UIApplication,
         openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
             if (url.scheme == "com.googleusercontent.apps.775290173412-oq2b75tmh408iuc63fbaqk5immmj7sg6") {
-                let options: [String: AnyObject] = [UIApplicationOpenURLOptionsSourceApplicationKey: sourceApplication!,
-                UIApplicationOpenURLOptionsAnnotationKey: annotation]
                 return GIDSignIn.sharedInstance().handleURL(url,
                     sourceApplication: sourceApplication,
-                    annotation: options)
+                    annotation: annotation)
                 
             } else if (url.scheme == "fb168725456842511"){
                 return FBSDKApplicationDelegate.sharedInstance().application(

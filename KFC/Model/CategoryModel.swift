@@ -73,6 +73,7 @@ class CategoryModel: NSObject {
             for cdCategory in cdCategories{
                 managedContext.deleteObject(cdCategory)
             }
+            try managedContext.save()
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }

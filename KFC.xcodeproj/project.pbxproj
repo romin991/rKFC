@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2A57C416F428E182D7B0FED7 /* Pods_KFC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D75EA3A83EE73FEDA917AAD /* Pods_KFC.framework */; };
-		4806EEF81C9A9D95003C08A5 /* SelectLanguageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4806EEF71C9A9D95003C08A5 /* SelectLanguageViewController.swift */; };
+		4806EEF81C9A9D95003C08A5 /* PopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4806EEF71C9A9D95003C08A5 /* PopoverViewController.swift */; };
 		480B75AA1C8EA4A700177712 /* CommonFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480B75A91C8EA4A700177712 /* CommonFunction.swift */; };
 		480B75AC1C8EA70E00177712 /* CustomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480B75AB1C8EA70E00177712 /* CustomView.swift */; };
 		481589AC1C7D47D400C41B0D /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481589AB1C7D47D400C41B0D /* LoginViewController.swift */; };
@@ -60,7 +60,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4806EEF71C9A9D95003C08A5 /* SelectLanguageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SelectLanguageViewController.swift; path = ViewController/SelectLanguageViewController.swift; sourceTree = "<group>"; };
+		4806EEF71C9A9D95003C08A5 /* PopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PopoverViewController.swift; path = ViewController/PopoverViewController.swift; sourceTree = "<group>"; };
 		480B75A91C8EA4A700177712 /* CommonFunction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommonFunction.swift; path = Custom/CommonFunction.swift; sourceTree = "<group>"; };
 		480B75AB1C8EA70E00177712 /* CustomView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomView.swift; path = Custom/CustomView.swift; sourceTree = "<group>"; };
 		481589AB1C7D47D400C41B0D /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = ViewController/LoginViewController.swift; sourceTree = "<group>"; };
@@ -189,7 +189,7 @@
 				481589AD1C7D481900C41B0D /* SplashViewController.swift */,
 				481589AB1C7D47D400C41B0D /* LoginViewController.swift */,
 				483AD8451C8EA01D00B6629C /* RegisterViewController.swift */,
-				4806EEF71C9A9D95003C08A5 /* SelectLanguageViewController.swift */,
+				4806EEF71C9A9D95003C08A5 /* PopoverViewController.swift */,
 				483AD8491C8EA21600B6629C /* ValidationViewController.swift */,
 			);
 			name = Outside;
@@ -531,7 +531,7 @@
 				482162761C91375E008B571C /* ProductDetailViewController.swift in Sources */,
 				487BDDDB1C93F07400FED8B5 /* Global.swift in Sources */,
 				48580F901C983F9400A44166 /* User.swift in Sources */,
-				4806EEF81C9A9D95003C08A5 /* SelectLanguageViewController.swift in Sources */,
+				4806EEF81C9A9D95003C08A5 /* PopoverViewController.swift in Sources */,
 				48B397BC1C9B8FEE0016D01C /* OrderModel.swift in Sources */,
 				487BDDE01C940D9900FED8B5 /* ModifierOption.swift in Sources */,
 				481A33881C7EF2B30074FD23 /* SearchAddressViewController.swift in Sources */,
@@ -662,6 +662,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Fast Food Indonesia, PT TBK (AZM6JUG4VS)";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = KFC/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kfc.indonesia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -681,6 +682,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Fast Food Indonesia, PT TBK (AZM6JUG4VS)";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = KFC/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kfc.indonesia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
