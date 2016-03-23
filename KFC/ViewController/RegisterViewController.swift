@@ -16,7 +16,7 @@ class RegisterViewController: UIViewController, UIPopoverPresentationControllerD
     @IBOutlet weak var phoneField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var confirmPasswordField: UITextField!
-    @IBOutlet weak var birthdayField: UITextField!
+    @IBOutlet weak var birthdateField: UITextField!
     @IBOutlet weak var addressField: UITextField!
     @IBOutlet weak var languageEnglishButton: UIButton!
     @IBOutlet weak var languageIndonesiaButton: UIButton!
@@ -59,7 +59,7 @@ class RegisterViewController: UIViewController, UIPopoverPresentationControllerD
             languageId: languageID,
             gender: gender,
             address: self.addressField.text,
-            birthdate: formatter.dateFromString(self.birthdayField.text!)
+            birthdate: formatter.dateFromString(self.birthdateField.text!)
         )
         
         LoginModel.register(user) { (status, message) -> Void in

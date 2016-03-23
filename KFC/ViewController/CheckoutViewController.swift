@@ -10,6 +10,7 @@ import UIKit
 import MBProgressHUD
 
 class CheckoutViewController: UIViewController {
+    @IBOutlet weak var addressField: UITextField!
     @IBOutlet weak var addressDetailTextField: UITextField!
     @IBOutlet weak var notesTextField: UITextField!
     @IBOutlet weak var dokuPayButton: UIButton!
@@ -23,6 +24,7 @@ class CheckoutViewController: UIViewController {
         CustomView.custom(self.dokuPayButton, borderColor: self.dokuPayButton.titleColorForState(UIControlState.Normal)!, cornerRadius: 22, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
         CustomView.custom(self.codButton, borderColor: self.codButton.titleColorForState(UIControlState.Normal)!, cornerRadius: 22, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
         self.cart = CartModel.getPendingCart()
+        self.addressField.text = self.cart?.address
         self.addressDetailTextField.text = self.cart?.addressDetail
     }
 
@@ -44,6 +46,9 @@ class CheckoutViewController: UIViewController {
         activityIndicator.mode = MBProgressHUDMode.Indeterminate;
         activityIndicator.labelText = "Loading";
         
+        if (self.addressField.text != ""){
+            self.cart?.address = self.addressField.text
+        }
         if (self.addressDetailTextField.text != ""){
             self.cart?.addressDetail = self.addressDetailTextField.text
         }

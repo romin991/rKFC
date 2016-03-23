@@ -38,16 +38,16 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         self.buttonView.layer.shadowRadius = 16.0
         self.buttonView.layer.shadowOffset = CGSize.init(width: 0, height: 1)
         self.buttonView.layer.masksToBounds = false
-        
-        self.taxLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.tax))
-        self.deliveryChargeLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.delivery))
-        self.totalLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.total))
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.cart = CartModel.getPendingCart()
         self.tableView.reloadData()
+        
+        self.taxLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.tax))
+        self.deliveryChargeLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.delivery))
+        self.totalLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.total))
     }
 
     override func didReceiveMemoryWarning() {
