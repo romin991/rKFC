@@ -24,6 +24,8 @@ struct Path {
 struct Menu {
     static let Main = "Set Location"
     static let History = "Order History"
+    static let Menu = "Menu"
+    static let ChangeLanguage = "Change Language"
     static let Account = "Account"
     static let Promo = "Promo"
     static let Logout = "Logout"

@@ -70,13 +70,45 @@ class ProductModel: NSObject {
         }
     }
     
-    class func getProductByCategoryId(categoryId:String) -> [Product]{
+    class func getProductByCartItem(cartItem:CartItem) -> Product{
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let managedContext = appDelegate.managedObjectContext
+        
+        let fetchRequest = NSFetchRequest(entityName: "Product")
+        fetchRequest.predicate = NSPredicate(format: "id = %@", cartItem.productId!)
+        
+        var product : Product = Product.init()
+        
+        do {
+            let results = try managedContext.executeFetchRequest(fetchRequest)
+            let cdProducts = results as! [NSManagedObject]
+            if (cdProducts.count != 0){
+                let cdProduct = cdProducts.first!
+                product = Product.init(
+                    guid: (cdProduct.valueForKey("guid") as? String),
+                    id: (cdProduct.valueForKey("id") as? String),
+                    categoryId: (cdProduct.valueForKey("categoryId") as? String),
+                    categoryGuid: (cdProduct.valueForKey("categoryGuid") as? String),
+                    image: (cdProduct.valueForKey("image") as? String),
+                    name: (cdProduct.valueForKey("name") as? String),
+                    note: (cdProduct.valueForKey("note") as? String),
+                    price: (cdProduct.valueForKey("price") as? String),
+                    taxable: (cdProduct.valueForKey("taxable") as? Bool))
+            }
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+        
+        return product
+    }
+    
+    class func getProductByCategory(category:Category) -> [Product]{
         
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedContext = appDelegate.managedObjectContext
         
         let fetchRequest = NSFetchRequest(entityName: "Product")
-        fetchRequest.predicate = NSPredicate(format: "categoryId = %@", categoryId)
+        fetchRequest.predicate = NSPredicate(format: "categoryId = %@", category.id!)
         
         var products : [Product] = [Product]()
         

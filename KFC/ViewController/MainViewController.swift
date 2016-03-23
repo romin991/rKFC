@@ -78,6 +78,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     @IBAction func shoppingCartButtonClicked(sender: AnyObject) {
         let cartViewController:ShoppingCartViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ShoppingCartViewController") as? ShoppingCartViewController)!
+        cartViewController.drawerDelegate = self.drawerDelegate
         self.navigationController?.pushViewController(cartViewController, animated: true)
     }
     
@@ -166,7 +167,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     }
     
     @IBAction func KFCStoreButtonClicked(sender: AnyObject) {
-        self.performSegueWithIdentifier("CategoryListSegue", sender: nil)
+        self.drawerDelegate?.selectMenu(Menu.Menu)
     }
     
 //MARK: SearchAddressDelegate

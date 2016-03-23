@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ProductDetailModifierTableViewCell: UITableViewCell {
+class ModifierDetailTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var quantityView: UIView!
     @IBOutlet weak var quantityMinusButton: UIButton!
@@ -17,7 +17,7 @@ class ProductDetailModifierTableViewCell: UITableViewCell {
     @IBOutlet weak var selectedButton: UIButton!
     
     var modifierOption:ModifierOption?
-    var delegate:ProductDetailModifierDelegate?
+    var delegate:ModifierDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()
