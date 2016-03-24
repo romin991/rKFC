@@ -107,44 +107,106 @@ class ProductDetailViewController: UIViewController {
         //get item id
         //add to shopping cart database
         //go to shopping cart view
-        var price:NSDecimalNumber = NSDecimalNumber.init(longLong: 0)
         
-        var cartModifiers:[CartModifier] = [CartModifier]()
-        for modifier in self.modifiers{
-            for modifierOption in modifier.modifierOptions{
-                if (modifierOption.quantity != 0){
-                    let cartModifier:CartModifier = CartModifier.init(
-                        guid: nil,
-                        cartGuid: nil,
-                        cartItemGuid: nil,
-                        modifierId: modifier.id,
-                        modifierOptionId: modifierOption.id,
-                        quantity: modifierOption.quantity,
-                        name: modifierOption.name
-                    )
-                
-                    let modifierPrice:NSDecimalNumber = NSDecimalNumber.init(string: modifierOption.price)
-                    price = price.decimalNumberByAdding(modifierPrice)
-                
-                    cartModifiers.append(cartModifier)
+        let cart : Cart = CartModel.getPendingCart()
+        
+        var savedCartItem:CartItem?
+        let filteredCartItem = cart.cartItems.filter{$0.productId == self.product.id}
+        let filteredSingleSelectModifier = self.modifiers.filter{$0.multipleSelect == false}
+        
+        for tempCartItem in filteredCartItem{
+            var valid = true
+            for tempModifier in filteredSingleSelectModifier{
+                let filteredSelectedModifierOption = tempModifier.modifierOptions.filter{$0.selected == true}
+                for tempModifierOption in filteredSelectedModifierOption{
+                    let results = tempCartItem.cartModifiers.filter{$0.modifierId == tempModifier.id && $0.modifierOptionId == tempModifierOption.id}
+                    if (results.isEmpty == true) {
+                        valid = false
+                    }
                 }
+            }
+            if (valid == true){
+                savedCartItem = tempCartItem
+                break
             }
         }
         
-        let total:NSDecimalNumber = price.decimalNumberByMultiplyingBy(NSDecimalNumber.init(integer:self.product.quantity))
-        
-        let cartItem:CartItem = CartItem.init(
-            guid: nil,
-            cartGuid: nil,
-            productId: self.product.id,
-            quantity: self.product.quantity,
-            price: price.stringValue,
-            name: self.product.name,
-            total: total.stringValue
-        )
-        cartItem.cartModifiers = cartModifiers
-        
-        CartModel.addCartItem(cartItem)
+        if (savedCartItem != nil){
+            CartModel.removeCartItem(savedCartItem!)
+            
+            for modifier in self.modifiers{
+                for modifierOption in modifier.modifierOptions{
+                    if (modifierOption.quantity != 0){
+                        let results = savedCartItem!.cartModifiers.filter{$0.modifierId == modifier.id && $0.modifierOptionId == modifierOption.id}
+                        if (results.isEmpty == false) {
+                            let cartModifier = results.first
+                            
+                            cartModifier?.quantity = (cartModifier?.quantity)! + modifierOption.quantity
+                        } else {
+                            let cartModifier:CartModifier = CartModifier.init(
+                                guid: nil,
+                                cartGuid: nil,
+                                cartItemGuid: nil,
+                                modifierId: modifier.id,
+                                modifierOptionId: modifierOption.id,
+                                quantity: modifierOption.quantity,
+                                name: modifierOption.name
+                            )
+                            
+                            savedCartItem?.cartModifiers.append(cartModifier)
+                            savedCartItem?.price = NSDecimalNumber.init(string:savedCartItem?.price).decimalNumberByAdding(NSDecimalNumber.init(string:modifierOption.price)).stringValue
+                        }
+                    }
+                }
+            }
+            
+            savedCartItem?.quantity = (savedCartItem?.quantity)! + self.product.quantity
+            let total:NSDecimalNumber = NSDecimalNumber.init(string: savedCartItem?.price).decimalNumberByMultiplyingBy(NSDecimalNumber.init(integer:savedCartItem!.quantity!))
+            savedCartItem?.total = total.stringValue
+            
+            CartModel.addCartItem(savedCartItem!)
+            
+        } else {
+
+            var price:NSDecimalNumber = NSDecimalNumber.init(longLong: 0)
+            
+            var cartModifiers:[CartModifier] = [CartModifier]()
+            for modifier in self.modifiers{
+                for modifierOption in modifier.modifierOptions{
+                    if (modifierOption.quantity != 0){
+                        let cartModifier:CartModifier = CartModifier.init(
+                            guid: nil,
+                            cartGuid: nil,
+                            cartItemGuid: nil,
+                            modifierId: modifier.id,
+                            modifierOptionId: modifierOption.id,
+                            quantity: modifierOption.quantity,
+                            name: modifierOption.name
+                        )
+                        
+                        let modifierPrice:NSDecimalNumber = NSDecimalNumber.init(string: modifierOption.price)
+                        price = price.decimalNumberByAdding(modifierPrice)
+                        
+                        cartModifiers.append(cartModifier)
+                    }
+                }
+            }
+            
+            let total:NSDecimalNumber = price.decimalNumberByMultiplyingBy(NSDecimalNumber.init(integer:self.product.quantity))
+            
+            let cartItem:CartItem = CartItem.init(
+                guid: nil,
+                cartGuid: nil,
+                productId: self.product.id,
+                quantity: self.product.quantity,
+                price: price.stringValue,
+                name: self.product.name,
+                total: total.stringValue
+            )
+            cartItem.cartModifiers = cartModifiers
+            
+            CartModel.addCartItem(cartItem)
+        }
         
         self.navigationController?.popViewControllerAnimated(true)
     }
