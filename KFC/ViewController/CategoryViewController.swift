@@ -13,6 +13,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var shoppingCartBadgesLabel: UILabel!
     
     var categories:[Category] = [Category]()
+    var drawerDelegate:DrawerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,12 +33,16 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func backButtonClicked(sender: AnyObject) {
-        self.navigationController?.popViewControllerAnimated(true)
+    @IBAction func leftMenuButtonClicked(sender: AnyObject) {
+        if (self.drawerDelegate != nil){
+            self.drawerDelegate?.openLeftMenu()
+        }
     }
+
     
     @IBAction func shoppingCartButtonClicked(sender: AnyObject) {
         let cartViewController:ShoppingCartViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ShoppingCartViewController") as? ShoppingCartViewController)!
+        cartViewController.drawerDelegate = self.drawerDelegate
         self.navigationController?.pushViewController(cartViewController, animated: true)
     }
     
@@ -75,6 +80,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
             if let category = sender as? Category {
                 let productViewController:ProductViewController = segue.destinationViewController as! ProductViewController
                 productViewController.category = category
+                productViewController.drawerDelegate = self.drawerDelegate
             }
         }
     }

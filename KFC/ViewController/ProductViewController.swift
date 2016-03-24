@@ -17,6 +17,7 @@ class ProductViewController: UIViewController, UITableViewDelegate, UITableViewD
     var products = [Product]()
     var category : Category!
     var selectedProduct : Product?
+    var drawerDelegate:DrawerDelegate?
     
     func registerNotification(){
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"refreshTableView", name: NotificationKey.ImageItemDownloaded, object: nil)
@@ -30,7 +31,7 @@ class ProductViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        self.products = ProductModel.getProductByCategoryId(category.id!)
+        self.products = ProductModel.getProductByCategory(category)
         CustomView.custom(self.shoppingCartBadgesView, borderColor: UIColor.whiteColor(), cornerRadius: 8, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
     }
     
@@ -55,6 +56,7 @@ class ProductViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     @IBAction func shoppingCartButtonClicked(sender: AnyObject) {
         let cartViewController:ShoppingCartViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ShoppingCartViewController") as? ShoppingCartViewController)!
+        cartViewController.drawerDelegate = self.drawerDelegate
         self.navigationController?.pushViewController(cartViewController, animated: true)
     }
     
@@ -154,6 +156,7 @@ class ProductViewController: UIViewController, UITableViewDelegate, UITableViewD
                 productDetailViewController.product = self.selectedProduct
                 productDetailViewController.modifiers = modifiers
                 productDetailViewController.category = self.category
+                productDetailViewController.drawerDelegate = self.drawerDelegate
             }
         }
     }

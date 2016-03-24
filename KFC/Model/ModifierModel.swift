@@ -105,6 +105,7 @@ class ModifierModel: NSObject {
                 ModifierOptionModel.deleteModifierOption(modifier)
                 managedContext.deleteObject(cdModifier)
             }
+            try managedContext.save()
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }
@@ -136,6 +137,7 @@ class ModifierModel: NSObject {
                 ModifierOptionModel.deleteModifierOption(modifier)
                 managedContext.deleteObject(cdModifier)
             }
+            try managedContext.save()
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }

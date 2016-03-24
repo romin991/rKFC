@@ -9,22 +9,22 @@
 import UIKit
 import MBProgressHUD
 
-protocol RegisterDelegate{
-    func languageSelected(languageID:String, language:String)
-}
-
-class RegisterViewController: UIViewController, RegisterDelegate, UIPopoverPresentationControllerDelegate {
+class RegisterViewController: UIViewController, UIPopoverPresentationControllerDelegate {
 
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var phoneField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var confirmPasswordField: UITextField!
-    @IBOutlet weak var selectLanguageField: UITextField!
+    @IBOutlet weak var birthdateField: UITextField!
+    @IBOutlet weak var addressField: UITextField!
+    @IBOutlet weak var languageEnglishButton: UIButton!
+    @IBOutlet weak var languageIndonesiaButton: UIButton!
+    @IBOutlet weak var genderMaleButton: UIButton!
+    @IBOutlet weak var genderFemaleButton: UIButton!
+    
     @IBOutlet weak var signUpButton: UIButton!
     @IBOutlet weak var signInButton: UIButton!
-    
-    var languageID:String = LanguangeID.Indonesia
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,13 +44,22 @@ class RegisterViewController: UIViewController, RegisterDelegate, UIPopoverPrese
         activityIndicator.mode = MBProgressHUDMode.Indeterminate;
         activityIndicator.labelText = "Loading";
         
+        let gender = self.genderMaleButton.selected == true ? Gender.Male : Gender.Female
+        let languageID = self.languageEnglishButton.selected == true ? LanguageID.English : LanguageID.Indonesia
+        
+        let formatter = NSDateFormatter.init()
+        //TODO: set to locale gmt +7
+        
         let user:User = User.init(
             username: self.emailField.text,
             fullname: self.nameField.text,
             handphone: self.phoneField.text,
             password: self.passwordField.text,
             confirmPassword: self.confirmPasswordField.text,
-            languageId: self.languageID
+            languageId: languageID,
+            gender: gender,
+            address: self.addressField.text,
+            birthdate: formatter.dateFromString(self.birthdateField.text!)
         )
         
         LoginModel.register(user) { (status, message) -> Void in
@@ -70,27 +79,30 @@ class RegisterViewController: UIViewController, RegisterDelegate, UIPopoverPrese
     @IBAction func signInButtonClicked(sender: AnyObject) {
         self.navigationController?.popViewControllerAnimated(true);
     }
-    
-    func languageSelected(languageID:String, language:String) {
-        self.selectLanguageField.text = language
-        self.languageID = languageID
-    }
 
+    @IBAction func selectLanguageButtonClicked(sender: AnyObject) {
+        self.languageEnglishButton.selected = false
+        self.languageIndonesiaButton.selected = false
+        
+        if let button = sender as? UIButton {
+            button.selected = true
+        }
+    }
+    
+    @IBAction func selectGenderButtonClicked(sender: AnyObject) {
+        self.genderFemaleButton.selected = false
+        self.genderMaleButton.selected = false
+        
+        if let button = sender as? UIButton {
+            button.selected = true
+        }
+    }
     // MARK: - Navigation
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        if (segue.identifier == "SelectLanguageSegue") {
-            let controller : SelectLanguageViewController = segue.destinationViewController as! SelectLanguageViewController
-            controller.registerDelegate = self
-            controller.popoverPresentationController!.delegate = self
-            controller.preferredContentSize = CGSize(width: self.view.frame.size.width, height: 2 * 44)
-        }
         
     }
-    
-    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
-        return .None
-    }
+
 }

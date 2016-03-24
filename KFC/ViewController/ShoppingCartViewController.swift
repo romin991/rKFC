@@ -15,14 +15,16 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     @IBOutlet weak var deliveryChargeLabel: UILabel!
     @IBOutlet weak var taxLabel: UILabel!
     @IBOutlet weak var buttonView: UIView!
-
+    @IBOutlet weak var tableView: UITableView!
+    
+    var drawerDelegate:DrawerDelegate?
     var cart:Cart = Cart.init()
 //    var cartItems:[CartItem] = [CartItem]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        self.cart = CartModel.getPendingCart()
+//        self.cart = CartModel.getPendingCart()
 //        self.cartItems = CartItemModel.getCartItem(cart)
         
         self.keepShoppingButton.titleLabel?.adjustsFontSizeToFitWidth = true
@@ -36,6 +38,12 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         self.buttonView.layer.shadowRadius = 16.0
         self.buttonView.layer.shadowOffset = CGSize.init(width: 0, height: 1)
         self.buttonView.layer.masksToBounds = false
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.cart = CartModel.getPendingCart()
+        self.tableView.reloadData()
         
         self.taxLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.tax))
         self.deliveryChargeLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.delivery))
@@ -56,10 +64,16 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     @IBAction func keepShoppingButtonClicked(sender: AnyObject) {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.drawerDelegate?.selectMenu(Menu.Menu)
     }
     
     //MARK: UITableViewDelegate && UITableViewDataSource
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        let cartItem:CartItem = self.cart.cartItems[indexPath.row]
+        self.performSegueWithIdentifier("CartItemSegue", sender: cartItem)
+    }
+    
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
     }
@@ -114,14 +128,21 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         return cell
     }
     
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        
+        if (segue.identifier == "CartItemSegue"){
+            if let cartItem = sender as? CartItem {
+                let shoppingCartItemViewController:ShoppingCartItemViewController = segue.destinationViewController as! ShoppingCartItemViewController
+                shoppingCartItemViewController.product = ProductModel.getProductByCartItem(cartItem)
+                shoppingCartItemViewController.modifiers = ModifierModel.getModifier(shoppingCartItemViewController.product)
+                shoppingCartItemViewController.cartItem = cartItem
+            }
+        }
     }
-    */
 
 }

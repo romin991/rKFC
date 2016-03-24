@@ -8,12 +8,16 @@
 
 import UIKit
 
-class SelectLanguageViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+protocol PopoverDelegate{
+    func optionSelected(key:String, value:String)
+}
+
+class PopoverViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    var registerDelegate:RegisterDelegate?
+    var popoverDelegate:PopoverDelegate?
 
     @IBOutlet weak var tableView: UITableView!
-    let languages:NSDictionary = [LanguangeID.Indonesia: "Indonesia", LanguangeID.English: "English"]
+    var options:NSDictionary = NSDictionary()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,21 +32,21 @@ class SelectLanguageViewController: UIViewController, UITableViewDelegate, UITab
     //MARK:UITableViewDelegate && UITableViewDataSource
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        let key = (self.languages.allKeys[indexPath.row] as? String)!
-        let value = (self.languages.objectForKey(key) as? String)!
-        self.registerDelegate?.languageSelected(key, language: value)
+        let key = (self.options.allKeys[indexPath.row] as? String)!
+        let value = (self.options.objectForKey(key) as? String)!
+        self.popoverDelegate?.optionSelected(key, value: value)
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.languages.count
+        return self.options.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell : CustomTableViewCell = tableView.dequeueReusableCellWithIdentifier( "Cell", forIndexPath: indexPath) as! CustomTableViewCell
         
-        let key = (self.languages.allKeys[indexPath.row] as? String)!
-        cell.mainTitleLabel?.text = self.languages.objectForKey(key) as? String
+        let key = (self.options.allKeys[indexPath.row] as? String)!
+        cell.mainTitleLabel?.text = self.options.objectForKey(key) as? String
         
         return cell
     }

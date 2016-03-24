@@ -158,4 +158,43 @@ class LoginModel: NSObject {
         CartModel.deleteAllCart()
         UserModel.deleteAllUser()
     }
+    
+    class func getProfile(user:User, completion: (status: String, message:String, user:User?) -> Void){
+        let parameters : [String:AnyObject] = [
+            "customer_id" : user.customerId!
+        ]
+        
+        Alamofire.request(.POST, NSString.init(format: "%@/GetProfile", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        let status:String = json["status"].string!
+                        let message:String = json["message"].string!
+                        
+                        if (status == "T"){
+                            let user:User = UserModel.getUser()
+                            let customerJSON = json["customer"].dictionary!
+                            
+//                            user.fullname = customerJSON["fullname"]
+//                            user.gender = customerJSON["gender"]
+//                            user.handphone = customerJSON["handphone"]
+//                            user.birthdate = customerJSON["birthdate"] as? String!
+                            
+                            completion(status: Status.Success, message: message, user: user)
+                        } else {
+                            completion(status: Status.Error, message: message, user: nil)
+                        }
+                    } else {
+                        completion(status: Status.Error, message: "Not a valid JSON object", user: nil)
+                    }
+                    break;
+                case .Failure(let error):
+                    completion(status: Status.Error, message: error.localizedDescription, user: nil)
+                    break;
+                }
+                
+        }
+    }
 }

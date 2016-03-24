@@ -8,29 +8,21 @@
 
 import UIKit
 
-protocol ProductDetailModifierDelegate{
+protocol ModifierDelegate{
     func plusQuantity(modifierOption:ModifierOption)
     func minusQuantity(modifierOption:ModifierOption)
     func selectModifier(modifierOption:ModifierOption)
     func refresh()
 }
 
-class ProductDetailTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDataSource, ProductDetailModifierDelegate {
+class ModifierTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDataSource, ModifierDelegate {
     @IBOutlet weak var tableView: UITableView!
     
     var titleLabel:UILabel = UILabel.init()
-    var productDetailDelegate:ProductDetailDelegate?
     var totalQuantity:Int = 0
-    var modifier:Modifier? {
-        didSet{
-            for modifierOption in (modifier?.modifierOptions)!{
-                if (modifierOption.defaultSelect == true){
-                    modifierOption.quantity = (self.modifier?.minimumSelect)!
-                    self.totalQuantity = modifierOption.quantity
-                }
-            }
-        }
-    }
+    var modifier:Modifier?
+    var isFirstTime:Bool = true
+    var currentQuantity:Int = 0
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -41,6 +33,30 @@ class ProductDetailTableViewCell: UITableViewCell, UITableViewDelegate, UITableV
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func refreshCurrentQuantity(){
+        self.currentQuantity = 0
+        for modifierOption in (self.modifier?.modifierOptions)!{
+            self.currentQuantity += modifierOption.quantity
+        }
+    }
+
+    func quantityDidChange(quantity: Int) {// tell us if quantity on parent view changed
+        self.totalQuantity = quantity
+    }
+    
+    func resetToDefault(){
+        for modifierOption in (modifier?.modifierOptions)!{
+            if (modifierOption.defaultSelect == true){
+                modifierOption.selected = true
+                let minimum : Int = self.totalQuantity * (self.modifier?.minimumSelect)!
+                modifierOption.quantity = minimum
+            } else {
+                modifierOption.selected = false
+                modifierOption.quantity = 0
+            }
+        }
     }
     
     //MARK: ProductDetailModifierDelegate
@@ -54,47 +70,54 @@ class ProductDetailTableViewCell: UITableViewCell, UITableViewDelegate, UITableV
     }
     
     func plusQuantity(modifierOption: ModifierOption) {
-        if (self.productDetailDelegate != nil){
-            let minimum : Int = (self.productDetailDelegate?.getQuantity())! * (self.modifier?.minimumSelect)!
-            let maximum : Int = (self.productDetailDelegate?.getQuantity())! * (self.modifier?.maximumSelect)!
-            if (self.totalQuantity + 1 <= maximum){
-                modifierOption.quantity += 1
-                self.totalQuantity += 1
-                
-                if (self.totalQuantity >= minimum && self.totalQuantity <= maximum){
-                    self.modifier?.status = Status.Valid
-                } else {
-                    self.modifier?.status = Status.Invalid
-                }
-                self.tableView.reloadData()
+        let minimum : Int = self.totalQuantity * (self.modifier?.minimumSelect)!
+        let maximum : Int = self.totalQuantity * (self.modifier?.maximumSelect)!
+        if (self.currentQuantity + 1 <= maximum){
+            modifierOption.quantity += 1
+            self.currentQuantity += 1
+            
+            if (self.currentQuantity >= minimum && self.currentQuantity <= maximum){
+                self.modifier?.status = Status.Valid
+            } else {
+                self.modifier?.status = Status.Invalid
             }
+            
+            if (modifierOption.quantity > 0){
+                modifierOption.selected = true
+            } else {
+                modifierOption.selected = false
+            }
+            self.tableView.reloadData()
         }
     }
     
     func minusQuantity(modifierOption: ModifierOption) {
-        if (self.productDetailDelegate != nil){
-            let minimum : Int = (self.productDetailDelegate?.getQuantity())! * (self.modifier?.minimumSelect)!
-            let maximum : Int = (self.productDetailDelegate?.getQuantity())! * (self.modifier?.maximumSelect)!
-            if (modifierOption.quantity > 0){
-                modifierOption.quantity -= 1
-                self.totalQuantity -= 1
-                
-                if (self.totalQuantity >= minimum && self.totalQuantity <= maximum){
-                    self.modifier?.status = Status.Valid
-                } else {
-                    self.modifier?.status = Status.Invalid
-                }
-                self.tableView.reloadData()
+        let minimum : Int = self.totalQuantity * (self.modifier?.minimumSelect)!
+        let maximum : Int = self.totalQuantity * (self.modifier?.maximumSelect)!
+        if (modifierOption.quantity > 0){
+            modifierOption.quantity -= 1
+            self.currentQuantity -= 1
+            
+            if (self.currentQuantity >= minimum && self.currentQuantity <= maximum){
+                self.modifier?.status = Status.Valid
+            } else {
+                self.modifier?.status = Status.Invalid
             }
+            
+            if (modifierOption.quantity > 0){
+                modifierOption.selected = true
+            } else {
+                modifierOption.selected = false
+            }
+            self.tableView.reloadData()
         }
     }
     
     func selectModifier(modifierOption: ModifierOption) {
-        let quantity : Int = (self.productDetailDelegate?.getQuantity())!
         for tempModifierOption in (self.modifier?.modifierOptions)!{
             if (modifierOption == tempModifierOption){
                 tempModifierOption.selected = true
-                tempModifierOption.quantity = quantity
+                tempModifierOption.quantity = self.totalQuantity
             } else {
                 tempModifierOption.selected = false
                 tempModifierOption.quantity = 0
@@ -105,13 +128,10 @@ class ProductDetailTableViewCell: UITableViewCell, UITableViewDelegate, UITableV
     
     func validateModifier(){
         var tempTotalQuantity : Int = 0
-        let minimum : Int = (self.productDetailDelegate?.getQuantity())! * (self.modifier?.minimumSelect)!
-        let maximum : Int = (self.productDetailDelegate?.getQuantity())! * (self.modifier?.maximumSelect)!
+        let minimum : Int = totalQuantity * (self.modifier?.minimumSelect)!
+        let maximum : Int = totalQuantity * (self.modifier?.maximumSelect)!
         
         for tempModifierOption in (self.modifier?.modifierOptions)!{
-            if (self.modifier?.multipleSelect == false && tempModifierOption.selected == true){
-                tempModifierOption.quantity = (self.productDetailDelegate?.getQuantity())!
-            }
             tempTotalQuantity += tempModifierOption.quantity
         }
         
@@ -137,24 +157,24 @@ class ProductDetailTableViewCell: UITableViewCell, UITableViewDelegate, UITableV
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell : ProductDetailModifierTableViewCell
+        let cell : ModifierDetailTableViewCell
         
         if (indexPath.section == 0){
-            cell = tableView.dequeueReusableCellWithIdentifier( "Cell", forIndexPath: indexPath) as! ProductDetailModifierTableViewCell
+            cell = tableView.dequeueReusableCellWithIdentifier( "Cell", forIndexPath: indexPath) as! ModifierDetailTableViewCell
             cell.titleLabel.text = modifier?.name
             
         } else if (indexPath.section == 1){
             let modifierOption = self.modifier?.modifierOptions[indexPath.row]
             
             if (modifier?.multipleSelect == true){
-                cell = tableView.dequeueReusableCellWithIdentifier( "MultipleCell", forIndexPath: indexPath) as! ProductDetailModifierTableViewCell
+                cell = tableView.dequeueReusableCellWithIdentifier( "MultipleCell", forIndexPath: indexPath) as! ModifierDetailTableViewCell
                 cell.modifierOption = modifierOption
                 cell.titleLabel.text = modifierOption?.name
                 cell.delegate = self
                 cell.quantityLabel.text = "\((modifierOption?.quantity)!)"
                 
             } else {
-                cell = tableView.dequeueReusableCellWithIdentifier( "SingleCell", forIndexPath: indexPath) as! ProductDetailModifierTableViewCell
+                cell = tableView.dequeueReusableCellWithIdentifier( "SingleCell", forIndexPath: indexPath) as! ModifierDetailTableViewCell
                 cell.modifierOption = modifierOption
                 cell.titleLabel.text = modifierOption?.name
                 cell.delegate = self

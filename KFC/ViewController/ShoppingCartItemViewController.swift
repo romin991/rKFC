@@ -1,35 +1,33 @@
 //
-//  ProductDetailViewController.swift
+//  ShoppingCartItemViewController.swift
 //  KFC
 //
-//  Created by Rudy Suharyadi on 3/10/16.
+//  Created by Rudy Suharyadi on 3/23/16.
 //  Copyright © 2016 Roodie. All rights reserved.
 //
 
 import UIKit
 
-class ProductDetailViewController: UIViewController {
+class ShoppingCartItemViewController: UIViewController {
+    @IBOutlet weak var navigationTitleLabel: UILabel!
     @IBOutlet weak var productImage: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
-    @IBOutlet weak var quantityView: UIView!
+    @IBOutlet weak var quantityLabel: UILabel!
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var quantityMinusButton: UIButton!
     @IBOutlet weak var quantityPlusButton: UIButton!
-    @IBOutlet weak var quantityLabel: UILabel!
-    @IBOutlet weak var addToShoppingCartButton: UIButton!
+    @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var warningLabel: UILabel!
+    @IBOutlet weak var quantityView: UIView!
     @IBOutlet weak var warningView: UIView!
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var shoppingCartBadgesView: UIView!
-    @IBOutlet weak var shoppingCartBadgesLabel: UILabel!
-    
+
     @IBOutlet weak var contentViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var warningHeightConstraint: NSLayoutConstraint!
     
     var product : Product!
-    var category : Category!
     var modifiers : [Modifier]!
-    var drawerDelegate:DrawerDelegate?
+    var cartItem : CartItem!
     
     func registerNotification(){
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"refreshImageView", name: NotificationKey.ImageItemDownloaded, object: nil)
@@ -45,20 +43,33 @@ class ProductDetailViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         CustomView.custom(self.quantityView, borderColor: self.quantityView.backgroundColor!, cornerRadius: 22, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
-        CustomView.custom(self.addToShoppingCartButton, borderColor: self.addToShoppingCartButton.backgroundColor!, cornerRadius: 22, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
-        CustomView.custom(self.shoppingCartBadgesView, borderColor: UIColor.whiteColor(), cornerRadius: 8, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
+        CustomView.custom(self.saveButton, borderColor: self.saveButton.backgroundColor!, cornerRadius: 22, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
         
         if (self.product != nil){
             self.refreshImageView()
+            self.navigationTitleLabel.text = self.product.name
             self.titleLabel.text = self.product.name
             self.subtitleLabel.text = self.product.note
+            
+            if (self.cartItem != nil){
+                self.product.quantity = (self.cartItem?.quantity)!
+                self.quantityLabel.text = "\(self.product.quantity)"
+                
+                for modifier:Modifier in self.modifiers{
+                    for modifierOption:ModifierOption in modifier.modifierOptions{
+                        modifierOption.quantity = 0
+                        modifierOption.selected = false
+                        
+                        for cartModifier:CartModifier in (self.cartItem?.cartModifiers)!{
+                            if (modifier.id == cartModifier.modifierId && modifierOption.id == cartModifier.modifierOptionId){
+                                modifierOption.quantity = cartModifier.quantity!
+                                modifierOption.selected = true
+                            }
+                        }
+                    }
+                }
+            }
         }
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        let cart:Cart = CartModel.getPendingCart()
-        self.shoppingCartBadgesLabel.text = "\(cart.quantity!)"
     }
     
     func refreshImageView(){
@@ -82,12 +93,6 @@ class ProductDetailViewController: UIViewController {
         self.navigationController?.popViewControllerAnimated(true)
     }
 
-    @IBAction func shoppingCartButtonClicked(sender: AnyObject) {
-        let cartViewController:ShoppingCartViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ShoppingCartViewController") as? ShoppingCartViewController)!
-        cartViewController.drawerDelegate = self.drawerDelegate
-        self.navigationController?.pushViewController(cartViewController, animated: true)
-    }
-    
     @IBAction func quantityMinusButtonClicked(sender: AnyObject) {
         if (Int(self.quantityLabel.text!)! > 1){
             self.quantityLabel.text = "\(Int(self.quantityLabel.text!)! - 1)"
@@ -102,11 +107,11 @@ class ProductDetailViewController: UIViewController {
         self.tableView.reloadData()
     }
     
-    @IBAction func addToShoppingCartButtonClicked(sender: AnyObject) {
-        //get item quantity
-        //get item id
-        //add to shopping cart database
-        //go to shopping cart view
+    @IBAction func saveButtonClicked(sender: AnyObject) {
+        //remove old cartItem
+        //then add new cartItem
+        CartModel.removeCartItem(self.cartItem)
+        
         var price:NSDecimalNumber = NSDecimalNumber.init(longLong: 0)
         
         var cartModifiers:[CartModifier] = [CartModifier]()
@@ -122,10 +127,10 @@ class ProductDetailViewController: UIViewController {
                         quantity: modifierOption.quantity,
                         name: modifierOption.name
                     )
-                
+                    
                     let modifierPrice:NSDecimalNumber = NSDecimalNumber.init(string: modifierOption.price)
                     price = price.decimalNumberByAdding(modifierPrice)
-                
+                    
                     cartModifiers.append(cartModifier)
                 }
             }
@@ -145,7 +150,6 @@ class ProductDetailViewController: UIViewController {
         cartItem.cartModifiers = cartModifiers
         
         CartModel.addCartItem(cartItem)
-        
         self.navigationController?.popViewControllerAnimated(true)
     }
     
@@ -180,11 +184,15 @@ class ProductDetailViewController: UIViewController {
         let modifier = self.modifiers[indexPath.row]
         cell.modifier = modifier
         cell.quantityDidChange(self.product.quantity)
-        cell.resetToDefault()
+        if (cell.isFirstTime == true){
+            cell.isFirstTime = false
+        } else {
+            cell.resetToDefault()
+        }
         cell.refreshCurrentQuantity()
         cell.refresh();
         cell.validateModifier()
-    
+        
         return cell
     }
     

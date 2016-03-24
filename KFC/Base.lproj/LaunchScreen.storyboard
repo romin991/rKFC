@@ -17,65 +17,37 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Background" translatesAutoresizingMaskIntoConstraints="NO" id="Op4-5Q-kvI">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="GradientBackground" translatesAutoresizingMaskIntoConstraints="NO" id="Op4-5Q-kvI">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                            </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="Tdh-1q-nEV">
-                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="204" id="sWz-Cd-nSL">
-                                        <variation key="heightClass=regular-widthClass=compact" constant="200"/>
-                                    </constraint>
-                                    <constraint firstAttribute="width" constant="202" id="vjz-nE-cud">
-                                        <variation key="heightClass=regular-widthClass=compact" constant="200"/>
-                                    </constraint>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="sWz-Cd-nSL"/>
-                                        <exclude reference="vjz-nE-cud"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
-                                    <mask key="constraints">
-                                        <include reference="sWz-Cd-nSL"/>
-                                        <include reference="vjz-nE-cud"/>
-                                    </mask>
-                                </variation>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Tdh-1q-nEV" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="3KG-pJ-8bG"/>
-                            <constraint firstAttribute="bottom" secondItem="Op4-5Q-kvI" secondAttribute="bottom" id="QIz-sh-jj2"/>
-                            <constraint firstItem="Tdh-1q-nEV" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="QMt-py-Kgn"/>
-                            <constraint firstAttribute="trailing" secondItem="Op4-5Q-kvI" secondAttribute="trailing" id="WUw-hB-VUT"/>
-                            <constraint firstItem="Op4-5Q-kvI" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="X1a-zE-0Db"/>
+                            <constraint firstItem="Op4-5Q-kvI" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="Nwu-oa-NIR"/>
+                            <constraint firstItem="Op4-5Q-kvI" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="gUL-BR-kKq"/>
+                            <constraint firstAttribute="trailing" secondItem="Op4-5Q-kvI" secondAttribute="trailing" id="nbV-r9-TRc"/>
+                            <constraint firstAttribute="bottom" secondItem="Op4-5Q-kvI" secondAttribute="bottom" id="ulc-jF-obe"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="Op4-5Q-kvI"/>
-                                <exclude reference="Tdh-1q-nEV"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="QIz-sh-jj2"/>
-                                <exclude reference="WUw-hB-VUT"/>
-                                <exclude reference="X1a-zE-0Db"/>
-                                <exclude reference="3KG-pJ-8bG"/>
-                                <exclude reference="QMt-py-Kgn"/>
+                                <exclude reference="Nwu-oa-NIR"/>
+                                <exclude reference="gUL-BR-kKq"/>
+                                <exclude reference="nbV-r9-TRc"/>
+                                <exclude reference="ulc-jF-obe"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
                             <mask key="subviews">
                                 <include reference="Op4-5Q-kvI"/>
-                                <include reference="Tdh-1q-nEV"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="QIz-sh-jj2"/>
-                                <include reference="WUw-hB-VUT"/>
-                                <include reference="X1a-zE-0Db"/>
-                                <include reference="3KG-pJ-8bG"/>
-                                <include reference="QMt-py-Kgn"/>
+                                <include reference="Nwu-oa-NIR"/>
+                                <include reference="gUL-BR-kKq"/>
+                                <include reference="nbV-r9-TRc"/>
+                                <include reference="ulc-jF-obe"/>
                             </mask>
                         </variation>
                     </view>
@@ -86,7 +58,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Background" width="640" height="640"/>
-        <image name="Logo" width="199" height="200"/>
+        <image name="GradientBackground" width="375" height="667"/>
     </resources>
 </document>

@@ -51,7 +51,13 @@ class DrawerViewController: UIViewController, DrawerDelegate {
     }
     
     func selectMenu(menu:String){
-        if (menu == Menu.Main){
+        self.navigationController?.popToViewController(self.drawerController!, animated: true)
+        if (menu == Menu.Account) {
+            let centerViewController:ProfileViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as? ProfileViewController)!
+            centerViewController.drawerDelegate = self
+            self.drawerController?.centerViewController = centerViewController
+            
+        } else if (menu == Menu.Main){
             let centerViewController:MainViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("MainViewController") as? MainViewController)!
             centerViewController.drawerDelegate = self
             self.drawerController?.centerViewController = centerViewController
@@ -59,9 +65,17 @@ class DrawerViewController: UIViewController, DrawerDelegate {
         } else if (menu == Menu.History){
 //            let centerViewController = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("HistoryViewController")
 //            self.drawerController?.centerViewController = centerViewController
+            
+        } else if (menu == Menu.Menu) {
+            let centerViewController:CategoryViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CategoryViewController") as? CategoryViewController)!
+            centerViewController.drawerDelegate = self
+            self.drawerController?.centerViewController = centerViewController
+            
         } else if (menu == Menu.Logout){
             LoginModel.logout()
+            let rootViewController = self.navigationController?.viewControllers.first
             self.navigationController?.popToRootViewControllerAnimated(false)
+            rootViewController?.performSegueWithIdentifier("LoginSegue", sender: nil)
         }
         self.drawerController?.closeDrawerAnimated(true, completion: nil)
     }

@@ -10,7 +10,7 @@ import UIKit
 
 class LeftViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
-    let menus:[String] = [Menu.Account, Menu.Main, Menu.History, Menu.Promo, Menu.Logout]
+    let menus:[String] = [Menu.Account, Menu.Main, Menu.History, Menu.Menu, Menu.Promo, Menu.ChangeLanguage, Menu.Logout]
     var drawerDelegate:DrawerDelegate?
     
     override func viewDidLoad() {
@@ -26,7 +26,7 @@ class LeftViewController: UIViewController, UITableViewDelegate, UITableViewData
     //MARK: TableViewDataSource & TableViewDelegate
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if (indexPath.section == 0){
-            return 127
+            return 191
         } else if (indexPath.section == 1){
             return 56
         } else {
@@ -48,7 +48,7 @@ class LeftViewController: UIViewController, UITableViewDelegate, UITableViewData
         if (section == 0){
             return 1
         } else if (section == 1){
-            return 5
+            return self.menus.count
         } else {
             return 0
         }
@@ -68,7 +68,11 @@ class LeftViewController: UIViewController, UITableViewDelegate, UITableViewData
                 cell.imageBackground.image = UIImage.init(named: "MenuMain")
             } else if (title == Menu.History){
                 cell.imageBackground.image = UIImage.init(named: "MenuHistory")
+            } else if (title == Menu.Menu){
+                cell.imageBackground.image = UIImage.init(named: "MenuHistory")
             } else if (title == Menu.Promo){
+                cell.imageBackground.image = UIImage.init(named: "MenuPromo")
+            } else if (title == Menu.ChangeLanguage){
                 cell.imageBackground.image = UIImage.init(named: "MenuPromo")
             } else if (title == Menu.Logout){
                 cell.imageBackground.image = UIImage.init(named: "MenuLogout")
