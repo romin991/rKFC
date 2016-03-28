@@ -22,14 +22,18 @@ class ProductDetailViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var shoppingCartBadgesView: UIView!
     @IBOutlet weak var shoppingCartBadgesLabel: UILabel!
+    @IBOutlet weak var navigationTitleLabel: UILabel!
     
     @IBOutlet weak var contentViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var warningHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var chooseQuantityLabel: UILabel!
     
     var product : Product!
     var category : Category!
     var modifiers : [Modifier]!
     var drawerDelegate:DrawerDelegate?
+    var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
     
     func registerNotification(){
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"refreshImageView", name: NotificationKey.ImageItemDownloaded, object: nil)
@@ -38,6 +42,10 @@ class ProductDetailViewController: UIViewController {
     override func awakeFromNib() {
         super.awakeFromNib()
         self.registerNotification()
+    }
+    
+    deinit{
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     override func viewDidLoad() {
@@ -50,9 +58,14 @@ class ProductDetailViewController: UIViewController {
         
         if (self.product != nil){
             self.refreshImageView()
-            self.titleLabel.text = self.product.name
-            self.subtitleLabel.text = self.product.note
+            self.navigationTitleLabel.text = self.product.names.filter{$0.languageId == self.languageId}.first?.name
+            self.titleLabel.text = self.product.names.filter{$0.languageId == self.languageId}.first?.name
+            self.subtitleLabel.text = self.product.notes.filter{$0.languageId == self.languageId}.first?.name
         }
+        
+        //change label language
+        self.chooseQuantityLabel.text = ShoppingCart.ChooseQuantity[self.languageId]
+        self.addToShoppingCartButton.setTitle(ShoppingCart.AddToCart[self.languageId], forState: UIControlState.Normal)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -149,9 +162,9 @@ class ProductDetailViewController: UIViewController {
                                 cartItemGuid: nil,
                                 modifierId: modifier.id,
                                 modifierOptionId: modifierOption.id,
-                                quantity: modifierOption.quantity,
-                                name: modifierOption.name
+                                quantity: modifierOption.quantity
                             )
+                            cartModifier.names = modifierOption.names
                             
                             savedCartItem?.cartModifiers.append(cartModifier)
                             savedCartItem?.price = NSDecimalNumber.init(string:savedCartItem?.price).decimalNumberByAdding(NSDecimalNumber.init(string:modifierOption.price)).stringValue
@@ -180,9 +193,9 @@ class ProductDetailViewController: UIViewController {
                             cartItemGuid: nil,
                             modifierId: modifier.id,
                             modifierOptionId: modifierOption.id,
-                            quantity: modifierOption.quantity,
-                            name: modifierOption.name
+                            quantity: modifierOption.quantity
                         )
+                        cartModifier.names = modifierOption.names
                         
                         let modifierPrice:NSDecimalNumber = NSDecimalNumber.init(string: modifierOption.price)
                         price = price.decimalNumberByAdding(modifierPrice)
@@ -200,9 +213,9 @@ class ProductDetailViewController: UIViewController {
                 productId: self.product.id,
                 quantity: self.product.quantity,
                 price: price.stringValue,
-                name: self.product.name,
                 total: total.stringValue
             )
+            cartItem.names = self.product.names
             cartItem.cartModifiers = cartModifiers
             
             CartModel.addCartItem(cartItem)

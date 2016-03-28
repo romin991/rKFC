@@ -11,9 +11,29 @@ import UIKit
 class CategoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var shoppingCartBadgesView: UIView!
     @IBOutlet weak var shoppingCartBadgesLabel: UILabel!
+    @IBOutlet weak var tableView: UITableView!
     
     var categories:[Category] = [Category]()
     var drawerDelegate:DrawerDelegate?
+    var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+    
+    func registerNotification(){
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"refreshLanguage", name: NotificationKey.LanguageChanged, object: nil)
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.registerNotification()
+    }
+    
+    deinit{
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func refreshLanguage(){
+        self.languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+        self.tableView.reloadData()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +81,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         let cell : CustomTableViewCell = tableView.dequeueReusableCellWithIdentifier( "Cell", forIndexPath: indexPath) as! CustomTableViewCell
         
         let category:Category = self.categories[indexPath.row]
-        cell.mainTitleLabel?.text = category.name
+        cell.mainTitleLabel?.text = category.names.filter{$0.languageId == self.languageId}.first?.name
         
         //TODO: category image still not found in API, fix this after the API fixed
         cell.imageBackground?.backgroundColor = UIColor.grayColor()

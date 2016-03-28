@@ -21,12 +21,32 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     @IBOutlet weak var addressStoreLabel: UILabel!
     @IBOutlet weak var shoppingCartBadgesView: UIView!
     @IBOutlet weak var shoppingCartBadgesLabel: UILabel!
+    @IBOutlet weak var navigationTitleLabel: UILabel!
     
     var currentPosition: CLLocation?
     let locationManager = CLLocationManager()
     var drawerDelegate:DrawerDelegate?
     var selectedAddress:Address?
     var selectedStore:Store?
+    var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+    
+    func registerNotification(){
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"refreshLanguage", name: NotificationKey.LanguageChanged, object: nil)
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.registerNotification()
+    }
+    
+    deinit{
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func refreshLanguage(){
+        self.languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+        self.navigationTitleLabel.text = Map.ChooseAddress[self.languageId]
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +69,15 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         self.addressTextField.backgroundImage = UIImage.init()
         
         self.hideStoreView()
+        
+        self.refreshLanguage()
+        
+        //clear data
+        CategoryModel.deleteAllCategory()
+        ProductModel.deleteAllProduct()
+        ModifierModel.deleteAllModifier()
+        ModifierOptionModel.deleteAllModifierOption()
+        CartModel.deletePendingCart()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -151,7 +180,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
             if (status == Status.Success && address != nil && address != "") {
                 resultText = address!
             } else {
-                resultText = "No Address Found"
+                resultText = Map.NotFound[self.languageId]!
             }
             
             //display address to address field
@@ -167,7 +196,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     }
     
     @IBAction func KFCStoreButtonClicked(sender: AnyObject) {
-        self.drawerDelegate?.selectMenu(Menu.Menu)
+        self.drawerDelegate?.selectMenu(Menu.Menu[self.languageId]!)
     }
     
 //MARK: SearchAddressDelegate

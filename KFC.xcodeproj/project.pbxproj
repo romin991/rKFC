@@ -48,10 +48,12 @@
 		487BDDEB1C9448AA00FED8B5 /* ModifierDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487BDDEA1C9448AA00FED8B5 /* ModifierDetailTableViewCell.swift */; };
 		48B397BC1C9B8FEE0016D01C /* OrderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B397BB1C9B8FEE0016D01C /* OrderModel.swift */; };
 		48BDE1381C7D9FC300D6619E /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BDE1371C7D9FC300D6619E /* Store.swift */; };
+		48EB97C91CA808A000CB7870 /* Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EB97C81CA808A000CB7870 /* Name.swift */; };
 		48ECEA411C8690C500CC33BE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 48ECEA401C8690C500CC33BE /* GoogleService-Info.plist */; };
 		48F04A481C9BD65500E82C18 /* CheckoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F04A471C9BD65500E82C18 /* CheckoutViewController.swift */; };
 		48F04A6E1CA008FF00E82C18 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F04A6D1CA008FF00E82C18 /* ProfileViewController.swift */; };
 		48F04A771CA260AB00E82C18 /* ShoppingCartItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F04A761CA260AB00E82C18 /* ShoppingCartItemViewController.swift */; };
+		48F04A7B1CA3C63300E82C18 /* HelperModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F04A7A1CA3C63300E82C18 /* HelperModel.swift */; };
 		48F785961C7C459F00D5D3E3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F785951C7C459F00D5D3E3 /* AppDelegate.swift */; };
 		48F7859B1C7C459F00D5D3E3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48F785991C7C459F00D5D3E3 /* Main.storyboard */; };
 		48F7859D1C7C459F00D5D3E3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48F7859C1C7C459F00D5D3E3 /* Assets.xcassets */; };
@@ -100,10 +102,12 @@
 		487BDDEA1C9448AA00FED8B5 /* ModifierDetailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ModifierDetailTableViewCell.swift; path = ViewController/ModifierDetailTableViewCell.swift; sourceTree = "<group>"; };
 		48B397BB1C9B8FEE0016D01C /* OrderModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OrderModel.swift; path = Model/OrderModel.swift; sourceTree = "<group>"; };
 		48BDE1371C7D9FC300D6619E /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Store.swift; path = Object/Store.swift; sourceTree = "<group>"; };
+		48EB97C81CA808A000CB7870 /* Name.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Name.swift; path = Object/Name.swift; sourceTree = "<group>"; };
 		48ECEA401C8690C500CC33BE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		48F04A471C9BD65500E82C18 /* CheckoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CheckoutViewController.swift; path = ViewController/CheckoutViewController.swift; sourceTree = "<group>"; };
 		48F04A6D1CA008FF00E82C18 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileViewController.swift; path = ViewController/ProfileViewController.swift; sourceTree = "<group>"; };
 		48F04A761CA260AB00E82C18 /* ShoppingCartItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShoppingCartItemViewController.swift; path = ViewController/ShoppingCartItemViewController.swift; sourceTree = "<group>"; };
+		48F04A7A1CA3C63300E82C18 /* HelperModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HelperModel.swift; path = Model/HelperModel.swift; sourceTree = "<group>"; };
 		48F570561C7F1DEB00DC2C2A /* KFC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KFC-Bridging-Header.h"; sourceTree = "<group>"; };
 		48F785921C7C459F00D5D3E3 /* KFC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KFC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		48F785951C7C459F00D5D3E3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -243,6 +247,7 @@
 				48580F851C97F0AE00A44166 /* CartItem.swift */,
 				48580F871C97F0CE00A44166 /* CartModifier.swift */,
 				48580F8F1C983F9400A44166 /* User.swift */,
+				48EB97C81CA808A000CB7870 /* Name.swift */,
 			);
 			name = Object;
 			sourceTree = "<group>";
@@ -323,6 +328,7 @@
 				481589AF1C7D4F4600C41B0D /* LoginModel.swift */,
 				481A33851C7ED7E50074FD23 /* MainModel.swift */,
 				48B397BB1C9B8FEE0016D01C /* OrderModel.swift */,
+				48F04A7A1CA3C63300E82C18 /* HelperModel.swift */,
 			);
 			name = API;
 			sourceTree = "<group>";
@@ -512,6 +518,7 @@
 				48580F921C98400400A44166 /* UserModel.swift in Sources */,
 				481589AC1C7D47D400C41B0D /* LoginViewController.swift in Sources */,
 				481589B01C7D4F4600C41B0D /* LoginModel.swift in Sources */,
+				48EB97C91CA808A000CB7870 /* Name.swift in Sources */,
 				487BDDE91C94486900FED8B5 /* ModifierTableViewCell.swift in Sources */,
 				482162AB1C917EC8008B571C /* CategoryModel.swift in Sources */,
 				487BDDDE1C940D8900FED8B5 /* Modifier.swift in Sources */,
@@ -535,6 +542,7 @@
 				48B397BC1C9B8FEE0016D01C /* OrderModel.swift in Sources */,
 				487BDDE01C940D9900FED8B5 /* ModifierOption.swift in Sources */,
 				481A33881C7EF2B30074FD23 /* SearchAddressViewController.swift in Sources */,
+				48F04A7B1CA3C63300E82C18 /* HelperModel.swift in Sources */,
 				487A4C4A1C9687D200B90EEE /* DrawerViewController.swift in Sources */,
 				482162721C91372B008B571C /* CategoryViewController.swift in Sources */,
 				48F04A481C9BD65500E82C18 /* CheckoutViewController.swift in Sources */,

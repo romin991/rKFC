@@ -37,6 +37,9 @@ class CartModel: NSObject {
         cdCart.setValue(cart.long, forKey: "long")
         cdCart.setValue(cart.lat, forKey: "lat")
         cdCart.setValue(cart.recipient, forKey: "recipient")
+        cdCart.setValue(cart.transId, forKey: "transId")
+        cdCart.setValue(cart.transNo, forKey: "transNo")
+        cdCart.setValue(cart.transDate, forKey: "transDate")
         
         do {
             try managedContext.save()
@@ -68,6 +71,9 @@ class CartModel: NSObject {
                 cdCart.setValue(cart.long, forKey: "long")
                 cdCart.setValue(cart.lat, forKey: "lat")
                 cdCart.setValue(cart.recipient, forKey: "recipient")
+                cdCart.setValue(cart.transId, forKey: "transId")
+                cdCart.setValue(cart.transNo, forKey: "transNo")
+                cdCart.setValue(cart.transDate, forKey: "transDate")
                 
                 try cdCart.managedObjectContext?.save()
             }
@@ -120,8 +126,26 @@ class CartModel: NSObject {
                 cdCartItem.setValue(cartItem.productId, forKey: "productId")
                 cdCartItem.setValue(cartItem.quantity, forKey: "quantity")
                 cdCartItem.setValue(cartItem.price, forKey: "price")
-                cdCartItem.setValue(cartItem.name, forKey: "name")
                 cdCartItem.setValue(cartItem.total, forKey: "total")
+                
+                let setNames = cdCartItem.mutableSetValueForKey("names")
+                for name in cartItem.names{
+                    
+                    name.guid = NSUUID().UUIDString
+                    name.refGuid = cartItem.guid
+                    name.refTable = Table.CartItem
+                    
+                    let entityName =  NSEntityDescription.entityForName("Name", inManagedObjectContext:managedContext)
+                    let cdName = NSManagedObject(entity: entityName!, insertIntoManagedObjectContext: managedContext)
+                    
+                    cdName.setValue(name.guid, forKey: "guid")
+                    cdName.setValue(name.languageId, forKey: "languageId")
+                    cdName.setValue(name.name, forKey: "name")
+                    cdName.setValue(name.refId, forKey: "refId")
+                    cdName.setValue(name.refTable, forKey: "refTable")
+                    
+                    setNames.addObject(cdName)
+                }
                 
                 let setModifiers = cdCartItem.mutableSetValueForKey("cartModifiers")
                 for cartModifier in cartItem.cartModifiers{
@@ -136,7 +160,25 @@ class CartModel: NSObject {
                     cdCartModifier.setValue(cartModifier.modifierId, forKey: "modifierId")
                     cdCartModifier.setValue(cartModifier.modifierOptionId, forKey: "modifierOptionId")
                     cdCartModifier.setValue(cartModifier.quantity, forKey: "quantity")
-                    cdCartModifier.setValue(cartModifier.name, forKey: "name")
+                    
+                    let setNames = cdCartModifier.mutableSetValueForKey("names")
+                    for name in cartModifier.names{
+                        
+                        name.guid = NSUUID().UUIDString
+                        name.refGuid = cartModifier.guid
+                        name.refTable = Table.CartModifier
+                        
+                        let entityName =  NSEntityDescription.entityForName("Name", inManagedObjectContext:managedContext)
+                        let cdName = NSManagedObject(entity: entityName!, insertIntoManagedObjectContext: managedContext)
+                        
+                        cdName.setValue(name.guid, forKey: "guid")
+                        cdName.setValue(name.languageId, forKey: "languageId")
+                        cdName.setValue(name.name, forKey: "name")
+                        cdName.setValue(name.refId, forKey: "refId")
+                        cdName.setValue(name.refTable, forKey: "refTable")
+                        
+                        setNames.addObject(cdName)
+                    }
                     
                     setModifiers.addObject(cdCartModifier)
                 }
@@ -190,6 +232,29 @@ class CartModel: NSObject {
         }
     }
     
+    class func isPendingCartNotEmpty() -> Bool{ //fast checking without return the data
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let managedContext = appDelegate.managedObjectContext
+        
+        let fetchRequest = NSFetchRequest(entityName: "Cart")
+        fetchRequest.predicate = NSPredicate(format: "status = %@", Status.Pending)
+        
+        do {
+            let results = try managedContext.executeFetchRequest(fetchRequest)
+            let cdCarts = results as! [NSManagedObject]
+            if (cdCarts.count > 0){
+                let cdCart = cdCarts.first!
+                if (cdCart.valueForKey("quantity") as? Int > 0) {
+                    return true
+                }
+            }
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+        
+        return false
+    }
+    
     class func getPendingCart() -> Cart{
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedContext = appDelegate.managedObjectContext
@@ -221,30 +286,60 @@ class CartModel: NSObject {
                 cart.long = (cdCart.valueForKey("long") as? Double)!
                 cart.lat = (cdCart.valueForKey("lat") as? Double)!
                 cart.recipient = (cdCart.valueForKey("recipient") as? String)!
+                cart.transId = (cdCart.valueForKey("transId") as? String)!
+                cart.transNo = (cdCart.valueForKey("transNo") as? String)!
+                cart.transDate = (cdCart.valueForKey("transDate") as? NSDate)!
                 
-                let cdCartItems = cdCart.mutableSetValueForKey("CartItems")
+                let cdCartItems = cdCart.mutableSetValueForKey("cartItems")
                 for cdCartItem in cdCartItems{
                     let cartItem = CartItem.init(
                         guid: (cdCartItem.valueForKey("guid") as? String)!,
-                        cartGuid: (cdCartItem.valueForKey("cartGuid") as? String)!,
-                        productId: (cdCartItem.valueForKey("productId") as? String)!,
-                        quantity: (cdCartItem.valueForKey("quantity") as? Int)!,
-                        price: (cdCartItem.valueForKey("price") as? String)!,
-                        name: (cdCartItem.valueForKey("name") as? String)!,
-                        total: (cdCartItem.valueForKey("total") as? String)!
+                        cartGuid: (cdCartItem.valueForKey("cartGuid") as? String),
+                        productId: (cdCartItem.valueForKey("productId") as? String),
+                        quantity: (cdCartItem.valueForKey("quantity") as? Int),
+                        price: (cdCartItem.valueForKey("price") as? String),
+                        total: (cdCartItem.valueForKey("total") as? String)
                     )
+                    
+                    let cdNames = cdCartItem.mutableSetValueForKey("names")
+                    for cdName in cdNames{
+                        let name = Name.init(
+                            guid: (cdName.valueForKey("guid") as? String),
+                            languageId: (cdName.valueForKey("languageId") as? String),
+                            name: (cdName.valueForKey("name") as? String),
+                            refId: (cdName.valueForKey("refId") as? String),
+                            refGuid: (cdName.valueForKey("refGuid") as? String),
+                            refTable: (cdName.valueForKey("refTable") as? String)
+                        )
+                        
+                        cartItem.names.append(name)
+                    }
                     
                     let cdCartModifiers = cdCartItem.mutableSetValueForKey("cartModifiers")
                     for cdCartModifier in cdCartModifiers{
                         let cartModifier = CartModifier.init(
-                            guid: (cdCartModifier.valueForKey("guid") as? String)!,
-                            cartGuid: (cdCartModifier.valueForKey("cartGuid") as? String)!,
-                            cartItemGuid: (cdCartModifier.valueForKey("cartItemGuid") as? String)!,
-                            modifierId: (cdCartModifier.valueForKey("modifierId") as? String)!,
-                            modifierOptionId: (cdCartModifier.valueForKey("modifierOptionId") as? String)!,
-                            quantity: (cdCartModifier.valueForKey("quantity") as? Int)!,
-                            name: (cdCartModifier.valueForKey("name") as? String)!
+                            guid: (cdCartModifier.valueForKey("guid") as? String),
+                            cartGuid: (cdCartModifier.valueForKey("cartGuid") as? String),
+                            cartItemGuid: (cdCartModifier.valueForKey("cartItemGuid") as? String),
+                            modifierId: (cdCartModifier.valueForKey("modifierId") as? String),
+                            modifierOptionId: (cdCartModifier.valueForKey("modifierOptionId") as? String),
+                            quantity: (cdCartModifier.valueForKey("quantity") as? Int)
                         )
+                        
+                        let cdNames = cdCartModifier.mutableSetValueForKey("names")
+                        for cdName in cdNames{
+                            let name = Name.init(
+                                guid: (cdName.valueForKey("guid") as? String),
+                                languageId: (cdName.valueForKey("languageId") as? String),
+                                name: (cdName.valueForKey("name") as? String),
+                                refId: (cdName.valueForKey("refId") as? String),
+                                refGuid: (cdName.valueForKey("refGuid") as? String),
+                                refTable: (cdName.valueForKey("refTable") as? String)
+                            )
+                            
+                            cartModifier.names.append(name)
+                        }
+                        
                         cartItem.cartModifiers.append(cartModifier)
                     }
                     
@@ -271,23 +366,26 @@ class CartModel: NSObject {
             let cdCarts = results as! [NSManagedObject]
             for cdCart in cdCarts{
                 let cart = Cart.init(
-                    guid: (cdCart.valueForKey("guid") as? String)!,
-                    notes: (cdCart.valueForKey("notes") as? String)!,
-                    status: (cdCart.valueForKey("status") as? String)!,
-                    subtotal: (cdCart.valueForKey("subtotal") as? String)!,
-                    tax: (cdCart.valueForKey("tax") as? String)!,
-                    delivery: (cdCart.valueForKey("delivery") as? String)!,
-                    total: (cdCart.valueForKey("total") as? String)!,
-                    customerId: (cdCart.valueForKey("customerId") as? String)!,
-                    customerAddressId: (cdCart.valueForKey("customerAddressId") as? String)!,
-                    storeId: (cdCart.valueForKey("storeId") as? String)!,
-                    priceId: (cdCart.valueForKey("priceId") as? String)!,
-                    quantity: (cdCart.valueForKey("quantity") as? Int)!,
-                    address: (cdCart.valueForKey("address") as? String)!,
-                    addressDetail: (cdCart.valueForKey("addressDetail") as? String)!,
-                    long: (cdCart.valueForKey("long") as? Double)!,
-                    lat: (cdCart.valueForKey("lat") as? Double)!,
-                    recipient: (cdCart.valueForKey("recipient") as? String)!
+                    guid: (cdCart.valueForKey("guid") as? String),
+                    notes: (cdCart.valueForKey("notes") as? String),
+                    status: (cdCart.valueForKey("status") as? String),
+                    subtotal: (cdCart.valueForKey("subtotal") as? String),
+                    tax: (cdCart.valueForKey("tax") as? String),
+                    delivery: (cdCart.valueForKey("delivery") as? String),
+                    total: (cdCart.valueForKey("total") as? String),
+                    customerId: (cdCart.valueForKey("customerId") as? String),
+                    customerAddressId: (cdCart.valueForKey("customerAddressId") as? String),
+                    storeId: (cdCart.valueForKey("storeId") as? String),
+                    priceId: (cdCart.valueForKey("priceId") as? String),
+                    quantity: (cdCart.valueForKey("quantity") as? Int),
+                    address: (cdCart.valueForKey("address") as? String),
+                    addressDetail: (cdCart.valueForKey("addressDetail") as? String),
+                    long: (cdCart.valueForKey("long") as? Double),
+                    lat: (cdCart.valueForKey("lat") as? Double),
+                    recipient: (cdCart.valueForKey("recipient") as? String),
+                    transId: (cdCart.valueForKey("transId") as? String),
+                    transNo: (cdCart.valueForKey("transNo") as? String),
+                    transDate: (cdCart.valueForKey("transDate") as? NSDate)
                 )
                 carts.append(cart)
             }

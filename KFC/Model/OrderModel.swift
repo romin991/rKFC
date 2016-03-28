@@ -162,4 +162,97 @@ class OrderModel: NSObject {
         
     }
     
+    class func getOrderList(completion: (status: String, message:String) -> Void){
+        let user:User = UserModel.getUser()
+        
+        let parameters:[String:AnyObject] = [
+            "customer_id" : user.customerId!
+        ]
+        
+        Alamofire.request(.POST, NSString.init(format: "%@/GetOrderHistory", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        let status:String = json["status"].string!
+                        let message:String = json["message"].string!
+                        
+                        if (status == "T"){
+                            
+                            
+                            completion(status: Status.Success, message: message)
+                        } else {
+                            completion(status: Status.Error, message: message)
+                        }
+                    } else {
+                        completion(status: Status.Error, message: "Not a valid JSON object")
+                    }
+                    break;
+                case .Failure(let error):
+                    completion(status: Status.Error, message: error.localizedDescription)
+                    break;
+                }
+                
+        }
+    }
+    
+    class func getOrderDetail(transId:String, transDate:NSDate, completion: (status: String, message: String) -> Void){
+        let parameters:[String:AnyObject] = [
+            "trans_id" : transId
+        ]
+        
+        Alamofire.request(.POST, NSString.init(format: "%@/GetOrderDetail", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        let status:String = json["status"].string!
+                        let message:String = json["message"].string!
+                        
+                        if (status == "T"){
+                            var orderStatus:String = Status.Delivered
+                            if (json["trans"]["status"].string! == "ON PROGRESS"){
+                                orderStatus = Status.Outgoing
+                            }
+                            
+                            let cart:Cart = Cart.init(
+                                guid: nil,
+                                notes: nil,
+                                status: orderStatus,
+                                subtotal: json["trans"]["total_amount"].string!,
+                                tax: json["trans"]["total_tax"].string!,
+                                delivery: json["trans"]["delivery_charge"].string!,
+                                total: json["trans"]["total_sales"].string!,
+                                customerId: json["trans"]["customer_id"].string!,
+                                customerAddressId: json["trans"]["customer_address_id"].string!,
+                                storeId: nil,
+                                priceId: nil,
+                                quantity: 0,
+                                address: json["trans"]["customer_address"].string!,
+                                addressDetail: nil,
+                                long: 0,
+                                lat: 0,
+                                recipient: json["trans"]["customer_address_recipient"].string!,
+                                transId: json["trans"]["trans_id"].string!,
+                                transNo: json["trans"]["trans_no"].string!,
+                                transDate: transDate
+                            )
+                            completion(status: Status.Success, message: message)
+                        } else {
+                            completion(status: Status.Error, message: message)
+                        }
+                    } else {
+                        completion(status: Status.Error, message: "Not a valid JSON object")
+                    }
+                    break;
+                case .Failure(let error):
+                    completion(status: Status.Error, message: error.localizedDescription)
+                    break;
+                }
+                
+        }
+    }
+    
 }

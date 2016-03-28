@@ -25,9 +25,12 @@ class ShoppingCartItemViewController: UIViewController {
     @IBOutlet weak var contentViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var warningHeightConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var chooseQuantityLabel: UILabel!
+    
     var product : Product!
     var modifiers : [Modifier]!
     var cartItem : CartItem!
+    var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
     
     func registerNotification(){
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"refreshImageView", name: NotificationKey.ImageItemDownloaded, object: nil)
@@ -36,6 +39,10 @@ class ShoppingCartItemViewController: UIViewController {
     override func awakeFromNib() {
         super.awakeFromNib()
         self.registerNotification()
+    }
+    
+    deinit{
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     override func viewDidLoad() {
@@ -47,9 +54,9 @@ class ShoppingCartItemViewController: UIViewController {
         
         if (self.product != nil){
             self.refreshImageView()
-            self.navigationTitleLabel.text = self.product.name
-            self.titleLabel.text = self.product.name
-            self.subtitleLabel.text = self.product.note
+            self.navigationTitleLabel.text = self.product.names.filter{$0.languageId == self.languageId}.first?.name
+            self.titleLabel.text = self.product.names.filter{$0.languageId == self.languageId}.first?.name
+            self.subtitleLabel.text = self.product.notes.filter{$0.languageId == self.languageId}.first?.name
             
             if (self.cartItem != nil){
                 self.product.quantity = (self.cartItem?.quantity)!
@@ -70,6 +77,10 @@ class ShoppingCartItemViewController: UIViewController {
                 }
             }
         }
+        
+        //change language label
+        self.chooseQuantityLabel.text = ShoppingCart.ChooseQuantity[self.languageId]
+        self.saveButton.setTitle(Common.Save[self.languageId], forState: UIControlState.Normal)
     }
     
     func refreshImageView(){
@@ -124,9 +135,9 @@ class ShoppingCartItemViewController: UIViewController {
                         cartItemGuid: nil,
                         modifierId: modifier.id,
                         modifierOptionId: modifierOption.id,
-                        quantity: modifierOption.quantity,
-                        name: modifierOption.name
+                        quantity: modifierOption.quantity
                     )
+                    cartModifier.names = modifierOption.names
                     
                     let modifierPrice:NSDecimalNumber = NSDecimalNumber.init(string: modifierOption.price)
                     price = price.decimalNumberByAdding(modifierPrice)
@@ -144,9 +155,9 @@ class ShoppingCartItemViewController: UIViewController {
             productId: self.product.id,
             quantity: self.product.quantity,
             price: price.stringValue,
-            name: self.product.name,
             total: total.stringValue
         )
+        cartItem.names = self.product.names
         cartItem.cartModifiers = cartModifiers
         
         CartModel.addCartItem(cartItem)

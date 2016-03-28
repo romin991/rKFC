@@ -16,24 +16,22 @@ class Modifier: NSObject {
     var minimumSelect : Int? = 0
     var maximumSelect : Int? = 0
     var multipleSelect : Bool? = false
-    var name : String? = ""
     var productId : String? = ""
     var productGuid : String? = ""
     var modifierOptions : [ModifierOption] = [ModifierOption]()
+    var names : [Name] = [Name]()
     
     var status : String = ""
     
-    init(guid:String?, id:String?, amount:String?, minimumSelect:Int?, maximumSelect:Int?, multipleSelect:Bool?, name:String?, productId:String?, productGuid:String?, modifierOptions:[ModifierOption]){
+    init(guid:String?, id:String?, amount:String?, minimumSelect:Int?, maximumSelect:Int?, multipleSelect:Bool?, productId:String?, productGuid:String?){
         self.guid = guid
         self.id = id
         self.amount = amount
         self.minimumSelect = minimumSelect
         self.maximumSelect = maximumSelect
         self.multipleSelect = multipleSelect
-        self.name = name
         self.productId = productId
         self.productGuid = productGuid
-        self.modifierOptions = modifierOptions
         
         self.status = Status.Valid
         

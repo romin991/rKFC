@@ -28,7 +28,26 @@ class ModifierOptionModel: NSObject {
         cdModifierOption.setValue(modifierOption.modifierId, forKey: "modifierId")
         cdModifierOption.setValue(modifierOption.modifierGuid, forKey: "modifierGuid")
         cdModifierOption.setValue(modifierOption.price, forKey: "price")
-        cdModifierOption.setValue(modifierOption.name, forKey: "name")
+        
+        let setNames = cdModifierOption.mutableSetValueForKey("names")
+        for name in modifierOption.names{
+            
+            name.guid = NSUUID().UUIDString
+            name.refId = modifierOption.id
+            name.refTable = Table.ModifierOption
+            
+            let entityName =  NSEntityDescription.entityForName("Name", inManagedObjectContext:managedContext)
+            let cdName = NSManagedObject(entity: entityName!, insertIntoManagedObjectContext: managedContext)
+            
+            cdName.setValue(name.guid, forKey: "guid")
+            cdName.setValue(name.languageId, forKey: "languageId")
+            cdName.setValue(name.name, forKey: "name")
+            cdName.setValue(name.refId, forKey: "refId")
+            cdName.setValue(name.refGuid, forKey: "refGuid")
+            cdName.setValue(name.refTable, forKey: "refTable")
+            
+            setNames.addObject(cdName)
+        }
         
         do {
             try managedContext.save()
@@ -61,9 +80,22 @@ class ModifierOptionModel: NSObject {
                     image: (cdModifierOption.valueForKey("image") as? String),
                     modifierId: (cdModifierOption.valueForKey("modifierId") as? String),
                     modifierGuid: (cdModifierOption.valueForKey("modifierGuid") as? String),
-                    price: (cdModifierOption.valueForKey("price") as? String),
-                    name: (cdModifierOption.valueForKey("name") as? String)
+                    price: (cdModifierOption.valueForKey("price") as? String)
                 )
+                let cdNames = cdModifierOption.mutableSetValueForKey("names")
+                for cdName in cdNames{
+                    let name = Name.init(
+                        guid: (cdName.valueForKey("guid") as? String),
+                        languageId: (cdName.valueForKey("languageId") as? String),
+                        name: (cdName.valueForKey("name") as? String),
+                        refId: (cdName.valueForKey("refId") as? String),
+                        refGuid: (cdName.valueForKey("refGuid") as? String),
+                        refTable: (cdName.valueForKey("refTable") as? String)
+                    )
+                    
+                    modifierOption.names.append(name)
+                }
+                
                 modifierOptions.append(modifierOption)
             }
         } catch let error as NSError {

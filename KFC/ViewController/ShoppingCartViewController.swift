@@ -17,9 +17,15 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     @IBOutlet weak var buttonView: UIView!
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var tax: UILabel!
+    @IBOutlet weak var delivery: UILabel!
+    @IBOutlet weak var total: UILabel!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var orderSummaryLabel: UILabel!
+    
     var drawerDelegate:DrawerDelegate?
     var cart:Cart = Cart.init()
-//    var cartItems:[CartItem] = [CartItem]()
+    var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +44,15 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         self.buttonView.layer.shadowRadius = 16.0
         self.buttonView.layer.shadowOffset = CGSize.init(width: 0, height: 1)
         self.buttonView.layer.masksToBounds = false
+        
+        //change language label
+        self.tax.text = NSString.init(format: "%@ (10%)", ShoppingCart.Tax[self.languageId]!) as String
+        self.delivery.text = ShoppingCart.Delivery[self.languageId]
+        self.total.text = ShoppingCart.Total[self.languageId]
+        self.titleLabel.text = ShoppingCart.Cart[self.languageId]
+        self.orderSummaryLabel.text = ShoppingCart.OrderSummary[self.languageId]
+        self.keepShoppingButton.setTitle(ShoppingCart.KeepShopping[self.languageId], forState: UIControlState.Normal)
+        self.checkoutButton.setTitle(ShoppingCart.Checkout[self.languageId], forState: UIControlState.Normal)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -64,7 +79,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     @IBAction func keepShoppingButtonClicked(sender: AnyObject) {
-        self.drawerDelegate?.selectMenu(Menu.Menu)
+        self.drawerDelegate?.selectMenu(Menu.Menu[self.languageId]!)
     }
     
     //MARK: UITableViewDelegate && UITableViewDataSource
@@ -105,13 +120,13 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         
         var subtitle:String = ""
         for cartModifier in cartItem.cartModifiers{
-            subtitle = subtitle.stringByAppendingFormat("%i %@, ", cartModifier.quantity!, cartModifier.name!)
+            subtitle = subtitle.stringByAppendingFormat("%i %@, ", cartModifier.quantity!, (cartModifier.names.filter{$0.languageId == self.languageId}.first?.name)!)
         }
         if (subtitle.characters.count > 2){
             subtitle = subtitle.substringToIndex(subtitle.endIndex.advancedBy(-2))
         }
         
-        cell.mainTitleLabel.text = cartItem.name
+        cell.mainTitleLabel.text = cartItem.names.filter{$0.languageId == self.languageId}.first?.name
         cell.priceLabel.text = NSString.init(format: "%i x %@", cartItem.quantity!, CommonFunction.formatCurrency(price)) as String
         cell.subtotalLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:cartItem.total))
         cell.subtitleLabel.text = subtitle

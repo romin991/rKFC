@@ -19,7 +19,8 @@ class MainModel: NSObject {
             if ((error) != nil){
                 completion(status: Status.Error, message:(error?.localizedDescription)!, address: nil)
             } else {
-                completion(status: Status.Success, message:"OK", address: response?.firstResult()?.lines?[0])
+                let languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+                completion(status: Status.Success, message:Common.OK[languageId]!, address: response?.firstResult()?.lines?[0])
             }
         }
     }
@@ -68,13 +69,6 @@ class MainModel: NSObject {
                 switch response.result {
                 case .Success:
                     if let value = response.result.value {
-                        //clear data
-                        CategoryModel.deleteAllCategory()
-                        ProductModel.deleteAllProduct()
-                        ModifierModel.deleteAllModifier()
-                        ModifierOptionModel.deleteAllModifierOption()
-                        CartModel.deletePendingCart()
-                        
                         //parse data and save to database
                         let json = JSON(value)
                         var store:Store = Store.init(
@@ -92,9 +86,9 @@ class MainModel: NSObject {
                             for categoryJSON in categoriesJSON! {
                                 var category = Category.init(
                                     guid: nil,
-                                    id: categoryJSON["id"].string,
-                                    name: categoryJSON["categoryNames"]["categoryName"][1]["content"].string
+                                    id: categoryJSON["id"].string
                                 )
+                                category.names = HelperModel.parseNames(categoryJSON["categoryNames"]["categoryName"].array!)
                                 category = CategoryModel.create(category)
                                 
                                 let productsJSON = categoryJSON["products"]["product"].array
@@ -106,12 +100,12 @@ class MainModel: NSObject {
                                             categoryId: category.id,
                                             categoryGuid: category.guid,
                                             image: productJSON["image"].string,
-                                            name: productJSON["name"].string,
-                                            note: productJSON["descriptions"]["description"][1]["content"].string,
                                             price: productJSON["price"].string,
                                             taxable: productJSON["taxable"].string! == "1" ? true : false
                                             
                                         )
+                                        product.names = HelperModel.parseNames(productJSON["names"]["name"].array!)
+                                        product.notes = HelperModel.parseNames(productJSON["descriptions"]["description"].array!)
                                         ProductModel.create(product)
                                     }
                                     
@@ -159,10 +153,9 @@ class MainModel: NSObject {
                                     minimumSelect: Int(modifierJSON["minimum_select"].string!)!,
                                     maximumSelect: Int(modifierJSON["maximum_select"].string!)!,
                                     multipleSelect: modifierJSON["multiple_select"].string! == "1" ? true : false,
-                                    name: modifierJSON["additionCategoryNames"]["additionCategoryName"][1]["content"].string!,
                                     productId: product.id,
-                                    productGuid: product.guid,
-                                    modifierOptions: [ModifierOption]())
+                                    productGuid: product.guid)
+                                modifier.names = HelperModel.parseNames(modifierJSON["additionCategoryNames"]["additionCategoryName"].array!)
                                 modifier = ModifierModel.create(modifier)
                                 
                                 let modifierOptionsJSON = modifierJSON["productAdditions"]["productAddition"].array
@@ -177,8 +170,8 @@ class MainModel: NSObject {
                                             image: modifierOptionJSON["image"].null != nil ? "" : modifierOptionJSON["image"].string! ,
                                             modifierId: modifier.id,
                                             modifierGuid: modifier.guid,
-                                            price: modifierOptionJSON["price"].string!,
-                                            name: modifierOptionJSON["additionNames"]["additionName"][1]["content"].string!)
+                                            price: modifierOptionJSON["price"].string!)
+                                        modifierOption.names = HelperModel.parseNames(modifierOptionJSON["additionNames"]["additionName"].array!)
                                         ModifierOptionModel.create(modifierOption)
                                         modifierOptions.append(modifierOption)
                                     }
@@ -189,7 +182,8 @@ class MainModel: NSObject {
                             }
                         }
                         
-                        completion(status:Status.Success, message:"OK", modifiers: modifiers)
+                        let languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+                        completion(status:Status.Success, message:Common.OK[languageId]!, modifiers: modifiers)
                     } else {
                         completion(status:Status.Error, message:"Not a valid JSON", modifiers: modifiers)
                     }

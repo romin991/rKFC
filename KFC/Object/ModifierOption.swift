@@ -18,12 +18,12 @@ class ModifierOption: NSObject {
     var modifierId : String? = ""
     var modifierGuid : String? = ""
     var price : String? = "0"
-    var name : String? = ""
+    var names : [Name] = [Name]()
     
     var selected : Bool? = false
     var quantity : Int = 0 //for shoppingCart
     
-    init(guid:String?, id:String?, code:String?, defaultSelect:Bool?, image:String?, modifierId:String?, modifierGuid:String?, price:String?, name:String?){
+    init(guid:String?, id:String?, code:String?, defaultSelect:Bool?, image:String?, modifierId:String?, modifierGuid:String?, price:String?){
         self.guid = guid
         self.id = id
         self.code = code
@@ -32,7 +32,6 @@ class ModifierOption: NSObject {
         self.modifierId = modifierId
         self.modifierGuid = modifierGuid
         self.price = price
-        self.name = name
         self.selected = defaultSelect
         
         super.init()

@@ -44,7 +44,7 @@ class RegisterViewController: UIViewController, UIPopoverPresentationControllerD
         activityIndicator.mode = MBProgressHUDMode.Indeterminate;
         activityIndicator.labelText = "Loading";
         
-        let gender = self.genderMaleButton.selected == true ? Gender.Male : Gender.Female
+        let gender = self.genderMaleButton.selected == true ? Gender.Male[LanguageID.English] : Gender.Female[LanguageID.English]
         let languageID = self.languageEnglishButton.selected == true ? LanguageID.English : LanguageID.Indonesia
         
         let formatter = NSDateFormatter.init()

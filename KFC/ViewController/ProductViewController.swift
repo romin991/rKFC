@@ -13,11 +13,13 @@ class ProductViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var shoppingCartBadgesView: UIView!
     @IBOutlet weak var shoppingCartBadgesLabel: UILabel!
+    @IBOutlet weak var navigationTItleLabel: UILabel!
     
     var products = [Product]()
     var category : Category!
     var selectedProduct : Product?
     var drawerDelegate:DrawerDelegate?
+    var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
     
     func registerNotification(){
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"refreshTableView", name: NotificationKey.ImageItemDownloaded, object: nil)
@@ -28,11 +30,17 @@ class ProductViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.registerNotification()
     }
     
+    deinit{
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         self.products = ProductModel.getProductByCategory(category)
         CustomView.custom(self.shoppingCartBadgesView, borderColor: UIColor.whiteColor(), cornerRadius: 8, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
+        
+        self.navigationTItleLabel.text = self.category.names.filter{$0.languageId == self.languageId}.first?.name
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -88,8 +96,10 @@ class ProductViewController: UIViewController, UITableViewDelegate, UITableViewD
                 if (status == Status.Success){
                     self.performSegueWithIdentifier("ProductDetailSegue", sender: modifiers)
                 } else {
+                    let languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+                    
                     let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+                    alert.addAction(UIAlertAction(title: Common.OK[languageId], style: UIAlertActionStyle.Default, handler: nil))
                     self.presentViewController(alert, animated: true, completion: nil)
                 }
             })
@@ -116,7 +126,7 @@ class ProductViewController: UIViewController, UITableViewDelegate, UITableViewD
         if (indexPath.section == 0){
             cell = tableView.dequeueReusableCellWithIdentifier( "Cell", forIndexPath: indexPath) as! CustomTableViewCell
             
-            cell.mainTitleLabel?.text = self.category.name
+            cell.mainTitleLabel?.text = self.category.names.filter{$0.languageId == self.languageId}.first?.name
             
             //TODO: category image still not found in API, fix this after the API fixed
             cell.imageBackground?.backgroundColor = UIColor.grayColor()
@@ -125,8 +135,8 @@ class ProductViewController: UIViewController, UITableViewDelegate, UITableViewD
             cell = tableView.dequeueReusableCellWithIdentifier( "ProductCell", forIndexPath: indexPath) as! CustomTableViewCell
             
             let product:Product = self.products[indexPath.row]
-            cell.mainTitleLabel?.text = product.name
-            cell.subtitleLabel?.text = product.note
+            cell.mainTitleLabel?.text = product.names.filter{$0.languageId == self.languageId}.first?.name
+            cell.subtitleLabel?.text = product.notes.filter{$0.languageId == self.languageId}.first?.name
             cell.priceLabel?.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string: product.price))
             let path = CommonFunction.generatePathAt(Path.ProductImage, filename: product.id!)
             let data = NSFileManager.defaultManager().contentsAtPath(path)

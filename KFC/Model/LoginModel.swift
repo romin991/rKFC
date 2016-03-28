@@ -77,6 +77,9 @@ class LoginModel: NSObject {
                                 if (status == Status.Success){
                                     user.addresses = addresses!
                                     user = UserModel.create(user)
+                                    
+                                    NSUserDefaults.standardUserDefaults().setObject(user.languageId, forKey: "LanguageId")
+                                    
                                     StoreModel.save(Store.init())
                                     
                                     completion(status: Status.Success, message: message, user:user)

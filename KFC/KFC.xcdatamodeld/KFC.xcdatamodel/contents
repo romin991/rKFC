@@ -28,18 +28,21 @@
         <attribute name="subtotal" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tax" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="total" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="transDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="transId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="transNo" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="cartItems" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CartItem" inverseName="cart" inverseEntity="CartItem" syncable="YES"/>
     </entity>
     <entity name="CartItem" syncable="YES">
         <attribute name="cartGuid" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="guid" attributeType="String" indexed="YES" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="price" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="productId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="quantity" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="total" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="cart" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Cart" inverseName="cartItems" inverseEntity="Cart" syncable="YES"/>
         <relationship name="cartModifiers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CartModifier" inverseName="cartItem" inverseEntity="CartModifier" syncable="YES"/>
+        <relationship name="names" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Name" inverseName="cartItemNames" inverseEntity="Name" syncable="YES"/>
     </entity>
     <entity name="CartModifier" syncable="YES">
         <attribute name="cartGuid" optional="YES" attributeType="String" syncable="YES"/>
@@ -47,14 +50,14 @@
         <attribute name="guid" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="modifierId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="modifierOptionId" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="quantity" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <relationship name="cartItem" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CartItem" inverseName="cartModifiers" inverseEntity="CartItem" syncable="YES"/>
+        <relationship name="names" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Name" inverseName="cartModifierNames" inverseEntity="Name" syncable="YES"/>
     </entity>
     <entity name="Category" syncable="YES">
         <attribute name="guid" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="names" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Name" inverseName="categoryNames" inverseEntity="Name" syncable="YES"/>
         <relationship name="products" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Product" inverseName="category" inverseEntity="Product" syncable="YES"/>
     </entity>
     <entity name="Modifier" syncable="YES">
@@ -64,10 +67,10 @@
         <attribute name="maximumSelect" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="minimumSelect" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="multipleSelect" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="productGuid" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="productId" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="modifierOptions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ModifierOption" inverseName="modifier" inverseEntity="ModifierOption" syncable="YES"/>
+        <relationship name="names" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Name" inverseName="modifierNames" inverseEntity="Name" syncable="YES"/>
         <relationship name="product" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Product" inverseName="modifiers" inverseEntity="Product" syncable="YES"/>
     </entity>
     <entity name="ModifierOption" syncable="YES">
@@ -78,9 +81,24 @@
         <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="modifierGuid" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="modifierId" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="price" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="modifier" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Modifier" inverseName="modifierOptions" inverseEntity="Modifier" syncable="YES"/>
+        <relationship name="names" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Name" inverseName="modifierOptionNames" inverseEntity="Name" syncable="YES"/>
+    </entity>
+    <entity name="Name" syncable="YES">
+        <attribute name="guid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="languageId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="refGuid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="refId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="refTable" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="cartItemNames" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CartItem" inverseName="names" inverseEntity="CartItem" syncable="YES"/>
+        <relationship name="cartModifierNames" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CartModifier" inverseName="names" inverseEntity="CartModifier" syncable="YES"/>
+        <relationship name="categoryNames" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="names" inverseEntity="Category" syncable="YES"/>
+        <relationship name="modifierNames" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Modifier" inverseName="names" inverseEntity="Modifier" syncable="YES"/>
+        <relationship name="modifierOptionNames" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ModifierOption" inverseName="names" inverseEntity="ModifierOption" syncable="YES"/>
+        <relationship name="productNames" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Product" inverseName="names" inverseEntity="Product" syncable="YES"/>
+        <relationship name="productNotes" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Product" inverseName="notes" inverseEntity="Product" syncable="YES"/>
     </entity>
     <entity name="Product" syncable="YES">
         <attribute name="categoryGuid" attributeType="String" syncable="YES"/>
@@ -88,12 +106,12 @@
         <attribute name="guid" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="note" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="price" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="taxable" optional="YES" attributeType="Boolean" syncable="YES"/>
         <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="products" inverseEntity="Category" syncable="YES"/>
         <relationship name="modifiers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Modifier" inverseName="product" inverseEntity="Modifier" syncable="YES"/>
+        <relationship name="names" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Name" inverseName="productNames" inverseEntity="Name" syncable="YES"/>
+        <relationship name="notes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Name" inverseName="productNotes" inverseEntity="Name" syncable="YES"/>
     </entity>
     <entity name="User" syncable="YES">
         <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
@@ -117,12 +135,13 @@
     </entity>
     <elements>
         <element name="Address" positionX="-162" positionY="126" width="128" height="165"/>
-        <element name="Cart" positionX="-162" positionY="90" width="128" height="315"/>
+        <element name="Cart" positionX="-162" positionY="90" width="128" height="360"/>
         <element name="CartItem" positionX="-153" positionY="99" width="128" height="180"/>
         <element name="CartModifier" positionX="-144" positionY="108" width="128" height="165"/>
         <element name="Category" positionX="-270" positionY="-9" width="128" height="105"/>
         <element name="Modifier" positionX="-162" positionY="63" width="128" height="210"/>
         <element name="ModifierOption" positionX="-153" positionY="72" width="128" height="195"/>
+        <element name="Name" positionX="-162" positionY="144" width="128" height="240"/>
         <element name="Product" positionX="-54" positionY="-9" width="128" height="210"/>
         <element name="User" positionX="-162" positionY="27" width="128" height="315"/>
     </elements>

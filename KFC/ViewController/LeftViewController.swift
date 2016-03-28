@@ -9,18 +9,48 @@
 import UIKit
 
 class LeftViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    @IBOutlet weak var tableView: UITableView!
 
-    let menus:[String] = [Menu.Account, Menu.Main, Menu.History, Menu.Menu, Menu.Promo, Menu.ChangeLanguage, Menu.Logout]
     var drawerDelegate:DrawerDelegate?
+    var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+    var menus:[String] = []
+    
+    func registerNotification(){
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"refreshDataSource", name: NotificationKey.LanguageChanged, object: nil)
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.registerNotification()
+    }
+    
+    deinit{
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        self.refreshDataSource()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func refreshDataSource(){
+        self.languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+        self.menus = [
+            Menu.Account[self.languageId]!,
+            Menu.Main[self.languageId]!,
+            Menu.History[self.languageId]!,
+            Menu.Menu[self.languageId]!,
+            Menu.Promo[self.languageId]!,
+            Menu.ChangeLanguage[self.languageId]!,
+            Menu.Logout[self.languageId]!
+        ]
+        self.tableView.reloadData()
     }
     
     //MARK: TableViewDataSource & TableViewDelegate
@@ -64,17 +94,17 @@ class LeftViewController: UIViewController, UITableViewDelegate, UITableViewData
             let title:String = self.menus[indexPath.row]
             cell.mainTitleLabel.text = title
             
-            if (title == Menu.Main){
+            if (title == Menu.Main[self.languageId]){
                 cell.imageBackground.image = UIImage.init(named: "MenuMain")
-            } else if (title == Menu.History){
+            } else if (title == Menu.History[self.languageId]){
                 cell.imageBackground.image = UIImage.init(named: "MenuHistory")
-            } else if (title == Menu.Menu){
+            } else if (title == Menu.Menu[self.languageId]){
                 cell.imageBackground.image = UIImage.init(named: "MenuHistory")
-            } else if (title == Menu.Promo){
+            } else if (title == Menu.Promo[self.languageId]){
                 cell.imageBackground.image = UIImage.init(named: "MenuPromo")
-            } else if (title == Menu.ChangeLanguage){
+            } else if (title == Menu.ChangeLanguage[self.languageId]){
                 cell.imageBackground.image = UIImage.init(named: "MenuPromo")
-            } else if (title == Menu.Logout){
+            } else if (title == Menu.Logout[self.languageId]){
                 cell.imageBackground.image = UIImage.init(named: "MenuLogout")
             } else {
                 cell.imageBackground.image = nil

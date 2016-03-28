@@ -23,6 +23,7 @@ class ModifierTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDa
     var modifier:Modifier?
     var isFirstTime:Bool = true
     var currentQuantity:Int = 0
+    var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -161,7 +162,7 @@ class ModifierTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDa
         
         if (indexPath.section == 0){
             cell = tableView.dequeueReusableCellWithIdentifier( "Cell", forIndexPath: indexPath) as! ModifierDetailTableViewCell
-            cell.titleLabel.text = modifier?.name
+            cell.titleLabel.text = modifier?.names.filter{$0.languageId == self.languageId}.first?.name
             
         } else if (indexPath.section == 1){
             let modifierOption = self.modifier?.modifierOptions[indexPath.row]
@@ -169,14 +170,14 @@ class ModifierTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDa
             if (modifier?.multipleSelect == true){
                 cell = tableView.dequeueReusableCellWithIdentifier( "MultipleCell", forIndexPath: indexPath) as! ModifierDetailTableViewCell
                 cell.modifierOption = modifierOption
-                cell.titleLabel.text = modifierOption?.name
+                cell.titleLabel.text = modifierOption?.names.filter{$0.languageId == self.languageId}.first?.name
                 cell.delegate = self
                 cell.quantityLabel.text = "\((modifierOption?.quantity)!)"
                 
             } else {
                 cell = tableView.dequeueReusableCellWithIdentifier( "SingleCell", forIndexPath: indexPath) as! ModifierDetailTableViewCell
                 cell.modifierOption = modifierOption
-                cell.titleLabel.text = modifierOption?.name
+                cell.titleLabel.text = modifierOption?.names.filter{$0.languageId == self.languageId}.first?.name
                 cell.delegate = self
                 if (modifierOption?.selected != nil && modifierOption?.selected == true){
                     cell.selectedButton.selected = true

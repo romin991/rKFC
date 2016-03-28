@@ -25,22 +25,70 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var genderMaleButton: UIButton!
     @IBOutlet weak var genderFemaleButton: UIButton!
     
+    @IBOutlet weak var emailLabel: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var passwordLabel: UILabel!
+    @IBOutlet weak var confirmPasswordLabel: UILabel!
+    @IBOutlet weak var birthdateLabel: UILabel!
+    @IBOutlet weak var phoneLabel: UILabel!
+    @IBOutlet weak var addressLabel: UILabel!
+    @IBOutlet weak var languageLabel: UILabel!
+    @IBOutlet weak var genderLabel: UILabel!
+    
     var state:Bool = false
     var drawerDelegate:DrawerDelegate?
+    var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+    
+    func registerNotification(){
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"refreshLanguage", name: NotificationKey.LanguageChanged, object: nil)
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.registerNotification()
+    }
+    
+    deinit{
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func refreshLanguage(){
+        self.languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+        self.emailLabel.text = Profile.Email[self.languageId]
+        self.nameLabel.text = Profile.Name[self.languageId]
+        self.passwordLabel.text = Profile.Password[self.languageId]
+        self.confirmPasswordLabel.text = Profile.ConfirmPassword[self.languageId]
+        self.birthdateLabel.text = Profile.Birthdate[self.languageId]
+        self.phoneLabel.text = Profile.PhoneNumber[self.languageId]
+        self.addressLabel.text = Profile.Address[self.languageId]
+        self.languageLabel.text = Profile.Language[self.languageId]
+        self.genderLabel.text = Profile.Gender[self.languageId]
+        self.profileButton.setTitle(Profile.EditProfile[self.languageId], forState: UIControlState.Normal)
+        
+        self.emailField.placeholder = Profile.Email[self.languageId]
+        self.nameField.placeholder = Profile.Name[self.languageId]
+        self.passwordField.placeholder = Profile.Password[self.languageId]
+        self.confirmPasswordField.placeholder = Profile.ConfirmPassword[self.languageId]
+        self.birthdateField.placeholder = Profile.Birthdate[self.languageId]
+        self.phoneField.placeholder = Profile.PhoneNumber[self.languageId]
+        self.addressField.placeholder = Profile.Address[self.languageId]
+        self.genderMaleButton.setTitle(Gender.Male[self.languageId], forState: UIControlState.Normal)
+        self.genderFemaleButton.setTitle(Gender.Female[self.languageId], forState: UIControlState.Normal)
+        
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        let user = UserModel.getUser()
-        
         let formatter = NSDateFormatter.init()
         
+        let user = UserModel.getUser()
         self.emailField.text = user.username
         self.nameField.text = user.fullname
         self.phoneField.text = user.handphone
         self.birthdateField.text = formatter.stringFromDate(user.birthdate!)
         self.addressField.text = user.address
-        if (user.gender == Gender.Male){
+        if (user.gender == Gender.Male[self.languageId]){
             self.genderMaleButton.selected = true
             self.genderFemaleButton.selected = false
         } else {
@@ -57,6 +105,7 @@ class ProfileViewController: UIViewController {
         }
         
         self.refresh()
+        self.refreshLanguage()
         
         CustomView.custom(self.profileButton, borderColor: self.profileButton.backgroundColor!, cornerRadius: 30, roundingCorners: UIRectCorner.AllCorners, borderWidth: 0)
     }
@@ -125,9 +174,9 @@ class ProfileViewController: UIViewController {
             user.address = self.addressField.text
             
             if (self.genderMaleButton.selected){
-                user.gender = Gender.Male
+                user.gender = Gender.Male[user.languageId!]
             } else {
-                user.gender = Gender.Female
+                user.gender = Gender.Female[user.languageId!]
             }
             
             if (self.languageEnglishButton.selected){

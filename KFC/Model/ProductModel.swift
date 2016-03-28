@@ -22,13 +22,49 @@ class ProductModel: NSObject {
         
         cdProduct.setValue(product.guid, forKey: "guid")
         cdProduct.setValue(product.id, forKey: "id")
-        cdProduct.setValue(product.name, forKey: "name")
         cdProduct.setValue(product.categoryId, forKey: "categoryId")
         cdProduct.setValue(product.categoryGuid, forKey: "categoryGuid")
         cdProduct.setValue(product.image, forKey: "image")
-        cdProduct.setValue(product.note, forKey: "note")
         cdProduct.setValue(product.price, forKey: "price")
         cdProduct.setValue(product.taxable, forKey: "taxable")
+        
+        let setNames = cdProduct.mutableSetValueForKey("names")
+        for name in product.names{
+            
+            name.guid = NSUUID().UUIDString
+            name.refId = product.id
+            name.refTable = Table.Product
+            
+            let entityName =  NSEntityDescription.entityForName("Name", inManagedObjectContext:managedContext)
+            let cdName = NSManagedObject(entity: entityName!, insertIntoManagedObjectContext: managedContext)
+            
+            cdName.setValue(name.guid, forKey: "guid")
+            cdName.setValue(name.languageId, forKey: "languageId")
+            cdName.setValue(name.name, forKey: "name")
+            cdName.setValue(name.refId, forKey: "refId")
+            cdName.setValue(name.refGuid, forKey: "refGuid")
+            cdName.setValue(name.refTable, forKey: "refTable")
+            
+            setNames.addObject(cdName)
+        }
+        
+        let setNotes = cdProduct.mutableSetValueForKey("notes")
+        for note in product.notes{
+            note.guid = NSUUID().UUIDString
+            note.refId = product.id
+            note.refTable = Table.Product
+            
+            let entityName =  NSEntityDescription.entityForName("Name", inManagedObjectContext:managedContext)
+            let cdNote = NSManagedObject(entity: entityName!, insertIntoManagedObjectContext: managedContext)
+            
+            cdNote.setValue(note.guid, forKey: "guid")
+            cdNote.setValue(note.languageId, forKey: "languageId")
+            cdNote.setValue(note.name, forKey: "name")
+            cdNote.setValue(note.refId, forKey: "refId")
+            cdNote.setValue(note.refTable, forKey: "refTable")
+            
+            setNotes.addObject(cdNote)
+        }
         
         do {
             try managedContext.save()
@@ -90,10 +126,37 @@ class ProductModel: NSObject {
                     categoryId: (cdProduct.valueForKey("categoryId") as? String),
                     categoryGuid: (cdProduct.valueForKey("categoryGuid") as? String),
                     image: (cdProduct.valueForKey("image") as? String),
-                    name: (cdProduct.valueForKey("name") as? String),
-                    note: (cdProduct.valueForKey("note") as? String),
                     price: (cdProduct.valueForKey("price") as? String),
                     taxable: (cdProduct.valueForKey("taxable") as? Bool))
+                
+                let cdNames = cdProduct.mutableSetValueForKey("names")
+                for cdName in cdNames{
+                    let name = Name.init(
+                        guid: (cdName.valueForKey("guid") as? String),
+                        languageId: (cdName.valueForKey("languageId") as? String),
+                        name: (cdName.valueForKey("name") as? String),
+                        refId: (cdName.valueForKey("refId") as? String),
+                        refGuid: (cdName.valueForKey("refGuid") as? String),
+                        refTable: (cdName.valueForKey("refTable") as? String)
+                    )
+                    
+                    product.names.append(name)
+                }
+                
+                let cdNotes = cdProduct.mutableSetValueForKey("notes")
+                for cdNote in cdNotes{
+                    let note = Name.init(
+                        guid: (cdNote.valueForKey("guid") as? String),
+                        languageId: (cdNote.valueForKey("languageId") as? String),
+                        name: (cdNote.valueForKey("name") as? String),
+                        refId: (cdNote.valueForKey("refId") as? String),
+                        refGuid: (cdNote.valueForKey("refGuid") as? String),
+                        refTable: (cdNote.valueForKey("refTable") as? String)
+                    )
+                    
+                    product.notes.append(note)
+                }
+                
             }
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
@@ -122,10 +185,37 @@ class ProductModel: NSObject {
                     categoryId: (cdProduct.valueForKey("categoryId") as? String),
                     categoryGuid: (cdProduct.valueForKey("categoryGuid") as? String),
                     image: (cdProduct.valueForKey("image") as? String),
-                    name: (cdProduct.valueForKey("name") as? String),
-                    note: (cdProduct.valueForKey("note") as? String),
                     price: (cdProduct.valueForKey("price") as? String),
                     taxable: (cdProduct.valueForKey("taxable") as? Bool))
+                
+                let cdNames = cdProduct.mutableSetValueForKey("names")
+                for cdName in cdNames{
+                    let name = Name.init(
+                        guid: (cdName.valueForKey("guid") as? String),
+                        languageId: (cdName.valueForKey("languageId") as? String),
+                        name: (cdName.valueForKey("name") as? String),
+                        refId: (cdName.valueForKey("refId") as? String),
+                        refGuid: (cdName.valueForKey("refGuid") as? String),
+                        refTable: (cdName.valueForKey("refTable") as? String)
+                    )
+                    
+                    product.names.append(name)
+                }
+                
+                let cdNotes = cdProduct.mutableSetValueForKey("notes")
+                for cdNote in cdNotes{
+                    let note = Name.init(
+                        guid: (cdNote.valueForKey("guid") as? String),
+                        languageId: (cdNote.valueForKey("languageId") as? String),
+                        name: (cdNote.valueForKey("name") as? String),
+                        refId: (cdNote.valueForKey("refId") as? String),
+                        refGuid: (cdNote.valueForKey("refGuid") as? String),
+                        refTable: (cdNote.valueForKey("refTable") as? String)
+                    )
+                    
+                    product.notes.append(note)
+                }
+                
                 products.append(product)
             }
         } catch let error as NSError {
