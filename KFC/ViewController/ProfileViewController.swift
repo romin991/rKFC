@@ -9,7 +9,7 @@
 import UIKit
 import MBProgressHUD
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var shoppingCartButton: UIButton!
     @IBOutlet weak var leftMenuButton: UIButton!
     @IBOutlet weak var profileButton: UIButton!
@@ -261,6 +261,16 @@ class ProfileViewController: UIViewController {
         self.genderMaleButton.selected = false
         if let button = sender as? UIButton{
             button.selected = true
+        }
+    }
+    
+    //MARK:UITextFieldDelegate
+    func textFieldDidEndEditing(textField: UITextField) {
+        if (textField == self.phoneField){
+            if (self.phoneField.text?.characters.first == "0"){
+                let replacedString = NSString.init(string: self.phoneField.text!).stringByReplacingCharactersInRange(NSMakeRange(0,1), withString: "62") as String
+                self.phoneField.text = replacedString
+            }
         }
     }
     

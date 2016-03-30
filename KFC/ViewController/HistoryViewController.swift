@@ -17,6 +17,7 @@ class HistoryViewController: UIViewController {
     
     var drawerDelegate:DrawerDelegate?
     var carts:[Cart] = [Cart]()
+    var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,7 +96,15 @@ class HistoryViewController: UIViewController {
         
         cell.orderDateLabel.text = dateFormatter.stringFromDate(cart.transDate!)
         cell.statusLabel.text = cart.status
-//        cell.orderDetailLabel.text = ""
+        
+        var subtitle:String = ""
+        for cartItem in cart.cartItems{
+            subtitle = subtitle.stringByAppendingFormat("%i x %@, ", cartItem.quantity!, (cartItem.names.filter{$0.languageId == self.languageId}.first?.name)!)
+        }
+        if (subtitle.characters.count > 2){
+            subtitle = subtitle.substringToIndex(subtitle.endIndex.advancedBy(-2))
+        }
+        cell.orderDetailLabel.text = subtitle
         
         return cell
     }

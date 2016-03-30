@@ -9,7 +9,7 @@
 import UIKit
 import MBProgressHUD
 
-class RegisterViewController: UIViewController, UIPopoverPresentationControllerDelegate {
+class RegisterViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var nameField: UITextField!
@@ -42,6 +42,16 @@ class RegisterViewController: UIViewController, UIPopoverPresentationControllerD
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    //MARK:UITextFieldDelegate
+    func textFieldDidEndEditing(textField: UITextField) {
+        if (textField == self.phoneField){
+            if (self.phoneField.text?.characters.first == "0"){
+                let replacedString = NSString.init(string: self.phoneField.text!).stringByReplacingCharactersInRange(NSMakeRange(0,1), withString: "62") as String
+                self.phoneField.text = replacedString
+            }
+        }
     }
     
     func updateDate(sender:AnyObject){
