@@ -236,16 +236,16 @@ class ProductModel: NSObject {
             let results = try managedContext.executeFetchRequest(fetchRequest)
             let cdProducts = results as! [NSManagedObject]
             for cdProduct in cdProducts{
-                let filename = cdProduct.valueForKey("id") as? String
-                if (filename != nil && filename != "") {
-                    CommonFunction.removeData(Path.ProductImage, filename: filename!)
-                }
                 managedContext.deleteObject(cdProduct)
             }
             try managedContext.save()
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }
+    }
+    
+    class func deleteAllProductImage(){
+        CommonFunction.removeData(Path.ProductImage, filename: "")
     }
     
 }

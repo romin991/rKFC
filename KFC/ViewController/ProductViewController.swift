@@ -128,8 +128,15 @@ class ProductViewController: UIViewController, UITableViewDelegate, UITableViewD
             
             cell.mainTitleLabel?.text = self.category.names.filter{$0.languageId == self.languageId}.first?.name
             
-            //TODO: category image still not found in API, fix this after the API fixed
-            cell.imageBackground?.backgroundColor = UIColor.grayColor()
+            let path = CommonFunction.generatePathAt(Path.CategoryImage, filename: self.category.id!)
+            let data = NSFileManager.defaultManager().contentsAtPath(path)
+            if (data != nil) {
+                cell.imageBackground?.image = UIImage.init(data: data!)
+                cell.imageBackground?.backgroundColor = UIColor.whiteColor()
+            } else {
+                cell.imageBackground?.image = nil
+                cell.imageBackground?.backgroundColor = UIColor.grayColor()
+            }
             
         } else if (indexPath.section == 1){
             cell = tableView.dequeueReusableCellWithIdentifier( "ProductCell", forIndexPath: indexPath) as! CustomTableViewCell

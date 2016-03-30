@@ -128,8 +128,9 @@ class OrderModel: NSObject {
                         let message:String = json["message"].string!
                         
                         if (status == "T"){
-                            cart.status = Status.Outgoing
-                            CartModel.update(cart)
+//                            cart.status = Status.Outgoing
+//                            CartModel.update(cart)
+                            CartModel.deletePendingCart()
                             
                             let newPendingCart:Cart = Cart.init()
                             newPendingCart.status = Status.Pending
@@ -180,65 +181,76 @@ class OrderModel: NSObject {
                         
                         if (status == "T"){
                             
+                            let dateformatter = NSDateFormatter.init()
+                            dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
                             
-                            completion(status: Status.Success, message: message)
-                        } else {
-                            completion(status: Status.Error, message: message)
-                        }
-                    } else {
-                        completion(status: Status.Error, message: "Not a valid JSON object")
-                    }
-                    break;
-                case .Failure(let error):
-                    completion(status: Status.Error, message: error.localizedDescription)
-                    break;
-                }
-                
-        }
-    }
-    
-    class func getOrderDetail(transId:String, transDate:NSDate, completion: (status: String, message: String) -> Void){
-        let parameters:[String:AnyObject] = [
-            "trans_id" : transId
-        ]
-        
-        Alamofire.request(.POST, NSString.init(format: "%@/GetOrderDetail", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
-            .responseJSON { response in
-                switch response.result {
-                case .Success:
-                    if let value = response.result.value {
-                        let json = JSON(value)
-                        let status:String = json["status"].string!
-                        let message:String = json["message"].string!
-                        
-                        if (status == "T"){
-                            var orderStatus:String = Status.Delivered
-                            if (json["trans"]["status"].string! == "ON PROGRESS"){
-                                orderStatus = Status.Outgoing
+                            let transJSON = json["trans"].array!
+                            for tranJSON in transJSON{
+                            
+                                let cart:Cart = Cart.init(
+                                    guid: nil,
+                                    notes: nil,
+                                    status: tranJSON["trans_detail"]["status"].string,
+                                    subtotal: tranJSON["trans_detail"]["total_amount"].string,
+                                    tax: tranJSON["trans_detail"]["total_tax"].string,
+                                    delivery: tranJSON["trans_detail"]["delivery_charge"].string,
+                                    total: tranJSON["trans_detail"]["total_sales"].string,
+                                    customerId: tranJSON["trans_detail"]["customer_id"].string,
+                                    customerAddressId: tranJSON["trans_detail"]["customer_address_id"].string,
+                                    storeId: nil,
+                                    priceId: nil,
+                                    quantity: 0,
+                                    address: tranJSON["trans_detail"]["customer_address"].string,
+                                    addressDetail: nil,
+                                    long: nil,
+                                    lat: nil,
+                                    recipient: tranJSON["trans_detail"]["customer_address_recipient"].string,
+                                    transId: tranJSON["trans_detail"]["trans_id"].string,
+                                    transNo: tranJSON["trans_detail"]["trans_no"].string,
+                                    transDate: dateformatter.dateFromString(NSString.init(format:"%@ %@", tranJSON["trans_date"].string!, tranJSON["trans_time"].string!) as String)
+                                )
+                                
+                                var quantity = 0
+                                let listsJSON = tranJSON["trans_detail"]["list"].array!
+                                for listJSON in listsJSON{
+                                    let cartItem = CartItem.init(
+                                        guid: nil,
+                                        cartGuid: nil,
+                                        productId: listJSON["product_id"].string,
+                                        quantity: Int(listJSON["quantity"].string!),
+                                        price: "0",
+                                        total: "0"
+                                    )
+                                    cartItem.names = HelperModel.parseNames(listJSON["product_names"]["product_name"].array!)
+                                    
+                                    quantity += cartItem.quantity!
+                                    
+                                    var price = NSDecimalNumber.init(string: "0")
+                                    let detailListsJSON = listJSON["detail_list"].array!
+                                    for detailListJSON in detailListsJSON{
+                                        let cartModifier = CartModifier.init(
+                                            guid: nil,
+                                            cartGuid: nil,
+                                            cartItemGuid: nil,
+                                            modifierId: detailListJSON["product_addition_category_id"].string,
+                                            modifierOptionId: detailListJSON["product_addition_id"].string,
+                                            quantity: Int(detailListJSON["quantity"].string!)
+                                        )
+                                        cartModifier.names = HelperModel.parseNames(detailListJSON["additionNames"]["additionName"].array!)
+                                        
+                                        price = price.decimalNumberByAdding(NSDecimalNumber.init(string: detailListJSON["price"].string))
+                                        cartItem.cartModifiers.append(cartModifier)
+                                    }
+                                    
+                                    cartItem.price = price.stringValue
+                                    cartItem.total = price.decimalNumberByMultiplyingBy(NSDecimalNumber.init(long:cartItem.quantity!)).stringValue
+                                    cart.cartItems.append(cartItem)
+                                }
+                                
+                                cart.quantity = quantity
+                                CartModel.create(cart)
                             }
                             
-                            let cart:Cart = Cart.init(
-                                guid: nil,
-                                notes: nil,
-                                status: orderStatus,
-                                subtotal: json["trans"]["total_amount"].string!,
-                                tax: json["trans"]["total_tax"].string!,
-                                delivery: json["trans"]["delivery_charge"].string!,
-                                total: json["trans"]["total_sales"].string!,
-                                customerId: json["trans"]["customer_id"].string!,
-                                customerAddressId: json["trans"]["customer_address_id"].string!,
-                                storeId: nil,
-                                priceId: nil,
-                                quantity: 0,
-                                address: json["trans"]["customer_address"].string!,
-                                addressDetail: nil,
-                                long: 0,
-                                lat: 0,
-                                recipient: json["trans"]["customer_address_recipient"].string!,
-                                transId: json["trans"]["trans_id"].string!,
-                                transNo: json["trans"]["trans_no"].string!,
-                                transDate: transDate
-                            )
                             completion(status: Status.Success, message: message)
                         } else {
                             completion(status: Status.Error, message: message)

@@ -81,13 +81,18 @@ class DrawerViewController: UIViewController, DrawerDelegate {
             }
             
         } else if (menu == Menu.History[self.languageId]){
-//            let centerViewController = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("HistoryViewController")
-//            self.drawerController?.centerViewController = centerViewController
-            
-        } else if (menu == Menu.Menu[self.languageId]) {
-            let centerViewController:CategoryViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CategoryViewController") as? CategoryViewController)!
+            let centerViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("HistoryViewController") as? HistoryViewController)!
             centerViewController.drawerDelegate = self
             self.drawerController?.centerViewController = centerViewController
+            
+        } else if (menu == Menu.Menu[self.languageId]) {
+            if (StoreModel.getSelectedStore().id == ""){
+                self.selectMenu(Menu.Main[self.languageId]!)
+            } else {
+                let centerViewController:CategoryViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CategoryViewController") as? CategoryViewController)!
+                centerViewController.drawerDelegate = self
+                self.drawerController?.centerViewController = centerViewController
+            }
             
         } else if (menu == Menu.ChangeLanguage[self.languageId]) {
             let user = UserModel.getUser()

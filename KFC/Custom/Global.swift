@@ -9,17 +9,19 @@
 import Foundation
 
 struct ApiKey {
-    static let BaseURL = "http://alfarisi.id:8280/fiona"
+    static let BaseURL = "http://36.66.78.251:8280/fiona"
     static let Google = "AIzaSyDL2_fjawveP2tkRDgtk3mT6sDErddQ-a8"
 }
 
 struct NotificationKey {
     static let ImageItemDownloaded = "ImageItemDownloaded"
+    static let ImageCategoryDownloaded = "ImageCategoryDownloaded"
     static let LanguageChanged = "LanguageChanged"
 }
     
 struct Path {
     static let ProductImage = "productImage"
+    static let CategoryImage = "categoryImage"
 }
 
 struct Status {

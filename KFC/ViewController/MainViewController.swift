@@ -78,6 +78,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         ModifierModel.deleteAllModifier()
         ModifierOptionModel.deleteAllModifierOption()
         CartModel.deletePendingCart()
+        StoreModel.deleteSelectedStore()
     }
     
     override func viewWillAppear(animated: Bool) {

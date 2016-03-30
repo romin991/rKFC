@@ -86,7 +86,8 @@ class MainModel: NSObject {
                             for categoryJSON in categoriesJSON! {
                                 var category = Category.init(
                                     guid: nil,
-                                    id: categoryJSON["id"].string
+                                    id: categoryJSON["id"].string,
+                                    image: categoryJSON["image"].string
                                 )
                                 category.names = HelperModel.parseNames(categoryJSON["categoryNames"]["categoryName"].array!)
                                 category = CategoryModel.create(category)
@@ -109,8 +110,10 @@ class MainModel: NSObject {
                                         ProductModel.create(product)
                                     }
                                     
-                                    ProductModel.downloadAllProductImage()
                                 }
+                                
+                                CategoryModel.downloadAllCategoryImage()
+                                ProductModel.downloadAllProductImage()
                             }
                         }
                         

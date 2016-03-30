@@ -64,4 +64,27 @@ class StoreModel: NSObject {
         
         return store
     }
+    
+    class func deleteSelectedStore(){
+        
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let managedContext = appDelegate.managedObjectContext
+        
+        let fetchRequest = NSFetchRequest(entityName: "User")
+        
+        do {
+            let results = try managedContext.executeFetchRequest(fetchRequest)
+            let cdUser = (results as! [NSManagedObject]).first!
+            cdUser.setValue("", forKey: "storeId")
+            cdUser.setValue("", forKey: "storeCode")
+            cdUser.setValue("", forKey: "storeName")
+            cdUser.setValue("", forKey: "storeLong")
+            cdUser.setValue("", forKey: "storeLat")
+            cdUser.setValue("", forKey: "storePriceId")
+            
+            try managedContext.save()
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+    }
 }

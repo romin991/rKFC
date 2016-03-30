@@ -12,7 +12,7 @@ import SwiftyJSON
 
 class LoginModel: NSObject {
     
-    class func register(user:User, completion: (status: String, message: String) -> Void){
+    class func register(user:User, completion: (status: String, message: String, user:User? ) -> Void){
         
         let parameters:[String:AnyObject] = [
             "language_id": user.languageId!,
@@ -24,6 +24,71 @@ class LoginModel: NSObject {
         ]
         
         Alamofire.request(.POST, NSString.init(format: "%@/Register", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        let status:String = json["status"].string!
+                        let message:String = json["message"].string!
+                        
+                        if (status == "T"){
+                            completion(status: Status.Success, message: message, user: user)
+                        } else {
+                            completion(status: Status.Error, message: message, user: nil)
+                        }
+                    } else {
+                        completion(status: Status.Error, message: "Not a valid JSON object", user: nil)
+                    }
+                    break;
+                case .Failure(let error):
+                    completion(status: Status.Error, message: error.localizedDescription, user: nil)
+                    break;
+                }
+                
+        }
+    }
+    
+    class func validate(user:User, completion: (status: String, message: String) -> Void){
+        
+        let parameters:[String:AnyObject] = [
+            "email" : user.username!,
+            "verification_code" : user.verificationCode!
+        ]
+        
+        Alamofire.request(.POST, NSString.init(format: "%@/VerifyRegistrant", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        let status:String = json["status"].string!
+                        let message:String = json["message"].string!
+                        
+                        if (status == "T"){
+                            completion(status: Status.Success, message: message)
+                        } else {
+                            completion(status: Status.Error, message: message)
+                        }
+                    } else {
+                        completion(status: Status.Error, message: "Not a valid JSON object")
+                    }
+                    break;
+                case .Failure(let error):
+                    completion(status: Status.Error, message: error.localizedDescription)
+                    break;
+                }
+                
+        }
+    }
+    
+    class func forgotPassword(email:String, completion: (status: String, message: String) -> Void){
+        
+        let parameters:[String:AnyObject] = [
+            "email" : email
+        ]
+        
+        Alamofire.request(.POST, NSString.init(format: "%@/ForgotPassword", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
             .responseJSON { response in
                 switch response.result {
                 case .Success:
@@ -158,7 +223,8 @@ class LoginModel: NSObject {
         ProductModel.deleteAllProduct()
         ModifierModel.deleteAllModifier()
         ModifierOptionModel.deleteAllModifierOption()
-        CartModel.deleteAllCart()
+        CartModel.deleteAllNotPendingCart()
+        CartModel.deletePendingCart()
         UserModel.deleteAllUser()
     }
     
@@ -178,13 +244,58 @@ class LoginModel: NSObject {
                         
                         if (status == "T"){
                             let user:User = UserModel.getUser()
-                            let customerJSON = json["customer"].dictionary!
+                            let customerJSON = json["customer"]
                             
-//                            user.fullname = customerJSON["fullname"]
+                            user.fullname = customerJSON["fullname"].string
 //                            user.gender = customerJSON["gender"]
-//                            user.handphone = customerJSON["handphone"]
+                            user.handphone = customerJSON["handphone"].string
 //                            user.birthdate = customerJSON["birthdate"] as? String!
+                            UserModel.updateUser(user)
                             
+                            completion(status: Status.Success, message: message, user: user)
+                        } else {
+                            completion(status: Status.Error, message: message, user: nil)
+                        }
+                    } else {
+                        completion(status: Status.Error, message: "Not a valid JSON object", user: nil)
+                    }
+                    break;
+                case .Failure(let error):
+                    completion(status: Status.Error, message: error.localizedDescription, user: nil)
+                    break;
+                }
+                
+        }
+    }
+    
+    class func updateProfile(user:User, completion: (status: String, message:String, user:User?) -> Void){
+        let dateformatter = NSDateFormatter.init()
+        dateformatter.dateFormat = "yyyy-MM-dd"
+        
+        let languageId = (NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as? String)!
+        
+        let parameters : [String:AnyObject] = [
+            "customer_id" : user.customerId!,
+            "email" : user.username!,
+            "handphone" : user.handphone!,
+            "fullname" : user.fullname!,
+            "gender" : user.gender! == Gender.Male[languageId]! ? "M" : "F",
+            "birthdate" : dateformatter.stringFromDate(user.birthdate!),
+            "password" : user.password!,
+            "confirm_password" : user.confirmPassword!
+            
+        ]
+        
+        Alamofire.request(.POST, NSString.init(format: "%@/UpdateProfile", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        let status:String = json["status"].string!
+                        let message:String = json["message"].string!
+                        
+                        if (status == "T"){
                             completion(status: Status.Success, message: message, user: user)
                         } else {
                             completion(status: Status.Error, message: message, user: nil)

@@ -33,11 +33,13 @@ class SearchAddressViewController: UIViewController, UITextFieldDelegate, UITabl
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
             LoginModel.getAddressList(user, completion: { (status, message, addresses) -> Void in
-                user.addresses = addresses!
-                UserModel.updateUser(user)
+                if (addresses != nil) {
+                    user.addresses = addresses!
+                    UserModel.updateUser(user)
                 
-                self.addresses = addresses!
-                self.tableView.reloadData()
+                    self.addresses = addresses!
+                    self.tableView.reloadData()
+                }
             })
         }
         

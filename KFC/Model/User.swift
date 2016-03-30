@@ -22,6 +22,7 @@ class User: NSObject {
     var address: String? = ""
     var birthdate: NSDate? = NSDate()
     
+    var verificationCode: String? = ""
     var password: String? = ""
     var confirmPassword: String? = ""
     var type: String? = ""
@@ -61,6 +62,13 @@ class User: NSObject {
         self.username = username
         self.password = password
         self.type = type
+        
+        super.init()
+    }
+    
+    init(username:String?, verificationCode:String?){
+        self.username = username
+        self.verificationCode = verificationCode
         
         super.init()
     }

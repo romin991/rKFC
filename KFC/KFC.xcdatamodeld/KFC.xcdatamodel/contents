@@ -57,6 +57,7 @@
     <entity name="Category" syncable="YES">
         <attribute name="guid" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="names" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Name" inverseName="categoryNames" inverseEntity="Name" syncable="YES"/>
         <relationship name="products" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Product" inverseName="category" inverseEntity="Product" syncable="YES"/>
     </entity>
@@ -138,7 +139,7 @@
         <element name="Cart" positionX="-162" positionY="90" width="128" height="360"/>
         <element name="CartItem" positionX="-153" positionY="99" width="128" height="180"/>
         <element name="CartModifier" positionX="-144" positionY="108" width="128" height="165"/>
-        <element name="Category" positionX="-270" positionY="-9" width="128" height="105"/>
+        <element name="Category" positionX="-270" positionY="-9" width="128" height="120"/>
         <element name="Modifier" positionX="-162" positionY="63" width="128" height="210"/>
         <element name="ModifierOption" positionX="-153" positionY="72" width="128" height="195"/>
         <element name="Name" positionX="-162" positionY="144" width="128" height="240"/>

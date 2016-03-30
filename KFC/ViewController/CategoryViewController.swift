@@ -19,6 +19,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     
     func registerNotification(){
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"refreshLanguage", name: NotificationKey.LanguageChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"refreshTableView", name: NotificationKey.ImageCategoryDownloaded, object: nil)
     }
     
     override func awakeFromNib() {
@@ -28,6 +29,10 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
     
     deinit{
         NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func refreshTableView(){
+        self.tableView?.reloadData()
     }
     
     func refreshLanguage(){
@@ -83,8 +88,15 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         let category:Category = self.categories[indexPath.row]
         cell.mainTitleLabel?.text = category.names.filter{$0.languageId == self.languageId}.first?.name
         
-        //TODO: category image still not found in API, fix this after the API fixed
-        cell.imageBackground?.backgroundColor = UIColor.grayColor()
+        let path = CommonFunction.generatePathAt(Path.CategoryImage, filename: category.id!)
+        let data = NSFileManager.defaultManager().contentsAtPath(path)
+        if (data != nil) {
+            cell.imageBackground?.image = UIImage.init(data: data!)
+            cell.imageBackground?.backgroundColor = UIColor.whiteColor()
+        } else {
+            cell.imageBackground?.image = nil
+            cell.imageBackground?.backgroundColor = UIColor.grayColor()
+        }
         
         return cell
     }

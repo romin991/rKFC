@@ -11,11 +11,13 @@ import Foundation
 class Category: NSObject {
     var guid : String? = ""
     var id : String? = ""
+    var image : String? = ""
     var names : [Name] = [Name]()
     
-    init(guid:String?, id:String?){
+    init(guid:String?, id:String?, image:String?){
         self.guid = guid
         self.id = id
+        self.image = image
         
         super.init()
     }

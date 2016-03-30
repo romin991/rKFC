@@ -34,10 +34,16 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var languageLabel: UILabel!
     @IBOutlet weak var genderLabel: UILabel!
+    @IBOutlet weak var genderMaleLabel: UILabel!
+    @IBOutlet weak var genderFemaleLabel: UILabel!
+    
+    @IBOutlet weak var shoppingCartBadgesView: UIView!
+    @IBOutlet weak var shoppingCartBadgesLabel: UILabel!
     
     var state:Bool = false
     var drawerDelegate:DrawerDelegate?
     var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+    var datePicker = UIDatePicker.init()
     
     func registerNotification(){
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"refreshLanguage", name: NotificationKey.LanguageChanged, object: nil)
@@ -64,50 +70,75 @@ class ProfileViewController: UIViewController {
         self.languageLabel.text = Profile.Language[self.languageId]
         self.genderLabel.text = Profile.Gender[self.languageId]
         self.profileButton.setTitle(Profile.EditProfile[self.languageId], forState: UIControlState.Normal)
+        self.genderMaleLabel.text = Gender.Male[self.languageId]
+        self.genderFemaleLabel.text = Gender.Female[self.languageId]
         
-        self.emailField.placeholder = Profile.Email[self.languageId]
-        self.nameField.placeholder = Profile.Name[self.languageId]
-        self.passwordField.placeholder = Profile.Password[self.languageId]
-        self.confirmPasswordField.placeholder = Profile.ConfirmPassword[self.languageId]
-        self.birthdateField.placeholder = Profile.Birthdate[self.languageId]
-        self.phoneField.placeholder = Profile.PhoneNumber[self.languageId]
-        self.addressField.placeholder = Profile.Address[self.languageId]
-        self.genderMaleButton.setTitle(Gender.Male[self.languageId], forState: UIControlState.Normal)
-        self.genderFemaleButton.setTitle(Gender.Female[self.languageId], forState: UIControlState.Normal)
+        self.emailField.attributedPlaceholder = NSAttributedString.init(string: Profile.Email[self.languageId]!, attributes: [NSForegroundColorAttributeName: UIColor.lightGrayColor()])
+        self.nameField.attributedPlaceholder = NSAttributedString.init(string: Profile.Name[self.languageId]!, attributes: [NSForegroundColorAttributeName: UIColor.lightGrayColor()])
+        self.passwordField.attributedPlaceholder = NSAttributedString.init(string: Profile.Password[self.languageId]!, attributes: [NSForegroundColorAttributeName: UIColor.lightGrayColor()])
+        self.confirmPasswordField.attributedPlaceholder = NSAttributedString.init(string: Profile.ConfirmPassword[self.languageId]!, attributes: [NSForegroundColorAttributeName: UIColor.lightGrayColor()])
+        self.birthdateField.attributedPlaceholder = NSAttributedString.init(string: Profile.Birthdate[self.languageId]!, attributes: [NSForegroundColorAttributeName: UIColor.lightGrayColor()])
+        self.phoneField.attributedPlaceholder = NSAttributedString.init(string: Profile.PhoneNumber[self.languageId]!, attributes: [NSForegroundColorAttributeName: UIColor.lightGrayColor()])
+        self.addressField.attributedPlaceholder = NSAttributedString.init(string: Profile.Address[self.languageId]!, attributes: [NSForegroundColorAttributeName: UIColor.lightGrayColor()])
         
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        let formatter = NSDateFormatter.init()
-        
-        let user = UserModel.getUser()
-        self.emailField.text = user.username
-        self.nameField.text = user.fullname
-        self.phoneField.text = user.handphone
-        self.birthdateField.text = formatter.stringFromDate(user.birthdate!)
-        self.addressField.text = user.address
-        if (user.gender == Gender.Male[self.languageId]){
-            self.genderMaleButton.selected = true
-            self.genderFemaleButton.selected = false
-        } else {
-            self.genderMaleButton.selected = false
-            self.genderFemaleButton.selected = true
-        }
-        
-        if (user.languageId == LanguageID.English){
-            self.languageEnglishButton.selected = true
-            self.languageIndonesiaButton.selected = false
-        } else {
-            self.languageEnglishButton.selected = false
-            self.languageIndonesiaButton.selected = true
-        }
-        
         self.refresh()
         self.refreshLanguage()
         
+        self.datePicker.datePickerMode = UIDatePickerMode.Date
+        self.datePicker.addTarget(self, action: "updateDate:", forControlEvents: UIControlEvents.ValueChanged)
+        self.birthdateField.inputView = self.datePicker
+        
         CustomView.custom(self.profileButton, borderColor: self.profileButton.backgroundColor!, cornerRadius: 30, roundingCorners: UIRectCorner.AllCorners, borderWidth: 0)
+        CustomView.custom(self.shoppingCartBadgesView, borderColor: UIColor.whiteColor(), cornerRadius: 8, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        let activityIndicator = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        activityIndicator.mode = MBProgressHUDMode.Indeterminate;
+        activityIndicator.labelText = "Loading";
+        
+        let formatter = NSDateFormatter.init()
+        formatter.dateFormat = "yyyy-MM-dd"
+        
+        let user = UserModel.getUser()
+        LoginModel.getProfile(user, completion: { (status, message, user) -> Void in
+            if (status == Status.Success){
+                self.emailField.text = user?.username
+                self.nameField.text = user?.fullname
+                self.phoneField.text = user?.handphone
+                self.birthdateField.text = formatter.stringFromDate((user?.birthdate!)!)
+                self.datePicker.setDate((user?.birthdate)!, animated: false)
+                self.addressField.text = user?.address
+                if (user?.gender == Gender.Male[self.languageId]){
+                    self.genderMaleButton.selected = true
+                    self.genderFemaleButton.selected = false
+                } else {
+                    self.genderMaleButton.selected = false
+                    self.genderFemaleButton.selected = true
+                }
+                
+                if (user?.languageId == LanguageID.English){
+                    self.languageEnglishButton.selected = true
+                    self.languageIndonesiaButton.selected = false
+                } else {
+                    self.languageEnglishButton.selected = false
+                    self.languageIndonesiaButton.selected = true
+                }
+            } else {
+                let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
+            }
+            
+            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+        })
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -115,33 +146,38 @@ class ProfileViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    func updateDate(sender:AnyObject){
+        let dateformatter = NSDateFormatter.init()
+        dateformatter.dateFormat = "yyyy-MM-dd"
+        self.birthdateField.text = dateformatter.stringFromDate(self.datePicker.date)
+    }
+    
     func refresh(){
         if (self.state == true){
             self.profileButton.setTitle("Save Profile", forState: UIControlState.Normal)
-            self.emailField.enabled = true
             self.nameField.enabled = true
             self.phoneField.enabled = true
             self.passwordField.enabled = true
             self.confirmPasswordField.enabled = true
             self.birthdateField.enabled = true
             self.addressField.enabled = true
-            self.genderMaleButton.enabled = true
-            self.genderFemaleButton.enabled = true
-            self.languageEnglishButton.enabled = true
-            self.languageIndonesiaButton.enabled = true
+            self.genderMaleButton.userInteractionEnabled = true
+            self.genderFemaleButton.userInteractionEnabled = true
+            self.languageEnglishButton.userInteractionEnabled = true
+            self.languageIndonesiaButton.userInteractionEnabled = true
+            
         } else {
             self.profileButton.setTitle("Edit Profile", forState: UIControlState.Normal)
-            self.emailField.enabled = false
             self.nameField.enabled = false
             self.phoneField.enabled = false
             self.passwordField.enabled = false
             self.confirmPasswordField.enabled = false
             self.birthdateField.enabled = false
             self.addressField.enabled = false
-            self.genderMaleButton.enabled = false
-            self.genderFemaleButton.enabled = false
-            self.languageEnglishButton.enabled = false
-            self.languageIndonesiaButton.enabled = false
+            self.genderMaleButton.userInteractionEnabled = false
+            self.genderFemaleButton.userInteractionEnabled = false
+            self.languageEnglishButton.userInteractionEnabled = false
+            self.languageIndonesiaButton.userInteractionEnabled = false
         }
     }
     
@@ -165,10 +201,10 @@ class ProfileViewController: UIViewController {
             activityIndicator.labelText = "Loading";
             
             let formatter = NSDateFormatter.init()
+            formatter.dateFormat = "yyyy-MM-dd"
             
             let user = UserModel.getUser()
             user.fullname = self.nameField.text
-            user.username = self.emailField.text
             user.handphone = self.phoneField.text
             user.birthdate = formatter.dateFromString(self.birthdateField.text!)
             user.address = self.addressField.text
@@ -187,14 +223,29 @@ class ProfileViewController: UIViewController {
             
             //parse data to object 
             //call API update profile
-            //if success then set state to false and refresh
-            //else show error message
-            //remove activity indicator
-            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
-        } else {
-            self.state = !self.state
-            self.refresh()
+            LoginModel.updateProfile(user, completion: { (status, message, user) -> Void in
+                //remove activity indicator
+                MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+                
+                if (status == Status.Success){
+                    let activityIndicator = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                    activityIndicator.mode = MBProgressHUDMode.Text;
+                    activityIndicator.labelText = message;
+                    
+                    let popTime:dispatch_time_t = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * NSEC_PER_SEC))
+                    dispatch_after(popTime, dispatch_get_main_queue(), {() -> Void in
+                        MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+                    })
+                    
+                } else {
+                    let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                }
+            })
         }
+        self.state = !self.state
+        self.refresh()
     }
     
     @IBAction func languageButtonClicked(sender: AnyObject) {

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		2A57C416F428E182D7B0FED7 /* Pods_KFC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D75EA3A83EE73FEDA917AAD /* Pods_KFC.framework */; };
-		4806EEF81C9A9D95003C08A5 /* PopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4806EEF71C9A9D95003C08A5 /* PopoverViewController.swift */; };
 		480B75AA1C8EA4A700177712 /* CommonFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480B75A91C8EA4A700177712 /* CommonFunction.swift */; };
 		480B75AC1C8EA70E00177712 /* CustomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480B75AB1C8EA70E00177712 /* CustomView.swift */; };
 		481589AC1C7D47D400C41B0D /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481589AB1C7D47D400C41B0D /* LoginViewController.swift */; };
@@ -46,9 +45,13 @@
 		487BDDE41C9411E900FED8B5 /* ModifierOptionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487BDDE31C9411E900FED8B5 /* ModifierOptionModel.swift */; };
 		487BDDE91C94486900FED8B5 /* ModifierTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487BDDE81C94486900FED8B5 /* ModifierTableViewCell.swift */; };
 		487BDDEB1C9448AA00FED8B5 /* ModifierDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487BDDEA1C9448AA00FED8B5 /* ModifierDetailTableViewCell.swift */; };
+		4885A46D1CABFC1000B7B860 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4885A46C1CABFC1000B7B860 /* ForgotPasswordViewController.swift */; };
 		48B397BC1C9B8FEE0016D01C /* OrderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B397BB1C9B8FEE0016D01C /* OrderModel.swift */; };
 		48BDE1381C7D9FC300D6619E /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BDE1371C7D9FC300D6619E /* Store.swift */; };
 		48EB97C91CA808A000CB7870 /* Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EB97C81CA808A000CB7870 /* Name.swift */; };
+		48EB97D11CAA259200CB7870 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EB97D01CAA259200CB7870 /* HistoryViewController.swift */; };
+		48EB97D31CAA2A0900CB7870 /* HistoryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EB97D21CAA2A0900CB7870 /* HistoryDetailViewController.swift */; };
+		48EB97D51CAA52D400CB7870 /* HistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EB97D41CAA52D400CB7870 /* HistoryTableViewCell.swift */; };
 		48ECEA411C8690C500CC33BE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 48ECEA401C8690C500CC33BE /* GoogleService-Info.plist */; };
 		48F04A481C9BD65500E82C18 /* CheckoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F04A471C9BD65500E82C18 /* CheckoutViewController.swift */; };
 		48F04A6E1CA008FF00E82C18 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F04A6D1CA008FF00E82C18 /* ProfileViewController.swift */; };
@@ -62,7 +65,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4806EEF71C9A9D95003C08A5 /* PopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PopoverViewController.swift; path = ViewController/PopoverViewController.swift; sourceTree = "<group>"; };
 		480B75A91C8EA4A700177712 /* CommonFunction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommonFunction.swift; path = Custom/CommonFunction.swift; sourceTree = "<group>"; };
 		480B75AB1C8EA70E00177712 /* CustomView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomView.swift; path = Custom/CustomView.swift; sourceTree = "<group>"; };
 		481589AB1C7D47D400C41B0D /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = ViewController/LoginViewController.swift; sourceTree = "<group>"; };
@@ -100,9 +102,13 @@
 		487BDDE31C9411E900FED8B5 /* ModifierOptionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ModifierOptionModel.swift; path = Model/ModifierOptionModel.swift; sourceTree = "<group>"; };
 		487BDDE81C94486900FED8B5 /* ModifierTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ModifierTableViewCell.swift; path = ViewController/ModifierTableViewCell.swift; sourceTree = "<group>"; };
 		487BDDEA1C9448AA00FED8B5 /* ModifierDetailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ModifierDetailTableViewCell.swift; path = ViewController/ModifierDetailTableViewCell.swift; sourceTree = "<group>"; };
+		4885A46C1CABFC1000B7B860 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ForgotPasswordViewController.swift; path = ViewController/ForgotPasswordViewController.swift; sourceTree = "<group>"; };
 		48B397BB1C9B8FEE0016D01C /* OrderModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OrderModel.swift; path = Model/OrderModel.swift; sourceTree = "<group>"; };
 		48BDE1371C7D9FC300D6619E /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Store.swift; path = Object/Store.swift; sourceTree = "<group>"; };
 		48EB97C81CA808A000CB7870 /* Name.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Name.swift; path = Object/Name.swift; sourceTree = "<group>"; };
+		48EB97D01CAA259200CB7870 /* HistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HistoryViewController.swift; path = ViewController/HistoryViewController.swift; sourceTree = "<group>"; };
+		48EB97D21CAA2A0900CB7870 /* HistoryDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HistoryDetailViewController.swift; path = ViewController/HistoryDetailViewController.swift; sourceTree = "<group>"; };
+		48EB97D41CAA52D400CB7870 /* HistoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HistoryTableViewCell.swift; path = ViewController/Component/HistoryTableViewCell.swift; sourceTree = "<group>"; };
 		48ECEA401C8690C500CC33BE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		48F04A471C9BD65500E82C18 /* CheckoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CheckoutViewController.swift; path = ViewController/CheckoutViewController.swift; sourceTree = "<group>"; };
 		48F04A6D1CA008FF00E82C18 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileViewController.swift; path = ViewController/ProfileViewController.swift; sourceTree = "<group>"; };
@@ -183,6 +189,7 @@
 			isa = PBXGroup;
 			children = (
 				4821627A1C915106008B571C /* CustomTableViewCell.swift */,
+				48EB97D41CAA52D400CB7870 /* HistoryTableViewCell.swift */,
 			);
 			name = Component;
 			sourceTree = "<group>";
@@ -193,8 +200,8 @@
 				481589AD1C7D481900C41B0D /* SplashViewController.swift */,
 				481589AB1C7D47D400C41B0D /* LoginViewController.swift */,
 				483AD8451C8EA01D00B6629C /* RegisterViewController.swift */,
-				4806EEF71C9A9D95003C08A5 /* PopoverViewController.swift */,
 				483AD8491C8EA21600B6629C /* ValidationViewController.swift */,
+				4885A46C1CABFC1000B7B860 /* ForgotPasswordViewController.swift */,
 			);
 			name = Outside;
 			sourceTree = "<group>";
@@ -220,6 +227,8 @@
 		487A4C511C96A82100B90EEE /* History */ = {
 			isa = PBXGroup;
 			children = (
+				48EB97D01CAA259200CB7870 /* HistoryViewController.swift */,
+				48EB97D21CAA2A0900CB7870 /* HistoryDetailViewController.swift */,
 			);
 			name = History;
 			sourceTree = "<group>";
@@ -527,6 +536,7 @@
 				48580F861C97F0AE00A44166 /* CartItem.swift in Sources */,
 				487BDDE21C9411D900FED8B5 /* ModifierModel.swift in Sources */,
 				48580F8A1C97FB5D00A44166 /* CartModel.swift in Sources */,
+				48EB97D11CAA259200CB7870 /* HistoryViewController.swift in Sources */,
 				482162A61C917734008B571C /* Product.swift in Sources */,
 				4821627B1C915106008B571C /* CustomTableViewCell.swift in Sources */,
 				48F785961C7C459F00D5D3E3 /* AppDelegate.swift in Sources */,
@@ -538,17 +548,19 @@
 				482162761C91375E008B571C /* ProductDetailViewController.swift in Sources */,
 				487BDDDB1C93F07400FED8B5 /* Global.swift in Sources */,
 				48580F901C983F9400A44166 /* User.swift in Sources */,
-				4806EEF81C9A9D95003C08A5 /* PopoverViewController.swift in Sources */,
+				48EB97D31CAA2A0900CB7870 /* HistoryDetailViewController.swift in Sources */,
 				48B397BC1C9B8FEE0016D01C /* OrderModel.swift in Sources */,
 				487BDDE01C940D9900FED8B5 /* ModifierOption.swift in Sources */,
 				481A33881C7EF2B30074FD23 /* SearchAddressViewController.swift in Sources */,
 				48F04A7B1CA3C63300E82C18 /* HelperModel.swift in Sources */,
+				48EB97D51CAA52D400CB7870 /* HistoryTableViewCell.swift in Sources */,
 				487A4C4A1C9687D200B90EEE /* DrawerViewController.swift in Sources */,
 				482162721C91372B008B571C /* CategoryViewController.swift in Sources */,
 				48F04A481C9BD65500E82C18 /* CheckoutViewController.swift in Sources */,
 				487A4C4C1C9688FF00B90EEE /* LeftViewController.swift in Sources */,
 				483AD84A1C8EA21600B6629C /* ValidationViewController.swift in Sources */,
 				48580F841C97F09C00A44166 /* Cart.swift in Sources */,
+				4885A46D1CABFC1000B7B860 /* ForgotPasswordViewController.swift in Sources */,
 				481589AE1C7D481900C41B0D /* SplashViewController.swift in Sources */,
 				480B75AA1C8EA4A700177712 /* CommonFunction.swift in Sources */,
 				48F04A6E1CA008FF00E82C18 /* ProfileViewController.swift in Sources */,

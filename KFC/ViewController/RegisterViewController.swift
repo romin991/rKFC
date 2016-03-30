@@ -26,9 +26,15 @@ class RegisterViewController: UIViewController, UIPopoverPresentationControllerD
     @IBOutlet weak var signUpButton: UIButton!
     @IBOutlet weak var signInButton: UIButton!
     
+    var datePicker = UIDatePicker.init()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        self.datePicker.datePickerMode = UIDatePickerMode.Date
+        self.datePicker.addTarget(self, action: "updateDate:", forControlEvents: UIControlEvents.ValueChanged)
+        self.birthdateField.inputView = self.datePicker
         
         CustomView.custom(self.signUpButton, borderColor: self.signUpButton.backgroundColor!, cornerRadius: 28, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
     }
@@ -36,6 +42,12 @@ class RegisterViewController: UIViewController, UIPopoverPresentationControllerD
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func updateDate(sender:AnyObject){
+        let dateformatter = NSDateFormatter.init()
+        dateformatter.dateFormat = "yyyy-MM-dd"
+        self.birthdateField.text = dateformatter.stringFromDate(self.datePicker.date)
     }
     
     @IBAction func signUpButtonClicked(sender: AnyObject) {
@@ -48,7 +60,7 @@ class RegisterViewController: UIViewController, UIPopoverPresentationControllerD
         let languageID = self.languageEnglishButton.selected == true ? LanguageID.English : LanguageID.Indonesia
         
         let formatter = NSDateFormatter.init()
-        //TODO: set to locale gmt +7
+        formatter.dateFormat = "yyyy-MM-dd"
         
         let user:User = User.init(
             username: self.emailField.text,
@@ -62,9 +74,9 @@ class RegisterViewController: UIViewController, UIPopoverPresentationControllerD
             birthdate: formatter.dateFromString(self.birthdateField.text!)
         )
         
-        LoginModel.register(user) { (status, message) -> Void in
+        LoginModel.register(user) { (status, message, user) -> Void in
             if (status == Status.Success){
-                self.performSegueWithIdentifier("ValidationSegue", sender: nil)
+                self.performSegueWithIdentifier("ValidationSegue", sender: user)
             } else {
                 //should show alert error
                 let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
@@ -74,6 +86,10 @@ class RegisterViewController: UIViewController, UIPopoverPresentationControllerD
             
             MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
         }
+    }
+    
+    @IBAction func backButtonClicked(sender: AnyObject) {
+        self.navigationController?.popViewControllerAnimated(true);
     }
     
     @IBAction func signInButtonClicked(sender: AnyObject) {
@@ -102,7 +118,12 @@ class RegisterViewController: UIViewController, UIPopoverPresentationControllerD
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        
+        if (segue.identifier == "ValidationSegue"){
+            if let user = sender as? User {
+                let validationViewController:ValidationViewController = segue.destinationViewController as! ValidationViewController
+                validationViewController.user = user
+            }
+        }
     }
 
 }

@@ -23,6 +23,7 @@ class CategoryModel: NSObject {
         
         cdCategory.setValue(category.guid, forKey: "guid")
         cdCategory.setValue(category.id, forKey: "id")
+        cdCategory.setValue(category.image, forKey: "image")
         
         let setNames = cdCategory.mutableSetValueForKey("names")
         for name in category.names{
@@ -53,6 +54,37 @@ class CategoryModel: NSObject {
         return category
     }
     
+    class func downloadAllCategoryImage(){
+        
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let managedContext = appDelegate.managedObjectContext
+        
+        let fetchRequest = NSFetchRequest(entityName: "Category")
+        
+        do {
+            let results = try managedContext.executeFetchRequest(fetchRequest)
+            let cdCategories = results as! [NSManagedObject]
+            for cdCategory in cdCategories{
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+                    let imageURL = cdCategory.valueForKey("image") as? String
+                    let filename = cdCategory.valueForKey("id") as? String
+                    if (imageURL != nil && imageURL != "" && filename != nil && filename != "") {
+                        let data = NSData.init(contentsOfURL: NSURL.init(string: imageURL!)!)
+                        if (data != nil){
+                            CommonFunction.saveData(data!, directory: Path.CategoryImage, filename: filename!)
+                        }
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            NSNotificationCenter.defaultCenter().postNotificationName(NotificationKey.ImageCategoryDownloaded, object: nil)
+                        })
+                    }
+                })
+            }
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+    }
+    
     class func getAllCategory() -> [Category] {
 
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -68,7 +100,8 @@ class CategoryModel: NSObject {
             for cdCategory in cdCategories{
                 let category = Category.init(
                     guid: (cdCategory.valueForKey("guid") as? String),
-                    id: (cdCategory.valueForKey("id") as? String)
+                    id: (cdCategory.valueForKey("id") as? String),
+                    image: (cdCategory.valueForKey("image") as? String)
                 )
                 
                 let cdNames = cdCategory.mutableSetValueForKey("names")
@@ -112,4 +145,7 @@ class CategoryModel: NSObject {
         }
     }
     
+    class func deleteAllCategoryImage(){
+        CommonFunction.removeData(Path.CategoryImage, filename: "")
+    }
 }

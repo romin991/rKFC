@@ -67,6 +67,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
     }
     
     @IBAction func forgotPasswordButtonClicked(sender: AnyObject) {
+        self.performSegueWithIdentifier("ForgotPasswordSegue", sender: nil)
     }
     
     @IBAction func skipButtonClicked(sender: AnyObject) {
