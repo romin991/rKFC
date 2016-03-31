@@ -60,12 +60,19 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         self.checkoutButton.setTitle(ShoppingCart.Checkout[self.languageId], forState: UIControlState.Normal)
         
         self.maxWidth = self.view.frame.size.width - 110
+    }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        //this is need to be done here!
         self.cart = CartModel.getPendingCart()
         
         self.taxLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.tax))
         self.deliveryChargeLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.delivery))
         self.totalLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.total))
+        self.tableView.reloadData()
+        //end
     }
     
     override func didReceiveMemoryWarning() {

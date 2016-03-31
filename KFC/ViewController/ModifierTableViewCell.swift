@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol ModifierParentDelegate{
+    func refreshPrice()
+}
+
 protocol ModifierDelegate{
     func plusQuantity(modifierOption:ModifierOption)
     func minusQuantity(modifierOption:ModifierOption)
@@ -24,6 +28,8 @@ class ModifierTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDa
     var isFirstTime:Bool = true
     var currentQuantity:Int = 0
     var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+    
+    var modifierParentDelegate:ModifierParentDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -90,6 +96,9 @@ class ModifierTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDa
             }
             self.tableView.reloadData()
         }
+        if (self.modifierParentDelegate != nil){
+            self.modifierParentDelegate?.refreshPrice()
+        }
     }
     
     func minusQuantity(modifierOption: ModifierOption) {
@@ -112,6 +121,9 @@ class ModifierTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDa
             }
             self.tableView.reloadData()
         }
+        if (self.modifierParentDelegate != nil){
+            self.modifierParentDelegate?.refreshPrice()
+        }
     }
     
     func selectModifier(modifierOption: ModifierOption) {
@@ -125,6 +137,9 @@ class ModifierTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDa
             }
         }
         self.tableView.reloadData()
+        if (self.modifierParentDelegate != nil){
+            self.modifierParentDelegate?.refreshPrice()
+        }
     }
     
     func validateModifier(){

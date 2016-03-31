@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ShoppingCartItemViewController: UIViewController {
+class ShoppingCartItemViewController: UIViewController, ModifierParentDelegate {
     @IBOutlet weak var navigationTitleLabel: UILabel!
     @IBOutlet weak var productImage: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
@@ -79,6 +79,8 @@ class ShoppingCartItemViewController: UIViewController {
                 }
             }
         }
+        
+        self.refreshPrice()
         
         //change language label
         self.chooseQuantityLabel.text = ShoppingCart.ChooseQuantity[self.languageId]
@@ -215,8 +217,25 @@ class ShoppingCartItemViewController: UIViewController {
         cell.refreshCurrentQuantity()
         cell.refresh();
         cell.validateModifier()
+        cell.modifierParentDelegate = self
         
         return cell
+    }
+    
+    //MARK:ModifierParentDelegate
+    func refreshPrice() {
+        var price:NSDecimalNumber = NSDecimalNumber.init(longLong: 0)
+        
+        for modifier in self.modifiers{
+            for modifierOption in modifier.modifierOptions{
+                if (modifierOption.quantity != 0){
+                    let modifierPrice:NSDecimalNumber = NSDecimalNumber.init(string: modifierOption.price)
+                    price = price.decimalNumberByAdding(modifierPrice)
+                }
+            }
+        }
+        
+        self.priceLabel.text = CommonFunction.formatCurrency(price)
     }
     
     /*
