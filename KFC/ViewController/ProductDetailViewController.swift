@@ -12,6 +12,7 @@ class ProductDetailViewController: UIViewController {
     @IBOutlet weak var productImage: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
+    @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var quantityView: UIView!
     @IBOutlet weak var quantityMinusButton: UIButton!
     @IBOutlet weak var quantityPlusButton: UIButton!
@@ -34,6 +35,7 @@ class ProductDetailViewController: UIViewController {
     var modifiers : [Modifier]!
     var drawerDelegate:DrawerDelegate?
     var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+    var baseHeight:CGFloat = 347.0
     
     func registerNotification(){
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"refreshImageView", name: NotificationKey.ImageItemDownloaded, object: nil)
@@ -56,22 +58,34 @@ class ProductDetailViewController: UIViewController {
         CustomView.custom(self.addToShoppingCartButton, borderColor: self.addToShoppingCartButton.backgroundColor!, cornerRadius: 22, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
         CustomView.custom(self.shoppingCartBadgesView, borderColor: UIColor.whiteColor(), cornerRadius: 8, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
         
-        if (self.product != nil){
-            self.refreshImageView()
-            self.navigationTitleLabel.text = self.product.names.filter{$0.languageId == self.languageId}.first?.name
-            self.titleLabel.text = self.product.names.filter{$0.languageId == self.languageId}.first?.name
-            self.subtitleLabel.text = self.product.notes.filter{$0.languageId == self.languageId}.first?.name
-        }
+        self.refreshImageView()
+        self.navigationTitleLabel.text = self.product.names.filter{$0.languageId == self.languageId}.first?.name
+        self.titleLabel.text = self.product.names.filter{$0.languageId == self.languageId}.first?.name
+        self.subtitleLabel.text = self.product.notes.filter{$0.languageId == self.languageId}.first?.name
+        self.priceLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string: self.product.price))
         
         //change label language
         self.chooseQuantityLabel.text = ShoppingCart.ChooseQuantity[self.languageId]
         self.addToShoppingCartButton.setTitle(ShoppingCart.AddToCart[self.languageId], forState: UIControlState.Normal)
+        
+        //calculate scrollview contentView
+        let maxWidth:CGFloat = self.view.frame.size.width - 40
+        
+        let subtitleHeight = NSString.init(string: self.subtitleLabel.text!).boundingRectWithSize(CGSizeMake(maxWidth, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.subtitleLabel.font!], context: nil).height
+        let titleHeight = NSString.init(string: self.titleLabel.text!).boundingRectWithSize(CGSizeMake(maxWidth, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.titleLabel.font!], context: nil).height
+        
+        self.baseHeight = 347.0 + subtitleHeight + titleHeight
+        
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         let cart:Cart = CartModel.getPendingCart()
         self.shoppingCartBadgesLabel.text = "\(cart.quantity!)"
+    }
+    
+    override func viewDidLayoutSubviews() {
+        self.contentViewHeightConstraint.constant = self.baseHeight + self.tableView.contentSize.height
     }
     
     func refreshImageView(){
@@ -231,8 +245,6 @@ class ProductDetailViewController: UIViewController {
         
         let modifier = self.modifiers[indexPath.row]
         totalHeight += modifier.modifierOptions.count * 38
-        
-        self.contentViewHeightConstraint.constant = 366.0 + tableView.contentSize.height
         
         return CGFloat(totalHeight)
     }

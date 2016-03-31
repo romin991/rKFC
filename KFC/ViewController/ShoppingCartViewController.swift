@@ -27,6 +27,11 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     var cart:Cart = Cart.init()
     var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
     
+    //for calculating height
+    var maxWidth = CGFloat(290)
+    let subtitleFont = UIFont.init(name: "HelveticaNeue", size: 11)
+    let titleFont = UIFont.init(name: "HelveticaNeue", size: 14)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -53,18 +58,16 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         self.orderSummaryLabel.text = ShoppingCart.OrderSummary[self.languageId]
         self.keepShoppingButton.setTitle(ShoppingCart.KeepShopping[self.languageId], forState: UIControlState.Normal)
         self.checkoutButton.setTitle(ShoppingCart.Checkout[self.languageId], forState: UIControlState.Normal)
-    }
+        
+        self.maxWidth = self.view.frame.size.width - 110
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
         self.cart = CartModel.getPendingCart()
-        self.tableView.reloadData()
         
         self.taxLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.tax))
         self.deliveryChargeLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.delivery))
         self.totalLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.total))
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -83,6 +86,27 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     //MARK: UITableViewDelegate && UITableViewDataSource
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        let cartItem:CartItem = self.cart.cartItems[indexPath.row]
+        
+        var subtitle:String = ""
+        for cartModifier in cartItem.cartModifiers{
+            subtitle = subtitle.stringByAppendingFormat("%i x %@, ", cartModifier.quantity!, (cartModifier.names.filter{$0.languageId == self.languageId}.first?.name)!)
+        }
+        if (subtitle.characters.count > 2){
+            subtitle = subtitle.substringToIndex(subtitle.endIndex.advancedBy(-2))
+        }
+        
+        let title = cartItem.names.filter{$0.languageId == self.languageId}.first?.name
+        
+        let subtitleHeight = subtitle == "" ? 0 : NSString.init(string: subtitle).boundingRectWithSize(CGSizeMake(self.maxWidth, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.subtitleFont!], context: nil).height
+        let titleHeight = NSString.init(string: title!).boundingRectWithSize(CGSizeMake(self.maxWidth, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.titleFont!], context: nil).height
+        
+        let height = ceil(subtitleHeight) + ceil(titleHeight) + 52
+        
+        return height
+    }
+    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         let cartItem:CartItem = self.cart.cartItems[indexPath.row]

@@ -21,6 +21,11 @@ class ProductViewController: UIViewController, UITableViewDelegate, UITableViewD
     var drawerDelegate:DrawerDelegate?
     var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
     
+    //for calculating height
+    var maxWidth = CGFloat(268)
+    let subtitleFont = UIFont.init(name: "HelveticaNeue", size: 13)
+    let titleFont = UIFont.init(name: "HelveticaNeue-Medium", size: 17)
+    
     func registerNotification(){
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"refreshTableView", name: NotificationKey.ImageItemDownloaded, object: nil)
     }
@@ -41,6 +46,7 @@ class ProductViewController: UIViewController, UITableViewDelegate, UITableViewD
         CustomView.custom(self.shoppingCartBadgesView, borderColor: UIColor.whiteColor(), cornerRadius: 8, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
         
         self.navigationTItleLabel.text = self.category.names.filter{$0.languageId == self.languageId}.first?.name
+        self.maxWidth = self.view.frame.size.width - 132.0
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -70,10 +76,20 @@ class ProductViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     //MARK: UITableViewDelegate && UITableViewDataSource
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        
         if (indexPath.section == 0){
             return 166
         } else if (indexPath.section == 1){
-            return 108
+            let product:Product = self.products[indexPath.row]
+            let subtitle = product.notes.filter{$0.languageId == self.languageId}.first?.name
+            let title = product.names.filter{$0.languageId == self.languageId}.first?.name
+            
+            let subtitleHeight = NSString.init(string: subtitle!).boundingRectWithSize(CGSizeMake(self.maxWidth, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.subtitleFont!], context: nil).height
+            let titleHeight = NSString.init(string: title!).boundingRectWithSize(CGSizeMake(self.maxWidth, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.titleFont!], context: nil).height
+            
+            let height = ceil(subtitleHeight) + ceil(titleHeight) + 72
+            
+            return height
         } else {
             return 0
         }

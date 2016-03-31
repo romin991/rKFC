@@ -154,6 +154,10 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
                 UIView.animateWithDuration(0.5, animations: {
                     self.showStoreView()
                 })
+            } else {
+                let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
             }
             
             //remove activity indicator

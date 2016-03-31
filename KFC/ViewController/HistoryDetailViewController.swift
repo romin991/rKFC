@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HistoryDetailViewController: UIViewController {
+class HistoryDetailViewController: UIViewController, UITableViewDelegate {
     @IBOutlet weak var navigationTitle: UILabel!
     @IBOutlet weak var contentViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
@@ -30,6 +30,11 @@ class HistoryDetailViewController: UIViewController {
     var drawerDelegate:DrawerDelegate?
     var cart:Cart?
     var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+    
+    //for calculating height
+    var maxWidth = CGFloat(290)
+    let subtitleFont = UIFont.init(name: "HelveticaNeue", size: 11)
+    let titleFont = UIFont.init(name: "HelveticaNeue", size: 14)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,11 +54,16 @@ class HistoryDetailViewController: UIViewController {
         self.statusLabel.text = cart?.status
         
         CustomView.custom(self.shoppingCartBadgesView, borderColor: UIColor.whiteColor(), cornerRadius: 8, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
+        
+        self.statusLabel.adjustsFontSizeToFitWidth = true
+        
+        self.maxWidth = self.view.frame.size.width - 140
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        self.contentViewHeightConstraint.constant = CGFloat(250 + (self.cart!.cartItems.count * 120))
+    override func viewDidLayoutSubviews() {
+        let addressHeight = NSString.init(string: self.addressLabel.text!).boundingRectWithSize(CGSizeMake(self.addressLabel.frame.size.width, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.addressLabel.font!], context: nil).height
+        
+        self.contentViewHeightConstraint.constant = CGFloat(242 - 15 + addressHeight + self.tableView.contentSize.height)
         self.contentView.layoutIfNeeded()
     }
 
@@ -73,6 +83,27 @@ class HistoryDetailViewController: UIViewController {
     }
     
     //MARK: UITableViewDelegate && UITableViewDataSource
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        let cartItem:CartItem = self.cart!.cartItems[indexPath.row]
+        
+        var subtitle:String = ""
+        for cartModifier in cartItem.cartModifiers{
+            subtitle = subtitle.stringByAppendingFormat("%i x %@, ", cartModifier.quantity!, (cartModifier.names.filter{$0.languageId == self.languageId}.first?.name)!)
+        }
+        if (subtitle.characters.count > 2){
+            subtitle = subtitle.substringToIndex(subtitle.endIndex.advancedBy(-2))
+        }
+        
+        let title = cartItem.names.filter{$0.languageId == self.languageId}.first?.name
+        
+        let subtitleHeight = subtitle == "" ? 0 : NSString.init(string: subtitle).boundingRectWithSize(CGSizeMake(self.maxWidth, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.subtitleFont!], context: nil).height
+        let titleHeight = NSString.init(string: title!).boundingRectWithSize(CGSizeMake(self.maxWidth, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.titleFont!], context: nil).height
+        
+        let height = ceil(subtitleHeight) + ceil(titleHeight) + 52
+        
+        return height
+    }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.cart!.cartItems.count
     }

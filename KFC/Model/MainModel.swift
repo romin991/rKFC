@@ -59,65 +59,71 @@ class MainModel: NSObject {
     }
     
     class func getStoreByLocation(position: CLLocationCoordinate2D, completion: (status: String, message:String, store: Store?) -> Void){
-        //TODO: remove this when API Fixed
-        var customPosition = position
-        customPosition.longitude = 106.799796
-        customPosition.latitude = -6.250463
+        let parameters = [
+            "lat": position.latitude,
+            "lng": position.longitude
+        ]
         
-        Alamofire.request(.POST, "http://103.43.44.222:9763/services/store/GetStoreByLocation", parameters: ["lat": customPosition.latitude, "lng": customPosition.longitude], encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+        Alamofire.request(.POST, "http://103.43.44.222:9763/services/store/GetStoreByLocation", parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
             .responseJSON { response in
                 switch response.result {
                 case .Success:
                     if let value = response.result.value {
-                        //parse data and save to database
                         let json = JSON(value)
-                        var store:Store = Store.init(
-                            code: json["result"]["store"]["code"].string! ,
-                            name: json["result"]["store"]["name"].string!,
-                            id: json["result"]["store"]["id"].string!,
-                            long: json["result"]["store"]["lng"].string!,
-                            lat: json["result"]["store"]["lat"].string!,
-                            priceId: json["result"]["store"]["price_id"].string!
-                        )
-                        store = StoreModel.save(store)
+                        let status:String = json["result"]["status"].string!
                         
-                        let categoriesJSON = json["result"]["store"]["productCatalogs"]["productCatalog"].array
-                        if (categoriesJSON != nil){
-                            for categoryJSON in categoriesJSON! {
-                                var category = Category.init(
-                                    guid: nil,
-                                    id: categoryJSON["id"].string,
-                                    image: categoryJSON["image"].string
-                                )
-                                category.names = HelperModel.parseNames(categoryJSON["categoryNames"]["categoryName"].array!)
-                                category = CategoryModel.create(category)
-                                
-                                let productsJSON = categoryJSON["products"]["product"].array
-                                if (productsJSON != nil) {
-                                    for productJSON in productsJSON! {
-                                        let product = Product.init(
-                                            guid: nil,
-                                            id: productJSON["id"].string,
-                                            categoryId: category.id,
-                                            categoryGuid: category.guid,
-                                            image: productJSON["image"].string,
-                                            price: productJSON["price"].string,
-                                            taxable: productJSON["taxable"].string! == "1" ? true : false
-                                            
-                                        )
-                                        product.names = HelperModel.parseNames(productJSON["names"]["name"].array!)
-                                        product.notes = HelperModel.parseNames(productJSON["descriptions"]["description"].array!)
-                                        ProductModel.create(product)
+                        if (status == "found"){
+                            //parse data and save to database
+                            var store:Store = Store.init(
+                                code: json["result"]["store"]["code"].string! ,
+                                name: json["result"]["store"]["name"].string!,
+                                id: json["result"]["store"]["id"].string!,
+                                long: json["result"]["store"]["lng"].string!,
+                                lat: json["result"]["store"]["lat"].string!,
+                                priceId: json["result"]["store"]["price_id"].string!
+                            )
+                            store = StoreModel.save(store)
+                            
+                            let categoriesJSON = json["result"]["store"]["productCatalogs"]["productCatalog"].array
+                            if (categoriesJSON != nil){
+                                for categoryJSON in categoriesJSON! {
+                                    var category = Category.init(
+                                        guid: nil,
+                                        id: categoryJSON["id"].string,
+                                        image: categoryJSON["image"].string
+                                    )
+                                    category.names = HelperModel.parseNames(categoryJSON["categoryNames"]["categoryName"].array!)
+                                    category = CategoryModel.create(category)
+                                    
+                                    let productsJSON = categoryJSON["products"]["product"].array
+                                    if (productsJSON != nil) {
+                                        for productJSON in productsJSON! {
+                                            let product = Product.init(
+                                                guid: nil,
+                                                id: productJSON["id"].string,
+                                                categoryId: category.id,
+                                                categoryGuid: category.guid,
+                                                image: productJSON["image"].string,
+                                                price: productJSON["price"].string,
+                                                taxable: productJSON["taxable"].string! == "1" ? true : false
+                                                
+                                            )
+                                            product.names = HelperModel.parseNames(productJSON["names"]["name"].array!)
+                                            product.notes = HelperModel.parseNames(productJSON["descriptions"]["description"].array!)
+                                            ProductModel.create(product)
+                                        }
+                                        
                                     }
                                     
+//                                    CategoryModel.downloadAllCategoryImage()
+//                                    ProductModel.downloadAllProductImage()
                                 }
-                                
-                                CategoryModel.downloadAllCategoryImage()
-                                ProductModel.downloadAllProductImage()
                             }
+                            
+                            completion(status: Status.Success, message:status, store: store)
+                        } else {
+                            completion(status: Status.Error, message:status, store: nil)
                         }
-                        
-                        completion(status: Status.Success, message:json["result"]["status"].string!, store: store)
                     } else {
                         completion(status: Status.Error, message:"Not a valid JSON", store: nil)
                     }
@@ -131,11 +137,13 @@ class MainModel: NSObject {
     }
     
     class func getProductDetail(product:Product, store:Store, completion: (status: String, message:String, modifiers: [Modifier]) -> Void){
-        //TODO:fix this
-        let priceId = "3B"
+        let parameters = [
+            "productId": product.id!,
+            "priceId": store.priceId!
+        ]
         
         var modifiers = [Modifier]()
-        Alamofire.request(.POST, "http://103.43.44.222:9763/services/store/GetProductDetail", parameters: ["productId": product.id!, "priceId": priceId], encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+        Alamofire.request(.POST, "http://103.43.44.222:9763/services/store/GetProductDetail", parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
             .responseJSON { response in
                 switch response.result {
                 case .Success:
