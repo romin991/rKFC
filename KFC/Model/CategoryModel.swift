@@ -69,9 +69,13 @@ class CategoryModel: NSObject {
                     let imageURL = cdCategory.valueForKey("image") as? String
                     let filename = cdCategory.valueForKey("id") as? String
                     if (imageURL != nil && imageURL != "" && filename != nil && filename != "") {
-                        let data = NSData.init(contentsOfURL: NSURL.init(string: imageURL!)!)
-                        if (data != nil){
-                            CommonFunction.saveData(data!, directory: Path.CategoryImage, filename: filename!)
+                        let path = CommonFunction.generatePathAt(Path.CategoryImage, filename: filename!)
+                        let data = NSFileManager.defaultManager().contentsAtPath(path)
+                        if (data == nil) {
+                            let data = NSData.init(contentsOfURL: NSURL.init(string: imageURL!)!)
+                            if (data != nil){
+                                CommonFunction.saveData(data!, directory: Path.CategoryImage, filename: filename!)
+                            }
                         }
                         
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in

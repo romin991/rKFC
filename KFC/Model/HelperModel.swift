@@ -16,8 +16,8 @@ class HelperModel: NSObject {
         for object in objects{
             let name = Name.init(
                 guid: nil,
-                languageId: object["language_id"].string ?? object["languageId"].string,
-                name: object["content"].string!,
+                languageId: object["language_id"].string ?? object["languageId"].string ?? "",
+                name: object["content"].string ?? "",
                 refId: nil,
                 refGuid: nil,
                 refTable: nil

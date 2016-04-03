@@ -115,8 +115,8 @@ class MainModel: NSObject {
                                         
                                     }
                                     
-//                                    CategoryModel.downloadAllCategoryImage()
-//                                    ProductModel.downloadAllProductImage()
+                                    CategoryModel.downloadAllCategoryImage()
+                                    ProductModel.downloadAllProductImage()
                                 }
                             }
                             

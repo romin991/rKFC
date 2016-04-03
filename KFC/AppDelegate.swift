@@ -17,7 +17,11 @@ import TwitterKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var adsURLs = [
+        ["title" : "KFC Jagonya Ayam", "url" : "http://i.imgur.com/GpMOw.jpg"],
+        ["title" : "KFC Hot Promo", "url"  : "https://dityaman.files.wordpress.com/2012/05/image1.png"],
+        ["title" : "KFC Competition", "url"  : "http://4.bp.blogspot.com/-0Mst2K-JKwA/VDSy7RrkfsI/AAAAAAAAAhc/l694sA46UjM/s1600/kfc%2Bsnackies.png"]
+    ]
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -40,6 +44,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //For Twitter
         Fabric.with([Twitter.self])
         //End
+        
+        AdsModel.downloadAdsImages()
         
         return true
     }

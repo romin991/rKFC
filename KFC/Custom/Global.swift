@@ -14,6 +14,7 @@ struct ApiKey {
 }
 
 struct NotificationKey {
+    static let ImageAdsDownloaded = "ImageAdsDownloaded"
     static let ImageItemDownloaded = "ImageItemDownloaded"
     static let ImageCategoryDownloaded = "ImageCategoryDownloaded"
     static let LanguageChanged = "LanguageChanged"
@@ -22,6 +23,7 @@ struct NotificationKey {
 struct Path {
     static let ProductImage = "productImage"
     static let CategoryImage = "categoryImage"
+    static let AdsImage = "adsImage"
 }
 
 struct Status {

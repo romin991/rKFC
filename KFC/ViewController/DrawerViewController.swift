@@ -32,11 +32,12 @@ class DrawerViewController: UIViewController, DrawerDelegate {
         self.drawerController?.centerHiddenInteractionMode = MMDrawerOpenCenterInteractionMode.None
         self.drawerController?.maximumLeftDrawerWidth = self.view.frame.width - 40
         
-        if (CartModel.isPendingCartNotEmpty()){
-            self.selectMenu(Menu.Menu[self.languageId]!)
-        } else {
-            self.selectMenu(Menu.Main[self.languageId]!)
-        }
+        self.selectMenu(Menu.Promo[self.languageId]!)
+//        if (CartModel.isPendingCartNotEmpty()){
+//            self.selectMenu(Menu.Menu[self.languageId]!)
+//        } else {
+//            self.selectMenu(Menu.Main[self.languageId]!)
+//        }
         
         self.navigationController?.pushViewController(self.drawerController!, animated: false)
     }
@@ -93,6 +94,11 @@ class DrawerViewController: UIViewController, DrawerDelegate {
                 centerViewController.drawerDelegate = self
                 self.drawerController?.centerViewController = centerViewController
             }
+            
+        } else if (menu == Menu.Promo[self.languageId]){
+            let centerViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("AdsViewController") as? AdsViewController)!
+            centerViewController.drawerDelegate = self
+            self.drawerController?.centerViewController = centerViewController
             
         } else if (menu == Menu.ChangeLanguage[self.languageId]) {
             let user = UserModel.getUser()

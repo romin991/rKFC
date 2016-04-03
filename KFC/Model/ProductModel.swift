@@ -90,9 +90,13 @@ class ProductModel: NSObject {
                     let imageURL = cdProduct.valueForKey("image") as? String
                     let filename = cdProduct.valueForKey("id") as? String
                     if (imageURL != nil && imageURL != "" && filename != nil && filename != "") {
-                        let data = NSData.init(contentsOfURL: NSURL.init(string: imageURL!)!)
-                        if (data != nil){
-                            CommonFunction.saveData(data!, directory: Path.ProductImage, filename: filename!)
+                        let path = CommonFunction.generatePathAt(Path.ProductImage, filename: filename!)
+                        let data = NSFileManager.defaultManager().contentsAtPath(path)
+                        if (data == nil) {
+                            let data = NSData.init(contentsOfURL: NSURL.init(string: imageURL!)!)
+                            if (data != nil){
+                                CommonFunction.saveData(data!, directory: Path.ProductImage, filename: filename!)
+                            }
                         }
                         
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
