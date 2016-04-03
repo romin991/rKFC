@@ -151,13 +151,19 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
                 
                 CartModel.create(cart)
                 
-                UIView.animateWithDuration(0.5, animations: {
-                    self.showStoreView()
-                })
+                self.drawerDelegate?.selectMenu(Menu.Menu[self.languageId]!)
+                
+                //change design
+//                UIView.animateWithDuration(0.5, animations: {
+//                    self.showStoreView()
+//                })
             } else {
-                let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                let errorViewController:ErrorViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ErrorViewController") as? ErrorViewController)!
+                self.navigationController?.pushViewController(errorViewController, animated: true)
+                
+//                let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+//                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+//                self.presentViewController(alert, animated: true, completion: nil)
             }
             
             //remove activity indicator
