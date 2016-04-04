@@ -29,8 +29,8 @@ class LoginModel: NSObject {
                 case .Success:
                     if let value = response.result.value {
                         let json = JSON(value)
-                        let status:String = json["status"].string!
-                        let message:String = json["message"].string!
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
                         
                         if (status == "T"){
                             completion(status: Status.Success, message: message, user: user)
@@ -62,8 +62,8 @@ class LoginModel: NSObject {
                 case .Success:
                     if let value = response.result.value {
                         let json = JSON(value)
-                        let status:String = json["status"].string!
-                        let message:String = json["message"].string!
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid json object"
                         
                         if (status == "T"){
                             completion(status: Status.Success, message: message)
@@ -94,8 +94,8 @@ class LoginModel: NSObject {
                 case .Success:
                     if let value = response.result.value {
                         let json = JSON(value)
-                        let status:String = json["status"].string!
-                        let message:String = json["message"].string!
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
                         
                         if (status == "T"){
                             completion(status: Status.Success, message: message)
@@ -127,16 +127,16 @@ class LoginModel: NSObject {
                 case .Success:
                     if let value = response.result.value {
                         let json = JSON(value)
-                        let status:String = json["status"].string!
-                        let message:String = json["message"].string!
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
                         
                         if (status == "T"){
                             var user:User = User.init()
-                            user.customerId = json["customer"]["customer_id"].string!
-                            user.languageId = json["customer"]["language_id"].string!
-                            user.fullname = json["customer"]["fullname"].string!
-                            user.handphone = json["customer"]["handphone"].string!
-                            user.username = json["customer"]["email"].string!
+                            user.customerId = json["customer"]["customer_id"].string
+                            user.languageId = json["customer"]["language_id"].string
+                            user.fullname = json["customer"]["fullname"].string
+                            user.handphone = json["customer"]["handphone"].string
+                            user.username = json["customer"]["email"].string
                             
                             self.getAddressList(user, completion: { (status, message, addresses) -> Void in
                                 if (status == Status.Success){
@@ -182,21 +182,21 @@ class LoginModel: NSObject {
                 case .Success:
                     if let value = response.result.value {
                         let json = JSON(value)
-                        let status:String = json["status"].string!
-                        let message:String = json["message"].string!
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
                         
                         if (status == "T"){
                             var addresses: [Address] = [Address]()
-                            let addressesJSON = json["address"].array!
+                            let addressesJSON = json["address"].array ?? []
                             for addressJSON in addressesJSON{
                                 let address:Address = Address.init(
                                     guid: nil,
-                                    id: addressJSON["id"].string!,
-                                    address: addressJSON["address"].string!,
-                                    addressDetail: addressJSON["address_detail"].string!,
-                                    long: Double(addressJSON["lng"].string!),
-                                    lat: Double(addressJSON["lat"].string!),
-                                    recipient: addressJSON["recipient"].string!
+                                    id: addressJSON["id"].string,
+                                    address: addressJSON["address"].string,
+                                    addressDetail: addressJSON["address_detail"].string,
+                                    long: Double(addressJSON["lng"].string ?? "0"),
+                                    lat: Double(addressJSON["lat"].string ?? "0"),
+                                    recipient: addressJSON["recipient"].string
                                 )
                                 
                                 addresses.append(address)
@@ -239,17 +239,15 @@ class LoginModel: NSObject {
                 case .Success:
                     if let value = response.result.value {
                         let json = JSON(value)
-                        let status:String = json["status"].string!
-                        let message:String = json["message"].string!
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
                         
                         if (status == "T"){
                             let user:User = UserModel.getUser()
                             let customerJSON = json["customer"]
                             
                             user.fullname = customerJSON["fullname"].string
-//                            user.gender = customerJSON["gender"]
                             user.handphone = customerJSON["handphone"].string
-//                            user.birthdate = customerJSON["birthdate"] as? String!
                             UserModel.updateUser(user)
                             
                             completion(status: Status.Success, message: message, user: user)
@@ -292,8 +290,8 @@ class LoginModel: NSObject {
                 case .Success:
                     if let value = response.result.value {
                         let json = JSON(value)
-                        let status:String = json["status"].string!
-                        let message:String = json["message"].string!
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
                         
                         if (status == "T"){
                             completion(status: Status.Success, message: message, user: user)

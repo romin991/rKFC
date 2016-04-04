@@ -38,12 +38,12 @@ class MainModel: NSObject {
                         let results = json["results"].array
                         if (results != nil){
                             for result in results!{
-                                let long = result["geometry"]["location"]["lng"].double!
-                                let lat = result["geometry"]["location"]["lat"].double!
-                                addresses.append(Address.init(address: result["formatted_address"].string!, addressDetail:"", long: long, lat: lat, recipient: ""))
+                                let long = result["geometry"]["location"]["lng"].double ?? 0
+                                let lat = result["geometry"]["location"]["lat"].double ?? 0
+                                addresses.append(Address.init(address: result["formatted_address"].string ?? "", addressDetail:"", long: long, lat: lat, recipient: ""))
                             }
                         }
-                        completion(status:Status.Success, message:json["status"].string!, addresses: addresses)
+                        completion(status:Status.Success, message:json["status"].string ?? "", addresses: addresses)
                     } else {
                         //need return something
                         completion(status:Status.Error, message:"Not a valid JSON", addresses: addresses)
@@ -64,23 +64,23 @@ class MainModel: NSObject {
             "lng": position.longitude
         ]
         
-        Alamofire.request(.POST, "http://103.43.44.222:9763/services/store/GetStoreByLocation", parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+        Alamofire.request(.POST, NSString.init(format: "%@/GetStoreByLocation", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
             .responseJSON { response in
                 switch response.result {
                 case .Success:
                     if let value = response.result.value {
                         let json = JSON(value)
-                        let status:String = json["result"]["status"].string!
+                        let status:String = json["result"]["status"].string ?? "Not Found"
                         
                         if (status == "found"){
                             //parse data and save to database
                             var store:Store = Store.init(
-                                code: json["result"]["store"]["code"].string! ,
-                                name: json["result"]["store"]["name"].string!,
-                                id: json["result"]["store"]["id"].string!,
-                                long: json["result"]["store"]["lng"].string!,
-                                lat: json["result"]["store"]["lat"].string!,
-                                priceId: json["result"]["store"]["price_id"].string!
+                                code: json["result"]["store"]["code"].string ,
+                                name: json["result"]["store"]["name"].string,
+                                id: json["result"]["store"]["id"].string,
+                                long: json["result"]["store"]["lng"].string,
+                                lat: json["result"]["store"]["lat"].string,
+                                priceId: json["result"]["store"]["price_id"].string
                             )
                             store = StoreModel.save(store)
                             
@@ -108,8 +108,8 @@ class MainModel: NSObject {
                                                 taxable: productJSON["taxable"].string! == "1" ? true : false
                                                 
                                             )
-                                            product.names = HelperModel.parseNames(productJSON["names"]["name"].array!)
-                                            product.notes = HelperModel.parseNames(productJSON["descriptions"]["description"].array!)
+                                            product.names = HelperModel.parseNames(productJSON["names"]["name"].array ?? [])
+                                            product.notes = HelperModel.parseNames(productJSON["descriptions"]["description"].array ?? [])
                                             ProductModel.create(product)
                                         }
                                         
@@ -143,7 +143,7 @@ class MainModel: NSObject {
         ]
         
         var modifiers = [Modifier]()
-        Alamofire.request(.POST, "http://103.43.44.222:9763/services/store/GetProductDetail", parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+        Alamofire.request(.POST, NSString.init(format: "%@/GetProductDetail", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
             .responseJSON { response in
                 switch response.result {
                 case .Success:
@@ -166,7 +166,7 @@ class MainModel: NSObject {
                                     multipleSelect: modifierJSON["multiple_select"].string! == "1" ? true : false,
                                     productId: product.id,
                                     productGuid: product.guid)
-                                modifier.names = HelperModel.parseNames(modifierJSON["additionCategoryNames"]["additionCategoryName"].array!)
+                                modifier.names = HelperModel.parseNames(modifierJSON["additionCategoryNames"]["additionCategoryName"].array ?? [])
                                 modifier = ModifierModel.create(modifier)
                                 
                                 let modifierOptionsJSON = modifierJSON["productAdditions"]["productAddition"].array
@@ -182,7 +182,7 @@ class MainModel: NSObject {
                                             modifierId: modifier.id,
                                             modifierGuid: modifier.guid,
                                             price: modifierOptionJSON["price"].string!)
-                                        modifierOption.names = HelperModel.parseNames(modifierOptionJSON["additionNames"]["additionName"].array!)
+                                        modifierOption.names = HelperModel.parseNames(modifierOptionJSON["additionNames"]["additionName"].array ?? [])
                                         ModifierOptionModel.create(modifierOption)
                                         modifierOptions.append(modifierOption)
                                     }

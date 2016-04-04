@@ -16,7 +16,7 @@ class Store: NSObject {
     var lat: String? = ""
     var priceId: String? = ""
     
-    init(code: String, name: String, id: String, long: String, lat: String, priceId: String?) {
+    init(code: String?, name: String?, id: String?, long: String?, lat: String?, priceId: String?) {
         self.code = code
         self.name = name
         self.id = id

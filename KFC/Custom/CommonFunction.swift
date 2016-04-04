@@ -75,5 +75,13 @@ class CommonFunction: NSObject {
             .stringByReplacingOccurrencesOfString("Rp ", withString: "")
     }
     
+    class func resizeImage(image:UIImage, size:CGSize) -> UIImage{
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        image.drawInRect(CGRectMake(0, 0, size.width, size.height))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage
+    }
+    
 }
 

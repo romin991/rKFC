@@ -93,17 +93,20 @@ class LeftViewController: UIViewController, UITableViewDelegate, UITableViewData
             cell = tableView.dequeueReusableCellWithIdentifier( "Cell", forIndexPath: indexPath) as! CustomTableViewCell
             let title:String = self.menus[indexPath.row]
             cell.mainTitleLabel.text = title
+            cell.imageBackground.contentMode = UIViewContentMode.Center
             
-            if (title == Menu.Main[self.languageId]){
+            if (title == Menu.Account[self.languageId]){
+                cell.imageBackground.image = UIImage.init(named: "MenuAccount")
+            } else if (title == Menu.Main[self.languageId]){
                 cell.imageBackground.image = UIImage.init(named: "MenuMain")
             } else if (title == Menu.History[self.languageId]){
                 cell.imageBackground.image = UIImage.init(named: "MenuHistory")
             } else if (title == Menu.Menu[self.languageId]){
-                cell.imageBackground.image = UIImage.init(named: "MenuHistory")
+                cell.imageBackground.image = UIImage.init(named: "MenuMenu")
             } else if (title == Menu.Promo[self.languageId]){
                 cell.imageBackground.image = UIImage.init(named: "MenuPromo")
             } else if (title == Menu.ChangeLanguage[self.languageId]){
-                cell.imageBackground.image = UIImage.init(named: "MenuPromo")
+                cell.imageBackground.image = UIImage.init(named: "MenuLanguage")
             } else if (title == Menu.Logout[self.languageId]){
                 cell.imageBackground.image = UIImage.init(named: "MenuLogout")
             } else {

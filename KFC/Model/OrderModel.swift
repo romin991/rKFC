@@ -55,7 +55,7 @@ class OrderModel: NSObject {
                         let message:String = json["message"].string!
                         
                         if (status == "T"){
-                            let customerAddressId:String = json["customer_address_id"].string!
+                            let customerAddressId:String = json["customer_address_id"].string ?? ""
                             address.id = customerAddressId
                             
                             completion(status: Status.Success, message: message, address: address)
@@ -124,8 +124,8 @@ class OrderModel: NSObject {
                 case .Success:
                     if let value = response.result.value {
                         let json = JSON(value)
-                        let status:String = json["status"].string!
-                        let message:String = json["message"].string!
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
                         
                         if (status == "T"){
 //                            cart.status = Status.Outgoing
@@ -176,15 +176,15 @@ class OrderModel: NSObject {
                 case .Success:
                     if let value = response.result.value {
                         let json = JSON(value)
-                        let status:String = json["status"].string!
-                        let message:String = json["message"].string!
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
                         
                         if (status == "T"){
                             
                             let dateformatter = NSDateFormatter.init()
                             dateformatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
                             
-                            let transJSON = json["trans"].array!
+                            let transJSON = json["trans"].array ?? []
                             for tranJSON in transJSON{
                             
                                 let cart:Cart = Cart.init(
@@ -207,26 +207,26 @@ class OrderModel: NSObject {
                                     recipient: tranJSON["trans_detail"]["customer_address_recipient"].string,
                                     transId: tranJSON["trans_detail"]["trans_id"].string,
                                     transNo: tranJSON["trans_detail"]["trans_no"].string,
-                                    transDate: dateformatter.dateFromString(NSString.init(format:"%@ %@", tranJSON["trans_date"].string!, tranJSON["trans_time"].string!) as String)
+                                    transDate: dateformatter.dateFromString(NSString.init(format:"%@ %@", tranJSON["trans_date"].string ?? "", tranJSON["trans_time"].string!) as String)
                                 )
                                 
                                 var quantity = 0
-                                let listsJSON = tranJSON["trans_detail"]["list"].array!
+                                let listsJSON = tranJSON["trans_detail"]["list"].array ?? []
                                 for listJSON in listsJSON{
                                     let cartItem = CartItem.init(
                                         guid: nil,
                                         cartGuid: nil,
                                         productId: listJSON["product_id"].string,
-                                        quantity: Int(listJSON["quantity"].string!),
+                                        quantity: Int(listJSON["quantity"].string ?? "0"),
                                         price: "0",
                                         total: "0"
                                     )
-                                    cartItem.names = HelperModel.parseNames(listJSON["product_names"]["product_name"].array!)
+                                    cartItem.names = HelperModel.parseNames(listJSON["product_names"]["product_name"].array ?? [])
                                     
                                     quantity += cartItem.quantity!
                                     
                                     var price = NSDecimalNumber.init(string: "0")
-                                    let detailListsJSON = listJSON["detail_list"].array!
+                                    let detailListsJSON = listJSON["detail_list"].array ?? []
                                     for detailListJSON in detailListsJSON{
                                         let cartModifier = CartModifier.init(
                                             guid: nil,
@@ -236,14 +236,14 @@ class OrderModel: NSObject {
                                             modifierOptionId: detailListJSON["product_addition_id"].string,
                                             quantity: Int(detailListJSON["quantity"].string!)
                                         )
-                                        cartModifier.names = HelperModel.parseNames(detailListJSON["additionNames"]["additionName"].array!)
+                                        cartModifier.names = HelperModel.parseNames(detailListJSON["additionNames"]["additionName"].array ?? [])
                                         
                                         price = price.decimalNumberByAdding(NSDecimalNumber.init(string: detailListJSON["price"].string))
                                         cartItem.cartModifiers.append(cartModifier)
                                     }
                                     
                                     cartItem.price = price.stringValue
-                                    cartItem.total = price.decimalNumberByMultiplyingBy(NSDecimalNumber.init(long:cartItem.quantity!)).stringValue
+                                    cartItem.total = price.decimalNumberByMultiplyingBy(NSDecimalNumber.init(long:cartItem.quantity ?? 0)).stringValue
                                     cart.cartItems.append(cartItem)
                                 }
                                 
