@@ -41,15 +41,24 @@ class LeftViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func refreshDataSource(){
         self.languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
-        self.menus = [
-            Menu.Account[self.languageId]!,
-            Menu.Main[self.languageId]!,
-            Menu.History[self.languageId]!,
-            Menu.Menu[self.languageId]!,
-            Menu.Promo[self.languageId]!,
-            Menu.ChangeLanguage[self.languageId]!,
-            Menu.Logout[self.languageId]!
-        ]
+        if (UserModel.getUser().customerId == ""){
+            self.menus = [
+                Menu.Main[self.languageId]!,
+                Menu.Menu[self.languageId]!,
+                Menu.Promo[self.languageId]!,
+                Menu.ChangeLanguage[self.languageId]!
+            ]
+        } else {
+            self.menus = [
+                Menu.Account[self.languageId]!,
+                Menu.Main[self.languageId]!,
+                Menu.History[self.languageId]!,
+                Menu.Menu[self.languageId]!,
+                Menu.Promo[self.languageId]!,
+                Menu.ChangeLanguage[self.languageId]!,
+                Menu.Logout[self.languageId]!
+            ]
+        }
         self.tableView.reloadData()
     }
     

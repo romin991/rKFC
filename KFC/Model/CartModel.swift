@@ -136,6 +136,8 @@ class CartModel: NSObject {
             if (cdCarts.count > 0){
                 let cdCart = cdCarts.first!
                 
+                cdCart.setValue(cart.customerId, forKey: "customerId")
+                cdCart.setValue(cart.recipient, forKey: "recipient")
                 cdCart.setValue(cart.notes, forKey: "notes")
                 cdCart.setValue(cart.status, forKey: "status")
                 cdCart.setValue(cart.customerAddressId, forKey: "customerAddressId")

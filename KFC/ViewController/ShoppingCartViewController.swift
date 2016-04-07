@@ -85,7 +85,12 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     }
 
     @IBAction func checkoutButtonClicked(sender: AnyObject) {
-        self.performSegueWithIdentifier("CheckoutSegue", sender: nil)
+        if (self.cart.customerId == ""){
+            let loginViewController:LoginViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController)!
+            self.navigationController?.pushViewController(loginViewController, animated: true)
+        } else {
+            self.performSegueWithIdentifier("CheckoutSegue", sender: nil)
+        }
     }
     
     @IBAction func keepShoppingButtonClicked(sender: AnyObject) {

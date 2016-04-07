@@ -33,12 +33,7 @@ class DrawerViewController: UIViewController, DrawerDelegate {
         self.drawerController?.maximumLeftDrawerWidth = self.view.frame.width - 40
         
         self.selectMenu(Menu.Promo[self.languageId]!)
-//        if (CartModel.isPendingCartNotEmpty()){
-//            self.selectMenu(Menu.Menu[self.languageId]!)
-//        } else {
-//            self.selectMenu(Menu.Main[self.languageId]!)
-//        }
-        
+    
         self.navigationController?.pushViewController(self.drawerController!, animated: false)
     }
     

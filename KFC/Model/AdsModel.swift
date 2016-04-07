@@ -18,9 +18,7 @@ class AdsModel: NSObject {
                 let imageURL = adsURL["url"]!
                 let filename = adsURL["title"]!
                 let data = NSData.init(contentsOfURL: NSURL.init(string: imageURL)!)
-                print (imageURL)
                 if (data != nil){
-                    print("test")
                     CommonFunction.saveData(data!, directory: Path.AdsImage, filename: filename)
                 }
                 

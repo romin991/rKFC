@@ -27,6 +27,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var signInButton: UIButton!
     
     var datePicker = UIDatePicker.init()
+    var username:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +38,10 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
         self.birthdateField.inputView = self.datePicker
         
         CustomView.custom(self.signUpButton, borderColor: self.signUpButton.backgroundColor!, cornerRadius: 28, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
+        
+        if (self.username != nil && self.username != ""){
+            self.emailField.text = self.username
+        }
     }
     
     override func didReceiveMemoryWarning() {

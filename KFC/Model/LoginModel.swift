@@ -138,14 +138,18 @@ class LoginModel: NSObject {
                             user.handphone = json["customer"]["handphone"].string
                             user.username = json["customer"]["email"].string
                             
+                            let cart = CartModel.getPendingCart()
+                            cart.customerId = user.customerId
+                            cart.recipient = user.fullname
+                            CartModel.update(cart)
+                            
                             self.getAddressList(user, completion: { (status, message, addresses) -> Void in
                                 if (status == Status.Success){
                                     user.addresses = addresses!
-                                    user = UserModel.create(user)
+                                    user = UserModel.updateUser(user)
                                     
                                     NSUserDefaults.standardUserDefaults().setObject(user.languageId, forKey: "LanguageId")
-                                    
-                                    StoreModel.save(Store.init())
+                                    NSNotificationCenter.defaultCenter().postNotificationName(NotificationKey.LanguageChanged, object: nil)
                                     
                                     completion(status: Status.Success, message: message, user:user)
                                 } else {

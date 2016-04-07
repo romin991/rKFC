@@ -48,7 +48,6 @@ class UserModel: NSObject {
             
             addresses.addObject(cdAddress)
         }
-        cdUser.setValue(addresses, forKey: "addresses")
         
         do {
             try managedContext.save()
@@ -59,7 +58,7 @@ class UserModel: NSObject {
         return user
     }
     
-    class func updateUser(user:User){
+    class func updateUser(user:User) -> User{
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedContext = appDelegate.managedObjectContext
         
@@ -67,40 +66,49 @@ class UserModel: NSObject {
         
         do {
             let results = try managedContext.executeFetchRequest(fetchRequest)
-            let cdUser = (results as! [NSManagedObject]).first!
-            
-            cdUser.setValue(user.fullname, forKey: "fullname")
-            cdUser.setValue(user.currentLong, forKey: "currentLong")
-            cdUser.setValue(user.currentLat, forKey: "currentLat")
-            cdUser.setValue(user.username, forKey: "username")
-            cdUser.setValue(user.handphone, forKey: "handphone")
-            cdUser.setValue(user.languageId, forKey: "languageId")
-            cdUser.setValue(user.customerId, forKey: "customerId")
-            cdUser.setValue(user.gender, forKey: "gender")
-            cdUser.setValue(user.address, forKey: "address")
-            cdUser.setValue(user.birthdate, forKey: "birthdate")
-            
-            let setAddresses = cdUser.mutableSetValueForKey("addresses")
-            for address in user.addresses{
-                let entity =  NSEntityDescription.entityForName("Address", inManagedObjectContext:managedContext)
-                let cdAddress = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: managedContext)
+            let cdUsers = (results as! [NSManagedObject])
+            if (cdUsers.count == 0){
+                return self.create(user)
                 
-                address.guid = NSUUID().UUIDString
-                cdAddress.setValue(address.guid, forKey: "guid")
-                cdAddress.setValue(address.id, forKey: "id")
-                cdAddress.setValue(address.address, forKey: "address")
-                cdAddress.setValue(address.addressDetail, forKey: "addressDetail")
-                cdAddress.setValue(address.long, forKey: "long")
-                cdAddress.setValue(address.lat, forKey: "lat")
-                cdAddress.setValue(address.recipient, forKey: "recipient")
+            } else {
+                let cdUser = cdUsers.first!
+            
+                cdUser.setValue(user.fullname, forKey: "fullname")
+                cdUser.setValue(user.currentLong, forKey: "currentLong")
+                cdUser.setValue(user.currentLat, forKey: "currentLat")
+                cdUser.setValue(user.username, forKey: "username")
+                cdUser.setValue(user.handphone, forKey: "handphone")
+                cdUser.setValue(user.languageId, forKey: "languageId")
+                cdUser.setValue(user.customerId, forKey: "customerId")
+                cdUser.setValue(user.gender, forKey: "gender")
+                cdUser.setValue(user.address, forKey: "address")
+                cdUser.setValue(user.birthdate, forKey: "birthdate")
                 
-                setAddresses.addObject(cdAddress)
+                let setAddresses = cdUser.mutableSetValueForKey("addresses")
+                for address in user.addresses{
+                    let entity =  NSEntityDescription.entityForName("Address", inManagedObjectContext:managedContext)
+                    let cdAddress = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: managedContext)
+                    
+                    address.guid = NSUUID().UUIDString
+                    cdAddress.setValue(address.guid, forKey: "guid")
+                    cdAddress.setValue(address.id, forKey: "id")
+                    cdAddress.setValue(address.address, forKey: "address")
+                    cdAddress.setValue(address.addressDetail, forKey: "addressDetail")
+                    cdAddress.setValue(address.long, forKey: "long")
+                    cdAddress.setValue(address.lat, forKey: "lat")
+                    cdAddress.setValue(address.recipient, forKey: "recipient")
+                    
+                    setAddresses.addObject(cdAddress)
+                }
+                
+                try managedContext.save()
+                
             }
-            
-            try managedContext.save()
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }
+        
+        return user
     }
     
     class func getUser() -> User{

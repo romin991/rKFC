@@ -38,12 +38,14 @@ class SplashViewController: UIViewController {
     }
     
     func animateBackground(){
-        UIView.animateWithDuration(0.6, animations: {
+        UIView.animateWithDuration(0.6, animations: { () -> Void in
             self.logoButtonYPositionConstraint.constant = 0
             self.logoButton.alpha = 1.0
             self.backgroundImageView.layoutIfNeeded()
             self.view.layoutIfNeeded()
-        }, completion: nil)
+        }) { (finish) -> Void in
+            self.logoButtonClicked(self)
+        }
     }
 
 }

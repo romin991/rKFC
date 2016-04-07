@@ -23,6 +23,11 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
     @IBOutlet weak var loginWithFacebookButton: UIButton!
     @IBOutlet weak var loginWithGoogleButton: UIButton!
     @IBOutlet weak var loginWithTwitterButton: UIButton!
+    @IBOutlet weak var skipButton: UIButton!
+    
+    func isFromCheckoutView() -> Bool{
+        return self.navigationController?.viewControllers.count > 2
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +37,10 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
         GIDSignIn.sharedInstance().delegate = self
         
         CustomView.custom(self.loginButton, borderColor: self.loginButton.backgroundColor!, cornerRadius: 28, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
+        
+        if (self.isFromCheckoutView()){
+            self.skipButton.hidden = true
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -51,7 +60,11 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
             //TODO: need to check, if user already verified, then go to MainSegue, if not, then go to ValidationSegue
             
             if (status == Status.Success){
-                self .performSegueWithIdentifier("MainSegue", sender: nil)
+                if (self.isFromCheckoutView()){
+                    self.navigationController?.popViewControllerAnimated(true)
+                } else {
+                    self .performSegueWithIdentifier("MainSegue", sender: nil)
+                }
             } else {
                 //should show alert error
                 let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
@@ -71,7 +84,9 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
     }
     
     @IBAction func skipButtonClicked(sender: AnyObject) {
-//        self.performSegueWithIdentifier("MainSegue", sender: nil)
+        NSUserDefaults.standardUserDefaults().setObject(LanguageID.English, forKey: "LanguageId")
+        UserModel.updateUser(User.init())
+        self.performSegueWithIdentifier("MainSegue", sender: nil)
     }
     
     @IBAction func loginWithFacebookButtonClicked(sender: AnyObject) {
@@ -152,14 +167,17 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
 //    }
     
     
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        if (segue.identifier == "ForgotPasswordSegue"){
+            let registerViewController:RegisterViewController = segue.destinationViewController as! RegisterViewController
+            registerViewController.username = self.usernameField.text
+        }
     }
-    */
 
 }

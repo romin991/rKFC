@@ -20,15 +20,18 @@ class StoreModel: NSObject {
         
         do {
             let results = try managedContext.executeFetchRequest(fetchRequest)
-            let cdUser = (results as! [NSManagedObject]).first!
-            cdUser.setValue(store.id, forKey: "storeId")
-            cdUser.setValue(store.code, forKey: "storeCode")
-            cdUser.setValue(store.name, forKey: "storeName")
-            cdUser.setValue(store.long, forKey: "storeLong")
-            cdUser.setValue(store.lat, forKey: "storeLat")
-            cdUser.setValue(store.priceId, forKey: "storePriceId")
+            let cdUsers = (results as! [NSManagedObject])
+            if (cdUsers.count != 0) {
+                let cdUser = cdUsers.first!
+                cdUser.setValue(store.id, forKey: "storeId")
+                cdUser.setValue(store.code, forKey: "storeCode")
+                cdUser.setValue(store.name, forKey: "storeName")
+                cdUser.setValue(store.long, forKey: "storeLong")
+                cdUser.setValue(store.lat, forKey: "storeLat")
+                cdUser.setValue(store.priceId, forKey: "storePriceId")
             
-            try managedContext.save()
+                try managedContext.save()
+            }
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }
@@ -74,15 +77,18 @@ class StoreModel: NSObject {
         
         do {
             let results = try managedContext.executeFetchRequest(fetchRequest)
-            let cdUser = (results as! [NSManagedObject]).first!
-            cdUser.setValue("", forKey: "storeId")
-            cdUser.setValue("", forKey: "storeCode")
-            cdUser.setValue("", forKey: "storeName")
-            cdUser.setValue("", forKey: "storeLong")
-            cdUser.setValue("", forKey: "storeLat")
-            cdUser.setValue("", forKey: "storePriceId")
+            let cdUsers = (results as! [NSManagedObject])
+            if (cdUsers.count != 0) {
+                let cdUser = cdUsers.first!
+                cdUser.setValue("", forKey: "storeId")
+                cdUser.setValue("", forKey: "storeCode")
+                cdUser.setValue("", forKey: "storeName")
+                cdUser.setValue("", forKey: "storeLong")
+                cdUser.setValue("", forKey: "storeLat")
+                cdUser.setValue("", forKey: "storePriceId")
             
-            try managedContext.save()
+                try managedContext.save()
+            }
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }

@@ -59,9 +59,10 @@ class MainModel: NSObject {
     }
     
     class func getStoreByLocation(position: CLLocationCoordinate2D, completion: (status: String, message:String, store: Store?) -> Void){
-        let parameters = [
+        let parameters:[String:AnyObject] = [
             "lat": position.latitude,
-            "lng": position.longitude
+            "lng": position.longitude,
+            "source" : "MOB"
         ]
         
         Alamofire.request(.POST, NSString.init(format: "%@/GetStoreByLocation", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])

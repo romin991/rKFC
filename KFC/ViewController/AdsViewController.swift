@@ -40,7 +40,7 @@ class AdsViewController: UIViewController, UICollectionViewDelegate, UICollectio
         
         self.pageControl.numberOfPages = self.adsURLs.count;
         self.adsURLs.append(self.adsURLs.first!)
-        self.messageLabel.text = UserModel.getUser().fullname
+        self.messageLabel.text = UserModel.getUser().fullname != "" ? UserModel.getUser().fullname : "You are not logged in"
     }
     
     override func viewDidLayoutSubviews() {

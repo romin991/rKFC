@@ -32,15 +32,17 @@ class SearchAddressViewController: UIViewController, UITextFieldDelegate, UITabl
         self.addresses = user.addresses
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
-            LoginModel.getAddressList(user, completion: { (status, message, addresses) -> Void in
-                if (addresses != nil) {
-                    user.addresses = addresses!
-                    UserModel.updateUser(user)
-                
-                    self.addresses = addresses!
-                    self.tableView.reloadData()
-                }
-            })
+            if (user.username != ""){
+                LoginModel.getAddressList(user, completion: { (status, message, addresses) -> Void in
+                    if (addresses != nil) {
+                        user.addresses = addresses!
+                        UserModel.updateUser(user)
+                        
+                        self.addresses = addresses!
+                        self.tableView.reloadData()
+                    }
+                })
+            }
         }
         
         //set languages
