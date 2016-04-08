@@ -11,15 +11,28 @@ import UIKit
 class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var keepShoppingButton: UIButton!
     @IBOutlet weak var checkoutButton: UIButton!
-    @IBOutlet weak var totalLabel: UILabel!
-    @IBOutlet weak var deliveryChargeLabel: UILabel!
-    @IBOutlet weak var taxLabel: UILabel!
     @IBOutlet weak var buttonView: UIView!
     @IBOutlet weak var tableView: UITableView!
     
-    @IBOutlet weak var tax: UILabel!
-    @IBOutlet weak var delivery: UILabel!
-    @IBOutlet weak var total: UILabel!
+    @IBOutlet weak var pb1ValueLabel: UILabel!
+    @IBOutlet weak var deliveryValueLabel: UILabel!
+    @IBOutlet weak var deliveryTaxValueLabel: UILabel!
+    @IBOutlet weak var taxValueLabel: UILabel!
+    @IBOutlet weak var roundingValueLabel: UILabel!
+    @IBOutlet weak var totalValueLabel: UILabel!
+    
+    @IBOutlet weak var pb1Label: UILabel!
+    @IBOutlet weak var deliveryLabel: UILabel!
+    @IBOutlet weak var deliveryTaxLabel: UILabel!
+    @IBOutlet weak var taxLabel: UILabel!
+    @IBOutlet weak var roundingLabel: UILabel!
+    @IBOutlet weak var totalLabel: UILabel!
+    
+    
+//    @IBOutlet weak var tax: UILabel!
+//    @IBOutlet weak var delivery: UILabel!
+//    @IBOutlet weak var total: UILabel!
+    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var orderSummaryLabel: UILabel!
     
@@ -51,9 +64,13 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         self.buttonView.layer.masksToBounds = false
         
         //change language label
-        self.tax.text = NSString.init(format: "%@ (10%)", ShoppingCart.Tax[self.languageId]!) as String
-        self.delivery.text = ShoppingCart.Delivery[self.languageId]
-        self.total.text = ShoppingCart.Total[self.languageId]
+        self.pb1Label.text = ShoppingCart.Pb1[self.languageId]
+        self.deliveryLabel.text = ShoppingCart.Delivery[self.languageId]
+        self.deliveryTaxLabel.text = ShoppingCart.DeliveryTax[self.languageId]
+        self.taxLabel.text = ShoppingCart.Tax[self.languageId]
+        self.roundingLabel.text = ShoppingCart.Rounding[self.languageId]
+        self.totalLabel.text = ShoppingCart.Total[self.languageId]
+        
         self.titleLabel.text = ShoppingCart.Cart[self.languageId]
         self.orderSummaryLabel.text = ShoppingCart.OrderSummary[self.languageId]
         self.keepShoppingButton.setTitle(ShoppingCart.KeepShopping[self.languageId], forState: UIControlState.Normal)
@@ -68,9 +85,13 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         //this is need to be done here!
         self.cart = CartModel.getPendingCart()
         
-        self.taxLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.tax))
-        self.deliveryChargeLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.delivery))
-        self.totalLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.total))
+        self.pb1ValueLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.tax))
+        self.deliveryValueLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.delivery))
+        self.deliveryTaxValueLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.deliveryTax))
+        self.taxValueLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.ppn))
+        self.roundingValueLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.rounding))
+        self.totalValueLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.total))
+        
         self.tableView.reloadData()
         //end
     }
@@ -103,16 +124,16 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         
         var subtitle:String = ""
         for cartModifier in cartItem.cartModifiers{
-            subtitle = subtitle.stringByAppendingFormat("%i x %@, ", cartModifier.quantity!, (cartModifier.names.filter{$0.languageId == self.languageId}.first?.name)!)
+            subtitle = subtitle.stringByAppendingFormat("%i x %@, ", cartModifier.quantity!, cartModifier.names.filter{$0.languageId == self.languageId}.first?.name ?? "")
         }
         if (subtitle.characters.count > 2){
             subtitle = subtitle.substringToIndex(subtitle.endIndex.advancedBy(-2))
         }
         
-        let title = cartItem.names.filter{$0.languageId == self.languageId}.first?.name
+        let title = cartItem.names.filter{$0.languageId == self.languageId}.first?.name ?? ""
         
         let subtitleHeight = subtitle == "" ? 0 : NSString.init(string: subtitle).boundingRectWithSize(CGSizeMake(self.maxWidth, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.subtitleFont!], context: nil).height
-        let titleHeight = NSString.init(string: title!).boundingRectWithSize(CGSizeMake(self.maxWidth, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.titleFont!], context: nil).height
+        let titleHeight = NSString.init(string: title).boundingRectWithSize(CGSizeMake(self.maxWidth, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.titleFont!], context: nil).height
         
         let height = ceil(subtitleHeight) + ceil(titleHeight) + 52
         
@@ -156,15 +177,15 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         
         var subtitle:String = ""
         for cartModifier in cartItem.cartModifiers{
-            subtitle = subtitle.stringByAppendingFormat("%i x %@, ", cartModifier.quantity!, (cartModifier.names.filter{$0.languageId == self.languageId}.first?.name)!)
+            subtitle = subtitle.stringByAppendingFormat("%i x %@, ", cartModifier.quantity!, cartModifier.names.filter{$0.languageId == self.languageId}.first?.name ?? "")
         }
         if (subtitle.characters.count > 2){
             subtitle = subtitle.substringToIndex(subtitle.endIndex.advancedBy(-2))
         }
         
-        cell.mainTitleLabel.text = cartItem.names.filter{$0.languageId == self.languageId}.first?.name
+        cell.mainTitleLabel.text = cartItem.names.filter{$0.languageId == self.languageId}.first?.name ?? ""
         cell.priceLabel.text = NSString.init(format: "%i x %@", cartItem.quantity!, CommonFunction.formatCurrency(price)) as String
-        cell.subtotalLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:cartItem.total))
+        cell.subtotalLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:cartItem.subtotal))
         cell.subtitleLabel.text = subtitle
 
         let path = CommonFunction.generatePathAt(Path.ProductImage, filename: cartItem.productId!)

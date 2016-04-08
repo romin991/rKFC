@@ -104,6 +104,9 @@ struct Profile {
 }
 
 struct ShoppingCart {
+    static let DeliveryTax:[String:String] = [LanguageID.Indonesia : "Pajak Biaya Antar", LanguageID.English : "Delivery Tax"]
+    static let Rounding:[String:String] = [LanguageID.Indonesia : "Pembulatan", LanguageID.English : "Rounding"]
+    static let Pb1:[String:String] = [LanguageID.Indonesia : "PB1", LanguageID.English : "PB1"]
     static let Tax:[String:String] = [LanguageID.Indonesia : "Pajak", LanguageID.English : "Tax"]
     static let Delivery:[String:String] = [LanguageID.Indonesia : "Biaya Antar", LanguageID.English : "Delivery"]
     static let Total:[String:String] = [LanguageID.Indonesia : "Total", LanguageID.English : "Total"]

@@ -17,6 +17,9 @@ class Cart: NSObject {
     var tax: String? = "0"
     var delivery: String? = "0"
     var total: String? = "0"
+    var deliveryTax: String? = "0"
+    var rounding: String? = "0"
+    var ppn: String? = "0"
     
     var customerId: String? = ""
     var customerAddressId: String? = ""
@@ -36,11 +39,14 @@ class Cart: NSObject {
     
     var cartItems: [CartItem] = [CartItem]()
     
-    init(guid: String?, notes:String?, status:String?, subtotal:String?, tax:String?, delivery:String?, total:String?, customerId:String?, customerAddressId:String?, storeId:String?, priceId:String?, quantity:Int?, address:String?, addressDetail:String?, long:Double?, lat:Double?, recipient:String?, transId:String?, transNo:String?, transDate:NSDate?) {
+    init(guid: String?, notes:String?, status:String?, subtotal:String?, ppn:String?, deliveryTax:String?, rounding:String?, tax:String?, delivery:String?, total:String?, customerId:String?, customerAddressId:String?, storeId:String?, priceId:String?, quantity:Int?, address:String?, addressDetail:String?, long:Double?, lat:Double?, recipient:String?, transId:String?, transNo:String?, transDate:NSDate?) {
         self.guid = guid
         self.notes = notes
         self.status = status
         self.subtotal = subtotal
+        self.ppn = ppn
+        self.deliveryTax = deliveryTax
+        self.rounding = rounding
         self.tax = tax
         self.delivery = delivery
         self.total = total

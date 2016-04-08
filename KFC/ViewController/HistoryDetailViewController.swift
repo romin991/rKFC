@@ -88,16 +88,16 @@ class HistoryDetailViewController: UIViewController, UITableViewDelegate {
         
         var subtitle:String = ""
         for cartModifier in cartItem.cartModifiers{
-            subtitle = subtitle.stringByAppendingFormat("%i x %@, ", cartModifier.quantity!, (cartModifier.names.filter{$0.languageId == self.languageId}.first?.name)!)
+            subtitle = subtitle.stringByAppendingFormat("%i x %@, ", cartModifier.quantity!, cartModifier.names.filter{$0.languageId == self.languageId}.first?.name ?? "")
         }
         if (subtitle.characters.count > 2){
             subtitle = subtitle.substringToIndex(subtitle.endIndex.advancedBy(-2))
         }
         
-        let title = cartItem.names.filter{$0.languageId == self.languageId}.first?.name
+        let title = cartItem.names.filter{$0.languageId == self.languageId}.first?.name ?? ""
         
         let subtitleHeight = subtitle == "" ? 0 : NSString.init(string: subtitle).boundingRectWithSize(CGSizeMake(self.maxWidth, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.subtitleFont!], context: nil).height
-        let titleHeight = NSString.init(string: title!).boundingRectWithSize(CGSizeMake(self.maxWidth, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.titleFont!], context: nil).height
+        let titleHeight = NSString.init(string: title).boundingRectWithSize(CGSizeMake(self.maxWidth, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.titleFont!], context: nil).height
         
         let height = ceil(subtitleHeight) + ceil(titleHeight) + 52
         
@@ -117,13 +117,13 @@ class HistoryDetailViewController: UIViewController, UITableViewDelegate {
         
         var subtitle:String = ""
         for cartModifier in cartItem.cartModifiers{
-            subtitle = subtitle.stringByAppendingFormat("%i x %@, ", cartModifier.quantity!, (cartModifier.names.filter{$0.languageId == self.languageId}.first?.name)!)
+            subtitle = subtitle.stringByAppendingFormat("%i x %@, ", cartModifier.quantity!, cartModifier.names.filter{$0.languageId == self.languageId}.first?.name ?? "")
         }
         if (subtitle.characters.count > 2){
             subtitle = subtitle.substringToIndex(subtitle.endIndex.advancedBy(-2))
         }
         
-        cell.mainTitleLabel.text = cartItem.names.filter{$0.languageId == self.languageId}.first?.name
+        cell.mainTitleLabel.text = cartItem.names.filter{$0.languageId == self.languageId}.first?.name ?? ""
         cell.priceLabel.text = NSString.init(format: "%i x %@", cartItem.quantity!, CommonFunction.formatCurrency(price)) as String
         cell.subtotalLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:cartItem.total))
         cell.subtitleLabel.text = subtitle

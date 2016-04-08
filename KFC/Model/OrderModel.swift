@@ -192,6 +192,9 @@ class OrderModel: NSObject {
                                     notes: nil,
                                     status: tranJSON["trans_detail"]["status"].string,
                                     subtotal: tranJSON["trans_detail"]["total_amount"].string,
+                                    ppn: nil,
+                                    deliveryTax: nil,
+                                    rounding: tranJSON["trans_detail"]["total_rounding"].string,
                                     tax: tranJSON["trans_detail"]["total_tax"].string,
                                     delivery: tranJSON["trans_detail"]["delivery_charge"].string,
                                     total: tranJSON["trans_detail"]["total_sales"].string,
@@ -219,6 +222,9 @@ class OrderModel: NSObject {
                                         productId: listJSON["product_id"].string,
                                         quantity: Int(listJSON["quantity"].string ?? "0"),
                                         price: "0",
+                                        tax: "0",
+                                        ppn: "0",
+                                        subtotal: "0",
                                         total: "0"
                                     )
                                     cartItem.names = HelperModel.parseNames(listJSON["product_names"]["product_name"].array ?? [])

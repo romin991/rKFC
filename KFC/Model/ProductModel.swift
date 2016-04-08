@@ -27,6 +27,7 @@ class ProductModel: NSObject {
         cdProduct.setValue(product.image, forKey: "image")
         cdProduct.setValue(product.price, forKey: "price")
         cdProduct.setValue(product.taxable, forKey: "taxable")
+        cdProduct.setValue(product.ppn, forKey: "ppn")
         
         let setNames = cdProduct.mutableSetValueForKey("names")
         for name in product.names{
@@ -131,7 +132,9 @@ class ProductModel: NSObject {
                     categoryGuid: (cdProduct.valueForKey("categoryGuid") as? String),
                     image: (cdProduct.valueForKey("image") as? String),
                     price: (cdProduct.valueForKey("price") as? String),
-                    taxable: (cdProduct.valueForKey("taxable") as? Bool))
+                    taxable: (cdProduct.valueForKey("taxable") as? Bool),
+                    ppn: (cdProduct.valueForKey("ppn") as? Bool)
+                )
                 
                 let cdNames = cdProduct.mutableSetValueForKey("names")
                 for cdName in cdNames{
@@ -190,7 +193,9 @@ class ProductModel: NSObject {
                     categoryGuid: (cdProduct.valueForKey("categoryGuid") as? String),
                     image: (cdProduct.valueForKey("image") as? String),
                     price: (cdProduct.valueForKey("price") as? String),
-                    taxable: (cdProduct.valueForKey("taxable") as? Bool))
+                    taxable: (cdProduct.valueForKey("taxable") as? Bool),
+                    ppn: (cdProduct.valueForKey("ppn") as? Bool)
+                )
                 
                 let cdNames = cdProduct.mutableSetValueForKey("names")
                 for cdName in cdNames{

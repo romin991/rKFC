@@ -16,13 +16,23 @@ class Store: NSObject {
     var lat: String? = ""
     var priceId: String? = ""
     
-    init(code: String?, name: String?, id: String?, long: String?, lat: String?, priceId: String?) {
+    var delivery: String? = ""
+    var deliveryTax: String? = ""
+    var tax: String? = ""
+    var ppn: String? = ""
+    
+    init(code: String?, name: String?, id: String?, long: String?, lat: String?, priceId: String?, delivery:String?, deliveryTax:String?, tax:String?, ppn:String?) {
         self.code = code
         self.name = name
         self.id = id
         self.long = long
         self.lat = lat
         self.priceId = priceId
+        
+        self.delivery = delivery
+        self.deliveryTax = deliveryTax
+        self.tax = tax
+        self.ppn = ppn
         
         super.init()
     }

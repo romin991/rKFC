@@ -86,7 +86,7 @@ class CategoryViewController: UIViewController, UITableViewDelegate, UITableView
         let cell : CustomTableViewCell = tableView.dequeueReusableCellWithIdentifier( "Cell", forIndexPath: indexPath) as! CustomTableViewCell
         
         let category:Category = self.categories[indexPath.row]
-        cell.mainTitleLabel?.text = category.names.filter{$0.languageId == self.languageId}.first?.name
+        cell.mainTitleLabel?.text = category.names.filter{$0.languageId == self.languageId}.first?.name ?? ""
         
         let path = CommonFunction.generatePathAt(Path.CategoryImage, filename: category.id!)
         let data = NSFileManager.defaultManager().contentsAtPath(path)

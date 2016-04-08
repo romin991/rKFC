@@ -45,7 +45,7 @@ class ProductViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.products = ProductModel.getProductByCategory(category)
         CustomView.custom(self.shoppingCartBadgesView, borderColor: UIColor.whiteColor(), cornerRadius: 8, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
         
-        self.navigationTItleLabel.text = self.category.names.filter{$0.languageId == self.languageId}.first?.name
+        self.navigationTItleLabel.text = self.category.names.filter{$0.languageId == self.languageId}.first?.name ?? ""
         self.maxWidth = self.view.frame.size.width - 132.0
     }
     
@@ -81,11 +81,11 @@ class ProductViewController: UIViewController, UITableViewDelegate, UITableViewD
             return 166
         } else if (indexPath.section == 1){
             let product:Product = self.products[indexPath.row]
-            let subtitle = product.notes.filter{$0.languageId == self.languageId}.first?.name
-            let title = product.names.filter{$0.languageId == self.languageId}.first?.name
+            let subtitle = product.notes.filter{$0.languageId == self.languageId}.first?.name ?? ""
+            let title = product.names.filter{$0.languageId == self.languageId}.first?.name ?? ""
             
-            let subtitleHeight = NSString.init(string: subtitle!).boundingRectWithSize(CGSizeMake(self.maxWidth, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.subtitleFont!], context: nil).height
-            let titleHeight = NSString.init(string: title!).boundingRectWithSize(CGSizeMake(self.maxWidth, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.titleFont!], context: nil).height
+            let subtitleHeight = NSString.init(string: subtitle).boundingRectWithSize(CGSizeMake(self.maxWidth, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.subtitleFont!], context: nil).height
+            let titleHeight = NSString.init(string: title).boundingRectWithSize(CGSizeMake(self.maxWidth, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.titleFont!], context: nil).height
             
             let height = ceil(subtitleHeight) + ceil(titleHeight) + 72
             
@@ -142,7 +142,7 @@ class ProductViewController: UIViewController, UITableViewDelegate, UITableViewD
         if (indexPath.section == 0){
             cell = tableView.dequeueReusableCellWithIdentifier( "Cell", forIndexPath: indexPath) as! CustomTableViewCell
             
-            cell.mainTitleLabel?.text = self.category.names.filter{$0.languageId == self.languageId}.first?.name
+            cell.mainTitleLabel?.text = self.category.names.filter{$0.languageId == self.languageId}.first?.name ?? ""
             
             let path = CommonFunction.generatePathAt(Path.CategoryImage, filename: self.category.id!)
             let data = NSFileManager.defaultManager().contentsAtPath(path)
@@ -158,8 +158,8 @@ class ProductViewController: UIViewController, UITableViewDelegate, UITableViewD
             cell = tableView.dequeueReusableCellWithIdentifier( "ProductCell", forIndexPath: indexPath) as! CustomTableViewCell
             
             let product:Product = self.products[indexPath.row]
-            cell.mainTitleLabel?.text = product.names.filter{$0.languageId == self.languageId}.first?.name
-            cell.subtitleLabel?.text = product.notes.filter{$0.languageId == self.languageId}.first?.name
+            cell.mainTitleLabel?.text = product.names.filter{$0.languageId == self.languageId}.first?.name ?? ""
+            cell.subtitleLabel?.text = product.notes.filter{$0.languageId == self.languageId}.first?.name ?? ""
             cell.priceLabel?.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string: product.price))
             let path = CommonFunction.generatePathAt(Path.ProductImage, filename: product.id!)
             let data = NSFileManager.defaultManager().contentsAtPath(path)

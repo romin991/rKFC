@@ -99,7 +99,7 @@ class HistoryViewController: UIViewController {
         
         var subtitle:String = ""
         for cartItem in cart.cartItems{
-            subtitle = subtitle.stringByAppendingFormat("%i x %@, ", cartItem.quantity!, (cartItem.names.filter{$0.languageId == self.languageId}.first?.name)!)
+            subtitle = subtitle.stringByAppendingFormat("%i x %@, ", cartItem.quantity!, cartItem.names.filter{$0.languageId == self.languageId}.first?.name ?? "")
         }
         if (subtitle.characters.count > 2){
             subtitle = subtitle.substringToIndex(subtitle.endIndex.advancedBy(-2))

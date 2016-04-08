@@ -59,9 +59,9 @@ class ProductDetailViewController: UIViewController, ModifierParentDelegate {
         CustomView.custom(self.shoppingCartBadgesView, borderColor: UIColor.whiteColor(), cornerRadius: 8, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
         
         self.refreshImageView()
-        self.navigationTitleLabel.text = self.product.names.filter{$0.languageId == self.languageId}.first?.name
-        self.titleLabel.text = self.product.names.filter{$0.languageId == self.languageId}.first?.name
-        self.subtitleLabel.text = self.product.notes.filter{$0.languageId == self.languageId}.first?.name
+        self.navigationTitleLabel.text = self.product.names.filter{$0.languageId == self.languageId}.first?.name ?? ""
+        self.titleLabel.text = self.product.names.filter{$0.languageId == self.languageId}.first?.name ?? ""
+        self.subtitleLabel.text = self.product.notes.filter{$0.languageId == self.languageId}.first?.name ?? ""
         self.priceLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string: self.product.price))
         
         //change label language
@@ -136,6 +136,7 @@ class ProductDetailViewController: UIViewController, ModifierParentDelegate {
         //go to shopping cart view
         
         let cart : Cart = CartModel.getPendingCart()
+        let store : Store = StoreModel.getSelectedStore()
         
         var savedCartItem:CartItem?
         let filteredCartItem = cart.cartItems.filter{$0.productId == self.product.id}
@@ -188,7 +189,21 @@ class ProductDetailViewController: UIViewController, ModifierParentDelegate {
             }
             
             savedCartItem?.quantity = (savedCartItem?.quantity)! + self.product.quantity
-            let total:NSDecimalNumber = NSDecimalNumber.init(string: savedCartItem?.price).decimalNumberByMultiplyingBy(NSDecimalNumber.init(integer:savedCartItem!.quantity!))
+            let subtotal:NSDecimalNumber = NSDecimalNumber.init(string: savedCartItem?.price).decimalNumberByMultiplyingBy(NSDecimalNumber.init(integer:savedCartItem!.quantity!))
+            savedCartItem?.subtotal = subtotal.stringValue
+            
+            let ppn:NSDecimalNumber = NSDecimalNumber.init(string: store.ppn).decimalNumberByDividingBy(NSDecimalNumber.init(long: 100)).decimalNumberByMultiplyingBy(subtotal)
+            let tax:NSDecimalNumber = NSDecimalNumber.init(string: store.tax).decimalNumberByDividingBy(NSDecimalNumber.init(long: 100)).decimalNumberByMultiplyingBy(subtotal)
+            
+            var total:NSDecimalNumber = subtotal
+            if (self.product.taxable == true) {
+                total = total.decimalNumberByAdding(tax)
+                savedCartItem?.tax = tax.stringValue
+            }
+            if (self.product.ppn == true){
+                total = total.decimalNumberByAdding(ppn)
+                savedCartItem?.ppn = ppn.stringValue
+            }
             savedCartItem?.total = total.stringValue
             
             CartModel.addCartItem(savedCartItem!)
@@ -219,7 +234,24 @@ class ProductDetailViewController: UIViewController, ModifierParentDelegate {
                 }
             }
             
-            let total:NSDecimalNumber = price.decimalNumberByMultiplyingBy(NSDecimalNumber.init(integer:self.product.quantity))
+            let subtotal:NSDecimalNumber = price.decimalNumberByMultiplyingBy(NSDecimalNumber.init(integer:self.product.quantity))
+            
+            var ppn:NSDecimalNumber = NSDecimalNumber.init(string: store.ppn).decimalNumberByDividingBy(NSDecimalNumber.init(long:100)).decimalNumberByMultiplyingBy(subtotal)
+            var tax:NSDecimalNumber = NSDecimalNumber.init(string: store.tax).decimalNumberByDividingBy(NSDecimalNumber.init(long:100)).decimalNumberByMultiplyingBy(subtotal)
+            
+            var total:NSDecimalNumber = subtotal
+            
+            if (self.product.taxable == true){
+                total = total.decimalNumberByAdding(tax)
+            } else {
+                tax = NSDecimalNumber.init(long: 0)
+            }
+            
+            if (self.product.ppn == true){
+                total = total.decimalNumberByAdding(ppn)
+            } else {
+                ppn = NSDecimalNumber.init(long: 0)
+            }
             
             let cartItem:CartItem = CartItem.init(
                 guid: nil,
@@ -227,6 +259,9 @@ class ProductDetailViewController: UIViewController, ModifierParentDelegate {
                 productId: self.product.id,
                 quantity: self.product.quantity,
                 price: price.stringValue,
+                tax: tax.stringValue,
+                ppn: ppn.stringValue,
+                subtotal: subtotal.stringValue,
                 total: total.stringValue
             )
             cartItem.names = self.product.names

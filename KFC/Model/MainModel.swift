@@ -81,7 +81,11 @@ class MainModel: NSObject {
                                 id: json["result"]["store"]["id"].string,
                                 long: json["result"]["store"]["lng"].string,
                                 lat: json["result"]["store"]["lat"].string,
-                                priceId: json["result"]["store"]["price_id"].string
+                                priceId: json["result"]["store"]["price_id"].string,
+                                delivery: json["result"]["store"]["delivery_charge"].string,
+                                deliveryTax: json["result"]["store"]["delivery_charge_tax_percent"].string,
+                                tax: json["result"]["store"]["tax_percent"].string,
+                                ppn: json["result"]["store"]["ppn_percent"].string
                             )
                             store = StoreModel.save(store)
                             
@@ -106,7 +110,8 @@ class MainModel: NSObject {
                                                 categoryGuid: category.guid,
                                                 image: productJSON["image"].string,
                                                 price: productJSON["price"].string,
-                                                taxable: productJSON["taxable"].string! == "1" ? true : false
+                                                taxable: productJSON["taxable"].string! == "1" ? true : false,
+                                                ppn: productJSON["ppn"].string! == "1" ? true : false
                                                 
                                             )
                                             product.names = HelperModel.parseNames(productJSON["names"]["name"].array ?? [])
