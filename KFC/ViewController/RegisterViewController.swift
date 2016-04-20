@@ -11,37 +11,47 @@ import MBProgressHUD
 
 class RegisterViewController: UIViewController, UITextFieldDelegate {
 
+    @IBOutlet weak var emailLabel: UILabel!
     @IBOutlet weak var emailField: UITextField!
+    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var nameField: UITextField!
+    @IBOutlet weak var phoneLabel: UILabel!
     @IBOutlet weak var phoneField: UITextField!
+    @IBOutlet weak var passwordLabel: UILabel!
     @IBOutlet weak var passwordField: UITextField!
+    @IBOutlet weak var confirmPasswordLabel: UILabel!
     @IBOutlet weak var confirmPasswordField: UITextField!
-    @IBOutlet weak var birthdateField: UITextField!
-    @IBOutlet weak var addressField: UITextField!
+    @IBOutlet weak var selectLanguageLabel: UILabel!
     @IBOutlet weak var languageEnglishButton: UIButton!
     @IBOutlet weak var languageIndonesiaButton: UIButton!
-    @IBOutlet weak var genderMaleButton: UIButton!
-    @IBOutlet weak var genderFemaleButton: UIButton!
     
     @IBOutlet weak var signUpButton: UIButton!
     @IBOutlet weak var signInButton: UIButton!
+    @IBOutlet weak var skipButton: UIButton!
     
     var datePicker = UIDatePicker.init()
     var username:String?
+    var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        self.datePicker.datePickerMode = UIDatePickerMode.Date
-        self.datePicker.addTarget(self, action: "updateDate:", forControlEvents: UIControlEvents.ValueChanged)
-        self.birthdateField.inputView = self.datePicker
-        
-        CustomView.custom(self.signUpButton, borderColor: self.signUpButton.backgroundColor!, cornerRadius: 28, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
-        
         if (self.username != nil && self.username != ""){
             self.emailField.text = self.username
         }
+        
+        self.emailLabel.text = Wording.Profile.Email[self.languageId]
+        self.nameLabel.text = Wording.Profile.Name[self.languageId]
+        self.phoneLabel.text = Wording.Profile.PhoneNumber[self.languageId]
+        self.passwordLabel.text = Wording.Profile.Password[self.languageId]
+        self.confirmPasswordLabel.text = Wording.Profile.ConfirmPassword[self.languageId]
+        self.selectLanguageLabel.text = Wording.Profile.Language[self.languageId]
+        self.signUpButton.setTitle(Wording.Login.Register[self.languageId], forState: UIControlState.Normal)
+        self.signInButton.setTitle(NSString.init(format:"%@ $@", Wording.Login.AlreadyHaveAnAccount[self.languageId]!, Wording.Login.LoginHere[self.languageId]!) as String, forState: UIControlState.Normal)
+        self.skipButton.setTitle(Wording.Login.Skip[self.languageId], forState: UIControlState.Normal)
+        
+        CustomView.custom(self.skipButton, borderColor: UIColor.init(red: 191.0/255.0, green: 58.0/255.0, blue: 56.0/255.0, alpha: 1.0), cornerRadius: 0, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
     }
     
     override func didReceiveMemoryWarning() {
@@ -59,19 +69,12 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func updateDate(sender:AnyObject){
-        let dateformatter = NSDateFormatter.init()
-        dateformatter.dateFormat = "yyyy-MM-dd"
-        self.birthdateField.text = dateformatter.stringFromDate(self.datePicker.date)
-    }
-    
     @IBAction func signUpButtonClicked(sender: AnyObject) {
         //show activity indicator
         let activityIndicator = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         activityIndicator.mode = MBProgressHUDMode.Indeterminate;
         activityIndicator.labelText = "Loading";
         
-        let gender = self.genderMaleButton.selected == true ? Gender.Male[LanguageID.English] : Gender.Female[LanguageID.English]
         let languageID = self.languageEnglishButton.selected == true ? LanguageID.English : LanguageID.Indonesia
         
         let formatter = NSDateFormatter.init()
@@ -84,9 +87,9 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
             password: self.passwordField.text,
             confirmPassword: self.confirmPasswordField.text,
             languageId: languageID,
-            gender: gender,
-            address: self.addressField.text,
-            birthdate: formatter.dateFromString(self.birthdateField.text!)
+            gender: "",
+            address: "",
+            birthdate: NSDate()
         )
         
         LoginModel.register(user) { (status, message, user) -> Void in
@@ -103,10 +106,6 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    @IBAction func backButtonClicked(sender: AnyObject) {
-        self.navigationController?.popViewControllerAnimated(true);
-    }
-    
     @IBAction func signInButtonClicked(sender: AnyObject) {
         self.navigationController?.popViewControllerAnimated(true);
     }
@@ -120,14 +119,6 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    @IBAction func selectGenderButtonClicked(sender: AnyObject) {
-        self.genderFemaleButton.selected = false
-        self.genderMaleButton.selected = false
-        
-        if let button = sender as? UIButton {
-            button.selected = true
-        }
-    }
     // MARK: - Navigation
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

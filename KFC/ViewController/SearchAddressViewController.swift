@@ -46,7 +46,7 @@ class SearchAddressViewController: UIViewController, UITextFieldDelegate, UITabl
         }
         
         //set languages
-        self.searchField.attributedPlaceholder = NSAttributedString.init(string: Profile.Address[self.languageId]!, attributes: [NSForegroundColorAttributeName: UIColor.whiteColor()])
+        self.searchField.attributedPlaceholder = NSAttributedString.init(string: Wording.Profile.Address[self.languageId]!, attributes: [NSForegroundColorAttributeName: UIColor.whiteColor()])
         
     }
     
@@ -82,7 +82,7 @@ class SearchAddressViewController: UIViewController, UITextFieldDelegate, UITabl
                 self.searchResult = addresses
             } else {
                 let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(UIAlertAction(title: Common.OK[self.languageId], style: UIAlertActionStyle.Default, handler: nil))
+                alert.addAction(UIAlertAction(title: Wording.Common.OK[self.languageId], style: UIAlertActionStyle.Default, handler: nil))
                 self.presentViewController(alert, animated: true, completion: nil)
             }
             
@@ -136,7 +136,7 @@ class SearchAddressViewController: UIViewController, UITextFieldDelegate, UITabl
         
         if (self.isSearching()){
             if (self.searchResult.count == 0){
-                cell.mainTitleLabel?.text = Map.NotFound[self.languageId]
+                cell.mainTitleLabel?.text = Wording.Map.NotFound[self.languageId]
             } else {
                 let address:Address = self.searchResult[indexPath.row]
                 cell.mainTitleLabel?.text = address.address

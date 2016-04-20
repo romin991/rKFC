@@ -25,7 +25,7 @@ class HistoryTableViewCell: UITableViewCell {
 
             self.borderView.layer.shadowColor = UIColor.blackColor().CGColor
             self.borderView.layer.shadowOpacity = 0.5
-            self.borderView.layer.shadowRadius = 4.0
+            self.borderView.layer.shadowRadius = 2.0
             self.borderView.layer.shadowOffset = CGSize.init(width: 0, height: 2)
             self.borderView.layer.masksToBounds = false
         }

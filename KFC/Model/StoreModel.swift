@@ -58,16 +58,16 @@ class StoreModel: NSObject {
             if (cdUsers.count != 0){
                 let cdUser = cdUsers.first!
                 store = Store.init(
-                    code: (cdUser.valueForKey("storeCode") as? String)!,
-                    name: (cdUser.valueForKey("storeName") as? String)!,
-                    id: (cdUser.valueForKey("storeId") as? String)!,
-                    long: (cdUser.valueForKey("storeLong") as? String)!,
-                    lat: (cdUser.valueForKey("storeLat") as? String)!,
-                    priceId: (cdUser.valueForKey("storePriceId") as? String)!,
-                    delivery: (cdUser.valueForKey("storeDelivery") as? String)!,
-                    deliveryTax: (cdUser.valueForKey("storeDeliveryTax") as? String)!,
-                    tax: (cdUser.valueForKey("storeTax") as? String)!,
-                    ppn: (cdUser.valueForKey("storePpn") as? String)!
+                    code: (cdUser.valueForKey("storeCode") as? String),
+                    name: (cdUser.valueForKey("storeName") as? String),
+                    id: (cdUser.valueForKey("storeId") as? String),
+                    long: (cdUser.valueForKey("storeLong") as? String),
+                    lat: (cdUser.valueForKey("storeLat") as? String),
+                    priceId: (cdUser.valueForKey("storePriceId") as? String),
+                    delivery: (cdUser.valueForKey("storeDelivery") as? String),
+                    deliveryTax: (cdUser.valueForKey("storeDeliveryTax") as? String),
+                    tax: (cdUser.valueForKey("storeTax") as? String),
+                    ppn: (cdUser.valueForKey("storePpn") as? String)
                 )
             }
         } catch let error as NSError {

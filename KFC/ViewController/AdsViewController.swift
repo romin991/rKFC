@@ -10,13 +10,13 @@ import UIKit
 
 class AdsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var pageControl: UIPageControl!
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var setLocationButton: UIButton!
+    @IBOutlet weak var titleLabel: UILabel!
     
     var drawerDelegate:DrawerDelegate?
-    var adsURLs = (UIApplication.sharedApplication().delegate as! AppDelegate).adsURLs
+    var ads = AdsModel.getAdsType(AdsType.General)
     var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
 
     func registerNotification(){
@@ -38,9 +38,11 @@ class AdsViewController: UIViewController, UICollectionViewDelegate, UICollectio
         
         CustomView.custom(self.setLocationButton, borderColor: self.setLocationButton.backgroundColor!, cornerRadius: 29, roundingCorners: UIRectCorner.AllCorners, borderWidth: 0)
         
-        self.pageControl.numberOfPages = self.adsURLs.count;
-        self.adsURLs.append(self.adsURLs.first!)
-        self.messageLabel.text = UserModel.getUser().fullname != "" ? UserModel.getUser().fullname : "You are not logged in"
+        self.pageControl.numberOfPages = self.ads.count;
+        self.ads.append(self.ads.first!)
+        self.messageLabel.text = UserModel.getUser().fullname != "" ? UserModel.getUser().fullname : Wording.Main.YouAreNotLoggedIn[self.languageId]
+        self.titleLabel.text = Wording.Main.Welcome[self.languageId]
+        self.setLocationButton.setTitle(Wording.Main.OrderNow[self.languageId], forState: UIControlState.Normal)
     }
     
     override func viewDidLayoutSubviews() {
@@ -68,9 +70,9 @@ class AdsViewController: UIViewController, UICollectionViewDelegate, UICollectio
     @IBAction func setLocationButtonClicked(sender: AnyObject) {
         if (self.drawerDelegate != nil){
             if (CartModel.isPendingCartNotEmpty()){
-                self.drawerDelegate?.selectMenu(Menu.Menu[self.languageId]!)
+                self.drawerDelegate?.selectMenu(Menu.Menu)
             } else {
-                self.drawerDelegate?.selectMenu(Menu.Main[self.languageId]!)
+                self.drawerDelegate?.selectMenu(Menu.Main)
             }
         }
     }
@@ -82,7 +84,7 @@ class AdsViewController: UIViewController, UICollectionViewDelegate, UICollectio
     //MARK:CollectionView Delegate
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         var page = Int(ceil(self.collectionView.contentOffset.x / self.collectionView.frame.size.width))
-        if (page == self.adsURLs.count - 1) {
+        if (page == self.ads.count - 1) {
             page = 0
             self.collectionView.scrollToItemAtIndexPath(NSIndexPath.init(forRow: 0, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.Left, animated: false)
         }
@@ -90,14 +92,14 @@ class AdsViewController: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.adsURLs.count
+        return self.ads.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell:AdsCollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! AdsCollectionViewCell
         
-        let ads = self.adsURLs[indexPath.row]
-        let path = CommonFunction.generatePathAt(Path.AdsImage, filename: ads["title"]!)
+        let ads = self.ads[indexPath.row]
+        let path = CommonFunction.generatePathAt((ads.image?.imagePath)!, filename: (ads.image?.guid)!)
         let data = NSFileManager.defaultManager().contentsAtPath(path)
         if (data != nil) {
             cell.image?.image = UIImage.init(data: data!)

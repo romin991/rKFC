@@ -36,14 +36,14 @@ class CheckoutViewController: UIViewController {
         //change language label
         let languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
         
-        self.navigationTitleLabel.text = ShoppingCart.Checkout[languageId]
-        self.addressLabel.text = ShoppingCart.Address[languageId]
-        self.addressField.placeholder = ShoppingCart.Address[languageId]
-        self.addressDetailLabel.text = ShoppingCart.AddressDetail[languageId]
-        self.addressDetailTextField.placeholder = ShoppingCart.AddressDetail[languageId]
-        self.notesLabel.text = ShoppingCart.Notes[languageId]
-        self.notesTextField.placeholder = ShoppingCart.NotesPlaceholder[languageId]
-        self.choosePaymentLabel.text = ShoppingCart.ChoosePayment[languageId]
+        self.navigationTitleLabel.text = Wording.ShoppingCart.Checkout[languageId]
+        self.addressLabel.text = Wording.ShoppingCart.Address[languageId]
+        self.addressField.placeholder = Wording.ShoppingCart.Address[languageId]
+        self.addressDetailLabel.text = Wording.ShoppingCart.AddressDetail[languageId]
+        self.addressDetailTextField.placeholder = Wording.ShoppingCart.AddressDetail[languageId]
+        self.notesLabel.text = Wording.ShoppingCart.Notes[languageId]
+        self.notesTextField.placeholder = Wording.ShoppingCart.AddAdditionalNotes[languageId]
+        self.choosePaymentLabel.text = Wording.ShoppingCart.ChoosePayment[languageId]
     }
 
     override func didReceiveMemoryWarning() {
@@ -82,12 +82,12 @@ class CheckoutViewController: UIViewController {
                 self.navigationController?.popToViewController(lastViewController!, animated: true)
                 
                 let alert: UIAlertController = UIAlertController(title: Status.Success, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(UIAlertAction(title: Common.OK[languageId], style: UIAlertActionStyle.Default, handler: nil))
+                alert.addAction(UIAlertAction(title: Wording.Common.OK[languageId], style: UIAlertActionStyle.Default, handler: nil))
                 lastViewController!.presentViewController(alert, animated: true, completion: nil)
                 
             } else {
                 let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(UIAlertAction(title: Common.OK[languageId], style: UIAlertActionStyle.Default, handler: nil))
+                alert.addAction(UIAlertAction(title: Wording.Common.OK[languageId], style: UIAlertActionStyle.Default, handler: nil))
                 self.presentViewController(alert, animated: true, completion: nil)
             }
             

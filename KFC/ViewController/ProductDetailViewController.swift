@@ -55,7 +55,6 @@ class ProductDetailViewController: UIViewController, ModifierParentDelegate {
         // Do any additional setup after loading the view.
         
         CustomView.custom(self.quantityView, borderColor: self.quantityView.backgroundColor!, cornerRadius: 22, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
-        CustomView.custom(self.addToShoppingCartButton, borderColor: self.addToShoppingCartButton.backgroundColor!, cornerRadius: 22, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
         CustomView.custom(self.shoppingCartBadgesView, borderColor: UIColor.whiteColor(), cornerRadius: 8, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
         
         self.refreshImageView()
@@ -65,8 +64,8 @@ class ProductDetailViewController: UIViewController, ModifierParentDelegate {
         self.priceLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string: self.product.price))
         
         //change label language
-        self.chooseQuantityLabel.text = ShoppingCart.ChooseQuantity[self.languageId]
-        self.addToShoppingCartButton.setTitle(ShoppingCart.AddToCart[self.languageId], forState: UIControlState.Normal)
+        self.chooseQuantityLabel.text = Wording.ShoppingCart.ChooseQuantity[self.languageId]
+        self.addToShoppingCartButton.setTitle(Wording.ShoppingCart.AddToCart[self.languageId], forState: UIControlState.Normal)
         
         //calculate scrollview contentView
         let maxWidth:CGFloat = self.view.frame.size.width - 40
@@ -275,7 +274,7 @@ class ProductDetailViewController: UIViewController, ModifierParentDelegate {
     
     //MARK: UITableViewDelegate && UITableViewDataSource
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        var totalHeight = 18
+        var totalHeight = 8
         totalHeight += 38
         
         let modifier = self.modifiers[indexPath.row]

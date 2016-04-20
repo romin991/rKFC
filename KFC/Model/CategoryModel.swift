@@ -54,20 +54,23 @@ class CategoryModel: NSObject {
         return category
     }
     
-    class func downloadAllCategoryImage(){
+    class func downloadAllCategoryImage(categories:[Category]){
         
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let managedContext = appDelegate.managedObjectContext
+//        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+//        let managedContext = appDelegate.managedObjectContext
+//        
+//        let fetchRequest = NSFetchRequest(entityName: "Category")
+//        
+//        do {
+//            let results = try managedContext.executeFetchRequest(fetchRequest)
+//            let cdCategories = results as! [NSManagedObject]
+//            for cdCategory in cdCategories{
         
-        let fetchRequest = NSFetchRequest(entityName: "Category")
-        
-        do {
-            let results = try managedContext.executeFetchRequest(fetchRequest)
-            let cdCategories = results as! [NSManagedObject]
-            for cdCategory in cdCategories{
+//        let categories = self.getAllCategory()
+        for category in categories{
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-                    let imageURL = cdCategory.valueForKey("image") as? String
-                    let filename = cdCategory.valueForKey("id") as? String
+                    let imageURL = category.image
+                    let filename = category.id
                     if (imageURL != nil && imageURL != "" && filename != nil && filename != "") {
                         let path = CommonFunction.generatePathAt(Path.CategoryImage, filename: filename!)
                         let data = NSFileManager.defaultManager().contentsAtPath(path)
@@ -83,10 +86,11 @@ class CategoryModel: NSObject {
                         })
                     }
                 })
-            }
-        } catch let error as NSError {
-            print("Could not fetch \(error), \(error.userInfo)")
         }
+//            }
+//        } catch let error as NSError {
+//            print("Could not fetch \(error), \(error.userInfo)")
+//        }
     }
     
     class func getAllCategory() -> [Category] {

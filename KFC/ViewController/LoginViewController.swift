@@ -15,7 +15,9 @@ import MBProgressHUD
 
 class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate {
 
+    @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var usernameField: UITextField!
+    @IBOutlet weak var passwordLabel: UILabel!
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var registerButton: UIButton!
@@ -24,6 +26,8 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
     @IBOutlet weak var loginWithGoogleButton: UIButton!
     @IBOutlet weak var loginWithTwitterButton: UIButton!
     @IBOutlet weak var skipButton: UIButton!
+    
+    var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
     
     func isFromCheckoutView() -> Bool{
         return self.navigationController?.viewControllers.count > 2
@@ -36,11 +40,18 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
         GIDSignIn.sharedInstance().uiDelegate = self
         GIDSignIn.sharedInstance().delegate = self
         
-        CustomView.custom(self.loginButton, borderColor: self.loginButton.backgroundColor!, cornerRadius: 28, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
-        
         if (self.isFromCheckoutView()){
             self.skipButton.hidden = true
         }
+        
+        CustomView.custom(self.skipButton, borderColor: UIColor.init(red: 191.0/255.0, green: 58.0/255.0, blue: 56.0/255.0, alpha: 1.0), cornerRadius: 0, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
+        
+        self.skipButton.setTitle(Wording.Login.Skip[self.languageId], forState: UIControlState.Normal)
+        self.loginButton.setTitle(Wording.Login.Login[self.languageId], forState: UIControlState.Normal)
+        self.registerButton.setTitle(Wording.Login.Register[self.languageId], forState: UIControlState.Normal)
+        self.forgotPasswordButton.setTitle(Wording.Login.ForgotPassword[self.languageId], forState: UIControlState.Normal)
+        self.usernameLabel.text = Wording.Profile.Email[self.languageId]
+        self.passwordLabel.text = Wording.Profile.Password[self.languageId]
     }
 
     override func didReceiveMemoryWarning() {
@@ -174,10 +185,6 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        if (segue.identifier == "ForgotPasswordSegue"){
-            let registerViewController:RegisterViewController = segue.destinationViewController as! RegisterViewController
-            registerViewController.username = self.usernameField.text
-        }
     }
 
 }

@@ -76,20 +76,23 @@ class ProductModel: NSObject {
         return product
     }
     
-    class func downloadAllProductImage(){
+    class func downloadAllProductImageFromCategory(categories:[Category]){
         
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let managedContext = appDelegate.managedObjectContext
-        
-        let fetchRequest = NSFetchRequest(entityName: "Product")
-
-        do {
-            let results = try managedContext.executeFetchRequest(fetchRequest)
-            let cdProducts = results as! [NSManagedObject]
-            for cdProduct in cdProducts{
+//        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+//        let managedContext = appDelegate.managedObjectContext
+//        
+//        let fetchRequest = NSFetchRequest(entityName: "Product")
+//
+//        do {
+//            let results = try managedContext.executeFetchRequest(fetchRequest)
+//            let cdProducts = results as! [NSManagedObject]
+//            for cdProduct in cdProducts{
+        for category in categories{
+            let products = self.getProductByCategory(category)
+            for product in products{
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-                    let imageURL = cdProduct.valueForKey("image") as? String
-                    let filename = cdProduct.valueForKey("id") as? String
+                    let imageURL = product.image
+                    let filename = product.id
                     if (imageURL != nil && imageURL != "" && filename != nil && filename != "") {
                         let path = CommonFunction.generatePathAt(Path.ProductImage, filename: filename!)
                         let data = NSFileManager.defaultManager().contentsAtPath(path)
@@ -106,9 +109,11 @@ class ProductModel: NSObject {
                     }
                 })
             }
-        } catch let error as NSError {
-            print("Could not fetch \(error), \(error.userInfo)")
         }
+//            }
+//        } catch let error as NSError {
+//            print("Could not fetch \(error), \(error.userInfo)")
+//        }
     }
     
     class func getProductByCartItem(cartItem:CartItem) -> Product{

@@ -31,7 +31,26 @@ class LeftViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        self.refreshDataSource()
+        if (UserModel.getUser().customerId == ""){
+            self.menus = [
+                Menu.Main,
+                Menu.Menu,
+                Menu.Promo,
+                Menu.ChangeLanguage,
+                Menu.Login
+            ]
+        } else {
+            self.menus = [
+                Menu.Account,
+                Menu.Main,
+                Menu.History,
+                Menu.Menu,
+                Menu.Promo,
+                Menu.ChangeLanguage,
+                Menu.Logout
+            ]
+        }
+        self.tableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -41,24 +60,6 @@ class LeftViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func refreshDataSource(){
         self.languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
-        if (UserModel.getUser().customerId == ""){
-            self.menus = [
-                Menu.Main[self.languageId]!,
-                Menu.Menu[self.languageId]!,
-                Menu.Promo[self.languageId]!,
-                Menu.ChangeLanguage[self.languageId]!
-            ]
-        } else {
-            self.menus = [
-                Menu.Account[self.languageId]!,
-                Menu.Main[self.languageId]!,
-                Menu.History[self.languageId]!,
-                Menu.Menu[self.languageId]!,
-                Menu.Promo[self.languageId]!,
-                Menu.ChangeLanguage[self.languageId]!,
-                Menu.Logout[self.languageId]!
-            ]
-        }
         self.tableView.reloadData()
     }
     
@@ -100,26 +101,36 @@ class LeftViewController: UIViewController, UITableViewDelegate, UITableViewData
             cell = tableView.dequeueReusableCellWithIdentifier( "LogoCell", forIndexPath: indexPath) as! CustomTableViewCell
         } else if (indexPath.section == 1){
             cell = tableView.dequeueReusableCellWithIdentifier( "Cell", forIndexPath: indexPath) as! CustomTableViewCell
-            let title:String = self.menus[indexPath.row]
-            cell.mainTitleLabel.text = title
+            let menu:String = self.menus[indexPath.row]
             cell.imageBackground.contentMode = UIViewContentMode.Center
             
-            if (title == Menu.Account[self.languageId]){
+            if (menu == Menu.Account){
                 cell.imageBackground.image = UIImage.init(named: "MenuAccount")
-            } else if (title == Menu.Main[self.languageId]){
+                cell.mainTitleLabel.text = Wording.Menu.Account[self.languageId]
+            } else if (menu == Menu.Main){
                 cell.imageBackground.image = UIImage.init(named: "MenuMain")
-            } else if (title == Menu.History[self.languageId]){
+                cell.mainTitleLabel.text = Wording.Menu.Main[self.languageId]
+            } else if (menu == Menu.History){
                 cell.imageBackground.image = UIImage.init(named: "MenuHistory")
-            } else if (title == Menu.Menu[self.languageId]){
+                cell.mainTitleLabel.text = Wording.Menu.History[self.languageId]
+            } else if (menu == Menu.Menu){
                 cell.imageBackground.image = UIImage.init(named: "MenuMenu")
-            } else if (title == Menu.Promo[self.languageId]){
+                cell.mainTitleLabel.text = Wording.Menu.Menu[self.languageId]
+            } else if (menu == Menu.Promo){
                 cell.imageBackground.image = UIImage.init(named: "MenuPromo")
-            } else if (title == Menu.ChangeLanguage[self.languageId]){
+                cell.mainTitleLabel.text = Wording.Menu.Promo[self.languageId]
+            } else if (menu == Menu.ChangeLanguage){
                 cell.imageBackground.image = UIImage.init(named: "MenuLanguage")
-            } else if (title == Menu.Logout[self.languageId]){
+                cell.mainTitleLabel.text = Wording.Menu.ChangeLanguage[self.languageId]
+            } else if (menu == Menu.Logout){
                 cell.imageBackground.image = UIImage.init(named: "MenuLogout")
+                cell.mainTitleLabel.text = Wording.Menu.Logout[self.languageId]
+            } else if (menu == Menu.Login){
+                cell.imageBackground.image = UIImage.init(named: "MenuLogout")
+                cell.mainTitleLabel.text = Wording.Menu.Login[self.languageId]
             } else {
                 cell.imageBackground.image = nil
+                cell.mainTitleLabel.text = ""
             }
         } else {
             return UITableViewCell.init()

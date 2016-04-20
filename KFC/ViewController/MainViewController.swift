@@ -21,7 +21,6 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     @IBOutlet weak var addressStoreLabel: UILabel!
     @IBOutlet weak var shoppingCartBadgesView: UIView!
     @IBOutlet weak var shoppingCartBadgesLabel: UILabel!
-    @IBOutlet weak var navigationTitleLabel: UILabel!
     
     var currentPosition: CLLocation?
     let locationManager = CLLocationManager()
@@ -45,7 +44,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     func refreshLanguage(){
         self.languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
-        self.navigationTitleLabel.text = Map.ChooseAddress[self.languageId]
+
     }
     
     override func viewDidLoad() {
@@ -151,7 +150,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
                 
                 CartModel.create(cart)
                 
-                self.drawerDelegate?.selectMenu(Menu.Menu[self.languageId]!)
+                self.drawerDelegate?.selectMenu(Menu.Menu)
                 
                 //change design
 //                UIView.animateWithDuration(0.5, animations: {
@@ -191,7 +190,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
             if (status == Status.Success && address != nil && address != "") {
                 resultText = address!
             } else {
-                resultText = Map.NotFound[self.languageId]!
+                resultText = Wording.Map.NotFound[self.languageId]!
             }
             
             //display address to address field
@@ -207,7 +206,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     }
     
     @IBAction func KFCStoreButtonClicked(sender: AnyObject) {
-        self.drawerDelegate?.selectMenu(Menu.Menu[self.languageId]!)
+        self.drawerDelegate?.selectMenu(Menu.Menu)
     }
     
 //MARK: SearchAddressDelegate

@@ -10,6 +10,14 @@
         <attribute name="recipient" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="addresses" inverseEntity="User" syncable="YES"/>
     </entity>
+    <entity name="Ads" syncable="YES">
+        <attribute name="guid" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="message" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="image" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Image" inverseName="ads" inverseEntity="Image" syncable="YES"/>
+    </entity>
     <entity name="Cart" syncable="YES">
         <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="addressDetail" optional="YES" attributeType="String" syncable="YES"/>
@@ -66,6 +74,13 @@
         <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="names" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Name" inverseName="categoryNames" inverseEntity="Name" syncable="YES"/>
         <relationship name="products" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Product" inverseName="category" inverseEntity="Product" syncable="YES"/>
+    </entity>
+    <entity name="Image" syncable="YES">
+        <attribute name="guid" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="imageDownloaded" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="imagePath" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imageURL" attributeType="String" syncable="YES"/>
+        <relationship name="ads" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Ads" inverseName="image" inverseEntity="Ads" syncable="YES"/>
     </entity>
     <entity name="Modifier" syncable="YES">
         <attribute name="amount" optional="YES" attributeType="String" syncable="YES"/>
@@ -147,10 +162,12 @@
     </entity>
     <elements>
         <element name="Address" positionX="-162" positionY="126" width="128" height="165"/>
+        <element name="Ads" positionX="-162" positionY="144" width="128" height="135"/>
         <element name="Cart" positionX="-162" positionY="90" width="128" height="405"/>
         <element name="CartItem" positionX="-153" positionY="99" width="128" height="225"/>
         <element name="CartModifier" positionX="-144" positionY="108" width="128" height="165"/>
         <element name="Category" positionX="-270" positionY="-9" width="128" height="120"/>
+        <element name="Image" positionX="-153" positionY="153" width="128" height="120"/>
         <element name="Modifier" positionX="-162" positionY="63" width="128" height="210"/>
         <element name="ModifierOption" positionX="-153" positionY="72" width="128" height="195"/>
         <element name="Name" positionX="-162" positionY="144" width="128" height="240"/>

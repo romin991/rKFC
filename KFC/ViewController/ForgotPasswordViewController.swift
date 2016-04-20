@@ -11,12 +11,20 @@ import MBProgressHUD
 
 class ForgotPasswordViewController: UIViewController {
     @IBOutlet weak var emailAddressField: UITextField!
+    @IBOutlet weak var navigationTitleLabel: UILabel!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var subtitleLabel: UILabel!
 
+    var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         CustomView.custom(self.emailAddressField, borderColor: self.emailAddressField.backgroundColor!, cornerRadius: 10, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
         
+        self.navigationTitleLabel.text = Wording.Login.ForgotPassword[self.languageId]
+        self.titleLabel.text = Wording.Login.ForgotPassword[self.languageId]
+        self.subtitleLabel.text = Wording.Login.InputValidationCode[self.languageId]
     }
 
     override func didReceiveMemoryWarning() {

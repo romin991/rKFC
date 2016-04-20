@@ -70,8 +70,8 @@ class ModifierTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDa
     func refresh(){
         self.tableView.layer.shadowColor = UIColor.blackColor().CGColor
         self.tableView.layer.shadowOpacity = 0.5
-        self.tableView.layer.shadowRadius = 2.0
-        self.tableView.layer.shadowOffset = CGSize.init(width: 1, height: 1)
+        self.tableView.layer.shadowRadius = 1.0
+        self.tableView.layer.shadowOffset = CGSize.init(width: 0, height: 1)
         self.tableView.layer.masksToBounds = false
         self.tableView.reloadData()
     }

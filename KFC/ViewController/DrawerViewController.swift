@@ -8,6 +8,7 @@
 
 import UIKit
 import MMDrawerController
+import MBProgressHUD
 
 protocol DrawerDelegate{
     func openLeftMenu()
@@ -17,7 +18,6 @@ protocol DrawerDelegate{
 class DrawerViewController: UIViewController, DrawerDelegate {
 
     var drawerController:MMDrawerController?
-    var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
     
     override func loadView() {
         super.loadView()
@@ -32,7 +32,7 @@ class DrawerViewController: UIViewController, DrawerDelegate {
         self.drawerController?.centerHiddenInteractionMode = MMDrawerOpenCenterInteractionMode.None
         self.drawerController?.maximumLeftDrawerWidth = self.view.frame.width - 40
         
-        self.selectMenu(Menu.Promo[self.languageId]!)
+        self.selectMenu(Menu.Promo)
     
         self.navigationController?.pushViewController(self.drawerController!, animated: false)
     }
@@ -53,16 +53,18 @@ class DrawerViewController: UIViewController, DrawerDelegate {
     
     func selectMenu(menu:String){
         self.navigationController?.popToViewController(self.drawerController!, animated: true)
-        if (menu == Menu.Account[self.languageId]) {
+        if (menu == Menu.Account) {
             let centerViewController:ProfileViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as? ProfileViewController)!
             centerViewController.drawerDelegate = self
             self.drawerController?.centerViewController = centerViewController
             
-        } else if (menu == Menu.Main[self.languageId]){
+        } else if (menu == Menu.Main){
             if (CartModel.isPendingCartNotEmpty()){
-                let alert: UIAlertController = UIAlertController(title: Common.Alert[self.languageId], message: Map.WarningClearShoppingCart[self.languageId], preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(UIAlertAction(title: Common.Cancel[self.languageId], style: UIAlertActionStyle.Cancel, handler: nil))
-                alert.addAction(UIAlertAction(title: Common.OK[self.languageId], style: UIAlertActionStyle.Default) { (action) in
+                let languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+                
+                let alert: UIAlertController = UIAlertController(title: Wording.Common.Alert[languageId], message: Wording.Warning.ClearShoppingCart[languageId], preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: Wording.Common.Cancel[languageId], style: UIAlertActionStyle.Cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: Wording.Common.OK[languageId], style: UIAlertActionStyle.Default) { (action) in
                     let centerViewController:MainViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("MainViewController") as? MainViewController)!
                     centerViewController.drawerDelegate = self
                     self.drawerController?.centerViewController = centerViewController
@@ -76,26 +78,27 @@ class DrawerViewController: UIViewController, DrawerDelegate {
                 
             }
             
-        } else if (menu == Menu.History[self.languageId]){
+        } else if (menu == Menu.History){
             let centerViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("HistoryViewController") as? HistoryViewController)!
             centerViewController.drawerDelegate = self
             self.drawerController?.centerViewController = centerViewController
             
-        } else if (menu == Menu.Menu[self.languageId]) {
-            if (StoreModel.getSelectedStore().id == ""){
-                self.selectMenu(Menu.Main[self.languageId]!)
+        } else if (menu == Menu.Menu) {
+            let store = StoreModel.getSelectedStore()
+            if (store.id == nil || store.id == ""){
+                self.selectMenu(Menu.Main)
             } else {
                 let centerViewController:CategoryViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CategoryViewController") as? CategoryViewController)!
                 centerViewController.drawerDelegate = self
                 self.drawerController?.centerViewController = centerViewController
             }
             
-        } else if (menu == Menu.Promo[self.languageId]){
+        } else if (menu == Menu.Promo){
             let centerViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("AdsViewController") as? AdsViewController)!
             centerViewController.drawerDelegate = self
             self.drawerController?.centerViewController = centerViewController
             
-        } else if (menu == Menu.ChangeLanguage[self.languageId]) {
+        } else if (menu == Menu.ChangeLanguage) {
             let user = UserModel.getUser()
             if (user.languageId == LanguageID.English){
                 user.languageId = LanguageID.Indonesia
@@ -103,15 +106,33 @@ class DrawerViewController: UIViewController, DrawerDelegate {
                 user.languageId = LanguageID.English
             }
             UserModel.updateUser(user)
-            self.languageId = user.languageId!
             NSUserDefaults.standardUserDefaults().setObject(user.languageId, forKey: "LanguageId")
             NSNotificationCenter.defaultCenter().postNotificationName(NotificationKey.LanguageChanged, object: nil)
             
-        } else if (menu == Menu.Logout[self.languageId]){
-            LoginModel.logout()
-            let rootViewController = self.navigationController?.viewControllers.first
-            self.navigationController?.popToRootViewControllerAnimated(false)
-            rootViewController?.performSegueWithIdentifier("LoginSegue", sender: nil)
+        } else if (menu == Menu.Logout){
+            let activityIndicator = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+            activityIndicator.mode = MBProgressHUDMode.Indeterminate;
+            activityIndicator.labelText = "Loading";
+            
+            LoginModel.logout(UserModel.getUser(), completion: { (status, message) -> Void in
+                if (status == Status.Success){
+                    let loginViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("LoginViewController"))
+                    let navigationController = self.navigationController
+                    navigationController?.popToRootViewControllerAnimated(false)
+                    navigationController?.pushViewController(loginViewController, animated: false)
+                } else {
+                    let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                }
+                
+                MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+            })
+        } else if (menu == Menu.Login){
+            let loginViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("LoginViewController"))
+            let navigationController = self.navigationController
+            navigationController?.popToRootViewControllerAnimated(false)
+            navigationController?.pushViewController(loginViewController, animated: false)
         }
         self.drawerController?.closeDrawerAnimated(true, completion: nil)
     }

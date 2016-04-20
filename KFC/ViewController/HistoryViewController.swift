@@ -65,6 +65,22 @@ class HistoryViewController: UIViewController {
     }
     
     //MARK: UITableViewDelegate && UITableViewDataSource
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        let cart:Cart = self.carts[indexPath.row]
+        
+        var subtitle:String = ""
+        for cartItem in cart.cartItems{
+            subtitle = subtitle.stringByAppendingFormat("%i x %@, ", cartItem.quantity!, cartItem.names.filter{$0.languageId == self.languageId}.first?.name ?? "")
+        }
+        if (subtitle.characters.count > 2){
+            subtitle = subtitle.substringToIndex(subtitle.endIndex.advancedBy(-2))
+        }
+        
+        let subtitleHeight = NSString.init(string: subtitle).boundingRectWithSize(CGSizeMake(self.tableView.frame.size.width - 50, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.init(name: "HelveticaNeue", size: 12)!], context: nil).height
+        
+        return subtitleHeight + 144
+    }
+    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         let cart = self.carts[indexPath.row]
@@ -80,12 +96,14 @@ class HistoryViewController: UIViewController {
         
         let cart:Cart = self.carts[indexPath.row]
         
-        let orderNumberString = NSString.init(format:"Order #%@", cart.transNo!) as String
-        let mutableAttributedString = NSMutableAttributedString.init(string: orderNumberString)
-        mutableAttributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: NSRange(location: 0,length: 6))
-        mutableAttributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.init(red: 191.0/255.0, green: 58.0/255.0, blue: 56.0/255.0, alpha: 1.0), range: NSRange(location: 6, length: orderNumberString.characters.count - 6))
+        let orderLabel = Wording.History.Order[self.languageId]
+        let orderNumberString = NSString.init(format:"%@ #%@", orderLabel!, cart.transNo!) as String
+        let orderNumberAttributedString = NSMutableAttributedString.init(string: orderNumberString)
+        orderNumberAttributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: NSRange(location: 0,length: (orderLabel?.characters.count)!))
+        orderNumberAttributedString.addAttribute(NSForegroundColorAttributeName, value: Color.Red, range: NSRange(location: (orderLabel?.characters.count)!, length: orderNumberString.characters.count - (orderLabel?.characters.count)!))
+        orderNumberAttributedString.addAttribute(NSFontAttributeName, value: UIFont.init(name: "HelveticaNeue", size: 14)!, range: NSRange(location: 0,length: orderNumberString.characters.count))
         
-        cell.orderNumberLabel.text = mutableAttributedString.string
+        cell.orderNumberLabel.attributedText = orderNumberAttributedString
         cell.totalLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:cart.total))
         
         let dateFormatter : NSDateFormatter = NSDateFormatter.init()
@@ -95,7 +113,21 @@ class HistoryViewController: UIViewController {
         dateFormatter.timeStyle = NSDateFormatterStyle.ShortStyle
         
         cell.orderDateLabel.text = dateFormatter.stringFromDate(cart.transDate!)
-        cell.statusLabel.text = cart.status
+        
+        var status = cart.status
+        var color = Color.Green
+        if (status == Status.InProgress) {
+            color = Color.Yellow
+            status = Wording.Status.OnProgress[self.languageId]
+        } else {
+            color = Color.Green
+            status = Wording.Status.Completed[self.languageId]
+        }
+        
+        let statusAttributedString = NSMutableAttributedString.init(string: status!)
+        statusAttributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: NSRange(location: 0, length: (status?.characters.count)!))
+        
+        cell.statusLabel.attributedText = statusAttributedString
         
         var subtitle:String = ""
         for cartItem in cart.cartItems{

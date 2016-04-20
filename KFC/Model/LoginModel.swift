@@ -115,10 +115,14 @@ class LoginModel: NSObject {
     }
 
     class func login(user:User, completion: (status: String?, message: String?, user:User?) -> Void){
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
         let parameters:[String:AnyObject] = [
             "type" : user.type!,
             "value" : user.username!,
             "password" : user.password!,
+            "source" : "IOS",
+            "registration_id" : appDelegate.token ?? ""
         ]
         
         Alamofire.request(.POST, NSString.init(format: "%@/Login", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
@@ -222,14 +226,47 @@ class LoginModel: NSObject {
         }
     }
     
-    class func logout(){
-        CategoryModel.deleteAllCategory()
-        ProductModel.deleteAllProduct()
-        ModifierModel.deleteAllModifier()
-        ModifierOptionModel.deleteAllModifierOption()
-        CartModel.deleteAllNotPendingCart()
-        CartModel.deletePendingCart()
-        UserModel.deleteAllUser()
+    class func logout(user:User, completion: (status: String?, message: String?) -> Void){
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        let parameters : [String:AnyObject] = [
+            "customer_id" : user.customerId!,
+            "source" : "IOS",
+            "registration_id" : appDelegate.token ?? "-"
+        ]
+        
+        Alamofire.request(.POST, NSString.init(format: "%@/Logout", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
+                        
+                        if (status == "T"){
+                            CategoryModel.deleteAllCategory()
+                            ProductModel.deleteAllProduct()
+                            ModifierModel.deleteAllModifier()
+                            ModifierOptionModel.deleteAllModifierOption()
+                            CartModel.deleteAllNotPendingCart()
+                            CartModel.deletePendingCart()
+                            UserModel.deleteAllUser()
+                            
+                            completion(status: Status.Success, message: message)
+                        } else {
+                            completion(status: Status.Error, message: message)
+                        }
+                    } else {
+                        completion(status: Status.Error, message: "Not a valid JSON object")
+                    }
+                    break;
+                case .Failure(let error):
+                    completion(status: Status.Error, message: error.localizedDescription)
+                    break;
+                }
+                
+        }
     }
     
     class func getProfile(user:User, completion: (status: String, message:String, user:User?) -> Void){
@@ -281,7 +318,7 @@ class LoginModel: NSObject {
             "email" : user.username!,
             "handphone" : user.handphone!,
             "fullname" : user.fullname!,
-            "gender" : user.gender! == Gender.Male[languageId]! ? "M" : "F",
+            "gender" : user.gender! == Wording.Gender.Male[languageId]! ? "M" : "F",
             "birthdate" : dateformatter.stringFromDate(user.birthdate!),
             "password" : user.password!,
             "confirm_password" : user.confirmPassword!

@@ -52,8 +52,6 @@ class ShoppingCartItemViewController: UIViewController, ModifierParentDelegate {
         // Do any additional setup after loading the view.
         
         CustomView.custom(self.quantityView, borderColor: self.quantityView.backgroundColor!, cornerRadius: 22, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
-        CustomView.custom(self.saveButton, borderColor: self.saveButton.backgroundColor!, cornerRadius: 22, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
-        
 
         self.refreshImageView()
         self.navigationTitleLabel.text = self.product.names.filter{$0.languageId == self.languageId}.first?.name ?? ""
@@ -83,8 +81,8 @@ class ShoppingCartItemViewController: UIViewController, ModifierParentDelegate {
         self.refreshPrice()
         
         //change language label
-        self.chooseQuantityLabel.text = ShoppingCart.ChooseQuantity[self.languageId]
-        self.saveButton.setTitle(Common.Save[self.languageId], forState: UIControlState.Normal)
+        self.chooseQuantityLabel.text = Wording.ShoppingCart.ChooseQuantity[self.languageId]
+        self.saveButton.setTitle(Wording.Common.Save[self.languageId], forState: UIControlState.Normal)
         
         //calculate scrollview contentView
         let maxWidth:CGFloat = self.view.frame.size.width - 40
@@ -203,7 +201,7 @@ class ShoppingCartItemViewController: UIViewController, ModifierParentDelegate {
     
     //MARK: UITableViewDelegate && UITableViewDataSource
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        var totalHeight = 18
+        var totalHeight = 8
         totalHeight += 38
         
         let modifier = self.modifiers[indexPath.row]

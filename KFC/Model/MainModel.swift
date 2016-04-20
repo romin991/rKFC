@@ -20,7 +20,7 @@ class MainModel: NSObject {
                 completion(status: Status.Error, message:(error?.localizedDescription)!, address: nil)
             } else {
                 let languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
-                completion(status: Status.Success, message:Common.OK[languageId]!, address: response?.firstResult()?.lines?[0])
+                completion(status: Status.Success, message:Wording.Common.OK[languageId]!, address: response?.firstResult()?.lines?[0])
             }
         }
     }
@@ -120,13 +120,21 @@ class MainModel: NSObject {
                                         }
                                         
                                     }
-                                    
-                                    CategoryModel.downloadAllCategoryImage()
-                                    ProductModel.downloadAllProductImage()
                                 }
                             }
                             
-                            completion(status: Status.Success, message:status, store: store)
+                            AdsModel.deleteAdsByType(AdsType.Store)
+                            PromoModel.getStorePromo({ (status, message) -> Void in
+                                let categories = CategoryModel.getAllCategory()
+                                
+                                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+                                    
+                                    CategoryModel.downloadAllCategoryImage(categories)
+                                    ProductModel.downloadAllProductImageFromCategory(categories)
+                                })
+                                
+                                completion(status: Status.Success, message:"found", store: store)
+                            })
                         } else {
                             completion(status: Status.Error, message:status, store: nil)
                         }
@@ -200,7 +208,7 @@ class MainModel: NSObject {
                         }
                         
                         let languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
-                        completion(status:Status.Success, message:Common.OK[languageId]!, modifiers: modifiers)
+                        completion(status:Status.Success, message:Wording.Common.OK[languageId]!, modifiers: modifiers)
                     } else {
                         completion(status:Status.Error, message:"Not a valid JSON", modifiers: modifiers)
                     }

@@ -9,11 +9,18 @@
 import UIKit
 
 class ErrorViewController: UIViewController {
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var subtitleLabel: UILabel!
 
+    var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        self.titleLabel.text = Wording.Warning.Sorry[self.languageId]
+        self.subtitleLabel.text = Wording.Warning.LocationOutOfRange[self.languageId]
     }
 
     override func didReceiveMemoryWarning() {

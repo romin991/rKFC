@@ -40,11 +40,11 @@ class HistoryDetailViewController: UIViewController, UITableViewDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        self.borderView.layer.shadowColor = UIColor.blackColor().CGColor
-        self.borderView.layer.shadowOpacity = 0.5
-        self.borderView.layer.shadowRadius = 4.0
-        self.borderView.layer.shadowOffset = CGSize.init(width: 0, height: 2)
-        self.borderView.layer.masksToBounds = false
+        self.orderNumberLabel.text = Wording.History.OrderNumber[self.languageId]
+        self.taxLabel.text = Wording.ShoppingCart.Tax[self.languageId]
+        self.deliveryLabel.text = Wording.ShoppingCart.Delivery[self.languageId]
+        self.totalLabel.text = Wording.ShoppingCart.Total[self.languageId]
+        self.navigationTitle.text = Wording.History.OrderHistoryDetail[self.languageId]
         
         self.orderNumberValueLabel.text = NSString.init(format:"#%@", (cart?.transNo)!) as String
         self.taxValueLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:cart?.tax))
@@ -124,7 +124,7 @@ class HistoryDetailViewController: UIViewController, UITableViewDelegate {
         }
         
         cell.mainTitleLabel.text = cartItem.names.filter{$0.languageId == self.languageId}.first?.name ?? ""
-        cell.priceLabel.text = NSString.init(format: "%i x %@", cartItem.quantity!, CommonFunction.formatCurrency(price)) as String
+        cell.quantityLabel.text = NSString.init(format: "%i x %@", cartItem.quantity!, CommonFunction.formatCurrency(price)) as String
         cell.subtotalLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:cartItem.total))
         cell.subtitleLabel.text = subtitle
         
