@@ -85,6 +85,7 @@ struct Menu {
     static let Promo = "Promo"
     static let Logout = "Logout"
     static let Login = "Login"
+    static let Toc = "Term And Condition"
 }
 
 struct Color {
@@ -125,6 +126,7 @@ struct Wording {
         static let Promo:[String:String] = [LanguageID.Indonesia : "Promo", LanguageID.English : "Promo"]
         static let Logout:[String:String] = [LanguageID.Indonesia : "Keluar", LanguageID.English : "Logout"]
         static let Login:[String:String] = [LanguageID.Indonesia : "Masuk", LanguageID.English : "Login"]
+        static let Toc:[String:String] = [LanguageID.Indonesia : "Syarat Dan Ketentuan", LanguageID.English : "Term And Condition"]
     }
     
     struct Map {
