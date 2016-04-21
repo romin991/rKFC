@@ -67,26 +67,26 @@ class CategoryModel: NSObject {
 //            for cdCategory in cdCategories{
         
 //        let categories = self.getAllCategory()
-        for category in categories{
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-                    let imageURL = category.image
-                    let filename = category.id
-                    if (imageURL != nil && imageURL != "" && filename != nil && filename != "") {
-                        let path = CommonFunction.generatePathAt(Path.CategoryImage, filename: filename!)
-                        let data = NSFileManager.defaultManager().contentsAtPath(path)
-                        if (data == nil) {
-                            let data = NSData.init(contentsOfURL: NSURL.init(string: imageURL!)!)
-                            if (data != nil){
-                                CommonFunction.saveData(data!, directory: Path.CategoryImage, filename: filename!)
-                            }
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+            for category in categories{
+                let imageURL = category.image
+                let filename = category.id
+                if (imageURL != nil && imageURL != "" && filename != nil && filename != "") {
+                    let path = CommonFunction.generatePathAt(Path.CategoryImage, filename: filename!)
+                    let data = NSFileManager.defaultManager().contentsAtPath(path)
+                    if (data == nil) {
+                        let data = NSData.init(contentsOfURL: NSURL.init(string: imageURL!)!)
+                        if (data != nil){
+                            CommonFunction.saveData(data!, directory: Path.CategoryImage, filename: filename!)
                         }
-                        
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            NSNotificationCenter.defaultCenter().postNotificationName(NotificationKey.ImageCategoryDownloaded, object: nil)
-                        })
                     }
-                })
-        }
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        NSNotificationCenter.defaultCenter().postNotificationName(NotificationKey.ImageCategoryDownloaded, object: nil)
+                    })
+                }
+            }
+        })
 //            }
 //        } catch let error as NSError {
 //            print("Could not fetch \(error), \(error.userInfo)")

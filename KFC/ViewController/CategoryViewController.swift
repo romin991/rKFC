@@ -110,7 +110,25 @@ class CategoryViewController: UIViewController, UICollectionViewDelegate, UIColl
         if (collectionView == self.categoryCollectionView){
             collectionView.deselectItemAtIndexPath(indexPath, animated: true)
             let category = self.categories[indexPath.row]
-            self.performSegueWithIdentifier("ProductListSegue", sender: category)
+            if (category.id! == "16"){ //breakfast menu category
+                let store = StoreModel.getSelectedStore()
+                if (store.isBreakfast == true){
+                    let now = NSDate()
+                    let dateFormatter = NSDateFormatter.init()
+                    dateFormatter.dateFormat = "yyyy-MM-dd"
+                    let nowStringForDate = dateFormatter.stringFromDate(now)
+                    
+                    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSSZZZZZ"
+                    let breakfastStart = dateFormatter.dateFromString(NSString.init(format: "%@ %@", nowStringForDate, store.breakfastStart!) as String)
+                    let breakfastEnd = dateFormatter.dateFromString(NSString.init(format: "%@ %@", nowStringForDate, store.breakfastEnd!) as String)
+                    
+                    if (now.compare(breakfastStart!) != NSComparisonResult.OrderedAscending && now.compare(breakfastEnd!) != NSComparisonResult.OrderedDescending){
+                        self.performSegueWithIdentifier("ProductListSegue", sender: category)
+                    }
+                }
+            } else {
+                self.performSegueWithIdentifier("ProductListSegue", sender: category)
+            }
         }
     }
     
@@ -129,6 +147,35 @@ class CategoryViewController: UIViewController, UICollectionViewDelegate, UIColl
             let cell:CustomCollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! CustomCollectionViewCell
             
             let category:Category = self.categories[indexPath.row];
+            
+            cell.breakfastFilterView.hidden = true
+            cell.breakfastTimeLabel.hidden = true
+            if (category.id! == "16"){ //breakfast menu category
+                let store = StoreModel.getSelectedStore()
+                if (store.isBreakfast == false){
+                    cell.breakfastFilterView.hidden = true
+                    
+                } else {
+                    let now = NSDate()
+                    let dateFormatter = NSDateFormatter.init()
+                    dateFormatter.dateFormat = "yyyy-MM-dd"
+                    let nowStringForDate = dateFormatter.stringFromDate(now)
+                    
+                    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSSZZZZZ"
+                    let breakfastStart = dateFormatter.dateFromString(NSString.init(format: "%@ %@", nowStringForDate, store.breakfastStart!) as String)
+                    let breakfastEnd = dateFormatter.dateFromString(NSString.init(format: "%@ %@", nowStringForDate, store.breakfastEnd!) as String)
+                    
+                    if (now.compare(breakfastStart!) == NSComparisonResult.OrderedAscending || now.compare(breakfastEnd!) == NSComparisonResult.OrderedDescending){
+                        //not available
+                        dateFormatter.dateFormat = "HH aa"
+                        
+                        cell.breakfastTimeLabel.text = NSString.init(format: "%@ - %@", dateFormatter.stringFromDate(breakfastStart!), dateFormatter.stringFromDate(breakfastEnd!)) as String
+                        cell.breakfastFilterView.hidden = false
+                        cell.breakfastTimeLabel.hidden = false
+                        
+                    }
+                }
+            }
             
             cell.titleLabel.text = category.names.filter{$0.languageId == self.languageId}.first?.name ?? ""
             let path = CommonFunction.generatePathAt(Path.CategoryImage, filename: category.id!)

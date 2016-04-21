@@ -85,7 +85,10 @@ class MainModel: NSObject {
                                 delivery: json["result"]["store"]["delivery_charge"].string,
                                 deliveryTax: json["result"]["store"]["delivery_charge_tax_percent"].string,
                                 tax: json["result"]["store"]["tax_percent"].string,
-                                ppn: json["result"]["store"]["ppn_percent"].string
+                                ppn: json["result"]["store"]["ppn_percent"].string,
+                                isBreakfast: json["result"]["store"]["is_breakfast"].bool,
+                                breakfastStart: json["result"]["store"]["breakfast_start"].string,
+                                breakfastEnd: json["result"]["store"]["breakfast_end"].string
                             )
                             store = StoreModel.save(store)
                             
@@ -127,11 +130,11 @@ class MainModel: NSObject {
                             PromoModel.getStorePromo({ (status, message) -> Void in
                                 let categories = CategoryModel.getAllCategory()
                                 
-                                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+                                
                                     
                                     CategoryModel.downloadAllCategoryImage(categories)
                                     ProductModel.downloadAllProductImageFromCategory(categories)
-                                })
+                            
                                 
                                 completion(status: Status.Success, message:"found", store: store)
                             })

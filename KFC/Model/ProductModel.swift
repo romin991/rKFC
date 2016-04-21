@@ -87,10 +87,10 @@ class ProductModel: NSObject {
 //            let results = try managedContext.executeFetchRequest(fetchRequest)
 //            let cdProducts = results as! [NSManagedObject]
 //            for cdProduct in cdProducts{
-        for category in categories{
-            let products = self.getProductByCategory(category)
-            for product in products{
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+            for category in categories{
+                let products = self.getProductByCategory(category)
+                for product in products{
                     let imageURL = product.image
                     let filename = product.id
                     if (imageURL != nil && imageURL != "" && filename != nil && filename != "") {
@@ -107,9 +107,9 @@ class ProductModel: NSObject {
                             NSNotificationCenter.defaultCenter().postNotificationName(NotificationKey.ImageItemDownloaded, object: nil)
                         })
                     }
-                })
+                }
             }
-        }
+        })
 //            }
 //        } catch let error as NSError {
 //            print("Could not fetch \(error), \(error.userInfo)")

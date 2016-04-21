@@ -17,6 +17,8 @@ class HistoryViewController: UIViewController {
     
     var drawerDelegate:DrawerDelegate?
     var carts:[Cart] = [Cart]()
+    var sectionTitle:[String] = [String]()
+    var dataSource:[String:[Cart]] = [String:[Cart]]()
     var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
 
     override func viewDidLoad() {
@@ -35,6 +37,20 @@ class HistoryViewController: UIViewController {
         OrderModel.getOrderList { (status, message) -> Void in
             if (status == Status.Success){
                 self.carts = CartModel.getAllNotPendingCart()
+                
+                let month = NSDateFormatter.init()
+                month.dateFormat = "MMMM"
+                for cart in self.carts{
+                    let monthString = month.stringFromDate(cart.transDate!)
+                    if (!self.sectionTitle.contains(monthString)) {
+                        self.sectionTitle.append(monthString)
+                    }
+                    if (!self.dataSource.keys.contains(monthString)){
+                        self.dataSource[monthString] = [Cart]()
+                    }
+                    self.dataSource[monthString]?.append(cart)
+                }
+                
                 self.tableView.reloadData()
             } else {
                 let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
@@ -86,15 +102,20 @@ class HistoryViewController: UIViewController {
         let cart = self.carts[indexPath.row]
         self.performSegueWithIdentifier("HistorySegue", sender: cart)
     }
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return self.sectionTitle.count
+    }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.carts.count
+        let monthString = self.sectionTitle[section]
+        return self.dataSource[monthString]?.count ?? 0
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell : HistoryTableViewCell = tableView.dequeueReusableCellWithIdentifier( "Cell", forIndexPath: indexPath) as! HistoryTableViewCell
         
-        let cart:Cart = self.carts[indexPath.row]
+        let monthString = self.sectionTitle[indexPath.section]
+        let cart:Cart = self.dataSource[monthString]![indexPath.row]
         
         let orderLabel = Wording.History.Order[self.languageId]
         let orderNumberString = NSString.init(format:"%@ #%@", orderLabel!, cart.transNo!) as String

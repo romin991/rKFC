@@ -41,21 +41,15 @@ class ImageModel: NSObject {
     }
     
     class func downloadImage(){
-        
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let managedContext = appDelegate.managedObjectContext
-        
-        let fetchRequest = NSFetchRequest(entityName: "Image")
-        fetchRequest.predicate = NSPredicate(format: "imageDownloaded = false")
-        
-        do {
-            let results = try managedContext.executeFetchRequest(fetchRequest)
-            let cdImages = results as! [NSManagedObject]
-            for cdImage in cdImages{
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-                    let imageURL = cdImage.valueForKey("imageURL") as? String
-                    let filename = cdImage.valueForKey("guid") as? String
-                    let imagePath = cdImage.valueForKey("imagePath") as? String
+        var images = [Image]()
+        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            images = self.getUndownloadedImage()
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+                for image in images{
+                    let imageURL = image.imageURL
+                    let filename = image.guid
+                    let imagePath = image.imagePath
                     
                     if (imageURL != nil && imageURL != "" && filename != nil && filename != "" && imagePath != nil && imagePath != "") {
                         let path = CommonFunction.generatePathAt(imagePath!, filename: filename!)
@@ -64,6 +58,7 @@ class ImageModel: NSObject {
                             let data = NSData.init(contentsOfURL: NSURL.init(string: imageURL!)!)
                             if (data != nil){
                                 CommonFunction.saveData(data!, directory: imagePath!, filename: filename!)
+                                self.updateImage(imageURL!)
                             }
                         }
                         
@@ -74,14 +69,65 @@ class ImageModel: NSObject {
                                 NSNotificationCenter.defaultCenter().postNotificationName(NotificationKey.ImageCategoryDownloaded, object: nil)
                             } else if (imagePath == Path.ProductImage){
                                 NSNotificationCenter.defaultCenter().postNotificationName(NotificationKey.ImageItemDownloaded, object: nil)
+                            } else if (imagePath == Path.PaymentImage){
+                                NSNotificationCenter.defaultCenter().postNotificationName(NotificationKey.ImagePaymentDownloaded, object: nil)
                             }
                         })
                     }
-                })
+                }
+            })
+        }
+    }
+    
+    class func updateImage(imageURL:String){
+        
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let managedContext = appDelegate.managedObjectContext
+        
+        let fetchRequest = NSFetchRequest(entityName: "Image")
+        fetchRequest.predicate = NSPredicate(format: "imageURL = %@", imageURL)
+        
+        do {
+            let results = try managedContext.executeFetchRequest(fetchRequest)
+            let cdImages = results as! [NSManagedObject]
+            if (cdImages.count > 0){
+                let cdImage = cdImages.first!
+                cdImage.setValue(true, forKey: "imageDownloaded")
+                try cdImage.managedObjectContext?.save()
+            }
+            
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+    }
+    
+    class func getUndownloadedImage() -> [Image]{
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let managedContext = appDelegate.managedObjectContext
+        
+        let fetchRequest = NSFetchRequest(entityName: "Image")
+        fetchRequest.predicate = NSPredicate(format: "imageDownloaded = false")
+        
+        var images = [Image]()
+        
+        do {
+            let results = try managedContext.executeFetchRequest(fetchRequest)
+            let cdImages = results as! [NSManagedObject]
+            for cdImage in cdImages{
+                let image = Image.init(
+                    guid: cdImage.valueForKey("guid") as? String,
+                    imageURL: cdImage.valueForKey("imageURL") as? String,
+                    imagePath: cdImage.valueForKey("imagePath") as? String,
+                    imageDownloaded: cdImage.valueForKey("imageDownloaded") as? Bool
+                )
+                
+                images.append(image)
             }
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }
+        
+        return images
     }
     
     class func getImageByImageURL(imageURL:String) -> (Image?, NSManagedObject?) {

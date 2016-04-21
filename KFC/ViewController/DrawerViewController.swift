@@ -105,9 +105,17 @@ class DrawerViewController: UIViewController, DrawerDelegate {
             } else {
                 user.languageId = LanguageID.English
             }
-            UserModel.updateUser(user)
-            NSUserDefaults.standardUserDefaults().setObject(user.languageId, forKey: "LanguageId")
-            NSNotificationCenter.defaultCenter().postNotificationName(NotificationKey.LanguageChanged, object: nil)
+            LoginModel.updateLanguage(user, completion: { (status, message, user) -> Void in
+                if (status == Status.Success && user != nil){
+                    UserModel.updateUser(user!)
+                    NSUserDefaults.standardUserDefaults().setObject(user!.languageId, forKey: "LanguageId")
+                    NSNotificationCenter.defaultCenter().postNotificationName(NotificationKey.LanguageChanged, object: nil)
+                } else {
+                    let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                }
+            })
             
         } else if (menu == Menu.Logout){
             let activityIndicator = MBProgressHUD.showHUDAddedTo(self.view, animated: true)

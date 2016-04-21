@@ -217,6 +217,9 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
                 shoppingCartItemViewController.modifiers = ModifierModel.getModifier(shoppingCartItemViewController.product)
                 shoppingCartItemViewController.cartItem = cartItem
             }
+        } else if (segue.identifier == "CheckoutSegue"){
+            let checkoutViewController:CheckoutViewController = segue.destinationViewController as! CheckoutViewController
+            checkoutViewController.drawerDelegate = self.drawerDelegate
         }
     }
 

@@ -20,8 +20,11 @@ class Store: NSObject {
     var deliveryTax: String? = ""
     var tax: String? = ""
     var ppn: String? = ""
+    var isBreakfast: Bool? = true
+    var breakfastStart: String? = ""
+    var breakfastEnd: String? = ""
     
-    init(code: String?, name: String?, id: String?, long: String?, lat: String?, priceId: String?, delivery:String?, deliveryTax:String?, tax:String?, ppn:String?) {
+    init(code: String?, name: String?, id: String?, long: String?, lat: String?, priceId: String?, delivery:String?, deliveryTax:String?, tax:String?, ppn:String?, isBreakfast:Bool?, breakfastStart:String?, breakfastEnd:String?) {
         self.code = code
         self.name = name
         self.id = id
@@ -33,6 +36,10 @@ class Store: NSObject {
         self.deliveryTax = deliveryTax
         self.tax = tax
         self.ppn = ppn
+        
+        self.isBreakfast = isBreakfast
+        self.breakfastStart = breakfastStart
+        self.breakfastEnd = breakfastEnd
         
         super.init()
     }

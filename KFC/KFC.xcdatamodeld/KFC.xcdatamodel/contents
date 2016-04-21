@@ -29,6 +29,8 @@
         <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="long" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="paymentInfo" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="paymentSubInfo" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="ppn" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="priceId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="quantity" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -81,6 +83,7 @@
         <attribute name="imagePath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="imageURL" attributeType="String" syncable="YES"/>
         <relationship name="ads" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Ads" inverseName="image" inverseEntity="Ads" syncable="YES"/>
+        <relationship name="payments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Payment" inverseName="image" inverseEntity="Payment" syncable="YES"/>
     </entity>
     <entity name="Modifier" syncable="YES">
         <attribute name="amount" optional="YES" attributeType="String" syncable="YES"/>
@@ -122,6 +125,15 @@
         <relationship name="productNames" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Product" inverseName="names" inverseEntity="Product" syncable="YES"/>
         <relationship name="productNotes" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Product" inverseName="notes" inverseEntity="Product" syncable="YES"/>
     </entity>
+    <entity name="Payment" syncable="YES">
+        <attribute name="failedURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="guid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="paymentInfo" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="paymentSubInfo" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="successURL" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="image" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Image" inverseName="payments" inverseEntity="Image" syncable="YES"/>
+    </entity>
     <entity name="Product" syncable="YES">
         <attribute name="categoryGuid" attributeType="String" syncable="YES"/>
         <attribute name="categoryId" optional="YES" attributeType="String" syncable="YES"/>
@@ -147,10 +159,13 @@
         <attribute name="guid" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="handphone" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="languageId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="storeBreakfastEnd" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="storeBreakfastStart" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="storeCode" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="storeDelivery" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="storeDeliveryTax" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="storeId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="storeIsBreakfast" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="storeLat" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="storeLong" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="storeName" optional="YES" attributeType="String" syncable="YES"/>
@@ -163,15 +178,16 @@
     <elements>
         <element name="Address" positionX="-162" positionY="126" width="128" height="165"/>
         <element name="Ads" positionX="-162" positionY="144" width="128" height="135"/>
-        <element name="Cart" positionX="-162" positionY="90" width="128" height="405"/>
+        <element name="Cart" positionX="-162" positionY="90" width="128" height="435"/>
         <element name="CartItem" positionX="-153" positionY="99" width="128" height="225"/>
         <element name="CartModifier" positionX="-144" positionY="108" width="128" height="165"/>
         <element name="Category" positionX="-270" positionY="-9" width="128" height="120"/>
-        <element name="Image" positionX="-153" positionY="153" width="128" height="120"/>
+        <element name="Image" positionX="-153" positionY="153" width="128" height="135"/>
         <element name="Modifier" positionX="-162" positionY="63" width="128" height="210"/>
         <element name="ModifierOption" positionX="-153" positionY="72" width="128" height="195"/>
         <element name="Name" positionX="-162" positionY="144" width="128" height="240"/>
         <element name="Product" positionX="-54" positionY="-9" width="128" height="225"/>
-        <element name="User" positionX="-162" positionY="27" width="128" height="375"/>
+        <element name="User" positionX="-162" positionY="27" width="128" height="420"/>
+        <element name="Payment" positionX="-162" positionY="144" width="128" height="150"/>
     </elements>
 </model>

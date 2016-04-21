@@ -34,6 +34,9 @@ class StoreModel: NSObject {
                 cdUser.setValue(store.delivery, forKey: "storeDelivery")
                 cdUser.setValue(store.ppn, forKey: "storePpn")
                 cdUser.setValue(store.tax, forKey: "storeTax")
+                cdUser.setValue(store.isBreakfast, forKey: "storeIsBreakfast")
+                cdUser.setValue(store.breakfastStart, forKey: "storeBreakfastStart")
+                cdUser.setValue(store.breakfastEnd, forKey: "storeBreakfastEnd")
             
                 try managedContext.save()
             }
@@ -67,7 +70,10 @@ class StoreModel: NSObject {
                     delivery: (cdUser.valueForKey("storeDelivery") as? String),
                     deliveryTax: (cdUser.valueForKey("storeDeliveryTax") as? String),
                     tax: (cdUser.valueForKey("storeTax") as? String),
-                    ppn: (cdUser.valueForKey("storePpn") as? String)
+                    ppn: (cdUser.valueForKey("storePpn") as? String),
+                    isBreakfast: (cdUser.valueForKey("storeIsBreakfast") as? Bool),
+                    breakfastStart: (cdUser.valueForKey("storeBreakfastStart") as? String),
+                    breakfastEnd: (cdUser.valueForKey("storeBreakfastEnd") as? String)
                 )
             }
         } catch let error as NSError {
@@ -99,6 +105,9 @@ class StoreModel: NSObject {
                 cdUser.setValue("", forKey: "storeDeliveryTax")
                 cdUser.setValue("", forKey: "storeTax")
                 cdUser.setValue("", forKey: "storePpn")
+                cdUser.setValue(true, forKey: "storeIsBreakfast")
+                cdUser.setValue("", forKey: "storeBreakfastStart")
+                cdUser.setValue("", forKey: "storeBreakfastEnd")
             
                 try managedContext.save()
             }

@@ -350,4 +350,37 @@ class LoginModel: NSObject {
                 
         }
     }
+    
+    class func updateLanguage(user:User, completion: (status: String, message:String, user:User?) -> Void){
+        let parameters : [String:AnyObject] = [
+            "customer_id" : user.customerId!,
+            "language_id" : user.languageId!
+            
+        ]
+        
+        Alamofire.request(.POST, NSString.init(format: "%@/UpdateLanguage", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
+                        
+                        if (status == "T"){
+                            completion(status: Status.Success, message: message, user: user)
+                        } else {
+                            completion(status: Status.Error, message: message, user: nil)
+                        }
+                    } else {
+                        completion(status: Status.Error, message: "Not a valid JSON object", user: nil)
+                    }
+                    break;
+                case .Failure(let error):
+                    completion(status: Status.Error, message: error.localizedDescription, user: nil)
+                    break;
+                }
+                
+        }
+    }
 }

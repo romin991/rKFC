@@ -12,23 +12,132 @@ import SwiftyJSON
 
 class OrderModel: NSObject {
     
-    class func addAddressAndSendOrder(cart:Cart, completion: (status: String, message:String) -> Void){
+    class func orderComplete(){
+        let cart = CartModel.getPendingCart()
+        CartModel.deletePendingCart()
+        
+        let newPendingCart:Cart = Cart.init()
+        newPendingCart.status = Status.Pending
+        newPendingCart.storeId = cart.storeId
+        newPendingCart.priceId = cart.priceId
+        newPendingCart.customerId = cart.customerId
+        
+        newPendingCart.customerAddressId = cart.customerAddressId
+        newPendingCart.address = cart.address
+        newPendingCart.addressDetail = cart.addressDetail
+        newPendingCart.long = cart.long
+        newPendingCart.lat = cart.lat
+        newPendingCart.recipient = cart.recipient
+        CartModel.create(newPendingCart)
+    }
+    
+    class func getPaymentChannel(completion: (status: String, message:String) -> Void){
+        Alamofire.request(.POST, NSString.init(format: "%@/GetPaymentChannel", ApiKey.BaseURL) as String, parameters: nil, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        let status:String = json["status"].string!
+                        let message:String = json["message"].string!
+                        
+                        if (status == "T"){
+                            let successURL = json["payment_success_url"].string
+                            let failedURL = json["payment_failed_url"].string
+                            
+                            let listsJSON = json["list"].array ?? []
+                            for listJSON in listsJSON{
+                                let paymentInfo = listJSON["code"].string ?? ""
+                                let subInfoListsJSON = listJSON["list"].array ?? []
+                                for subInfoListJSON in subInfoListsJSON{
+                                    let image = Image.init(
+                                        guid: nil,
+                                        imageURL: subInfoListJSON["image"].string,
+                                        imagePath: Path.PaymentImage,
+                                        imageDownloaded: false
+                                    )
+                                    
+                                    let payment = Payment.init(
+                                        guid: nil,
+                                        paymentInfo: paymentInfo,
+                                        paymentSubInfo: subInfoListJSON["code"].string,
+                                        name: subInfoListJSON["name"].string,
+                                        image: image,
+                                        successURL: successURL,
+                                        failedURL: failedURL
+                                    )
+                                    
+                                    PaymentModel.create(payment)
+                                }
+                            }
+                            ImageModel.downloadImage()
+                            
+                            completion(status: Status.Success, message: message)
+                        } else {
+                            completion(status: Status.Error, message: message)
+                        }
+                    } else {
+                        completion(status: Status.Error, message: "Not a valid JSON object")
+                    }
+                    break;
+                case .Failure(let error):
+                    completion(status: Status.Error, message: error.localizedDescription)
+                    break;
+                }
+                
+        }
+    }
+    
+    class func getPaymentForm(cart:Cart, completion: (status: String, message:String) -> Void){
+        let parameters:[String:AnyObject] = [
+            "trans_id" : cart.transId!,
+            "payment_sub_info" : cart.paymentSubInfo!
+        ]
+        
+        Alamofire.request(.POST, NSString.init(format: "%@/GetPaymentForm", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
+                        
+                        if (status == "T"){
+                            completion(status: Status.Success, message: message)
+                        } else {
+                            completion(status: Status.Error, message: message)
+                        }
+                    } else {
+                        completion(status: Status.Error, message: "Not a valid JSON object")
+                    }
+                    break;
+                case .Failure(let error):
+                    completion(status: Status.Error, message: error.localizedDescription)
+                    break;
+                }
+        
+        }
+    }
+    
+    class func addAddressAndSendOrder(cart:Cart, completion: (status: String, message:String, cart:Cart) -> Void){
         if (cart.customerAddressId == ""){
             let address:Address = Address.init(address: cart.address, addressDetail: cart.addressDetail, long: cart.long, lat: cart.lat, recipient: cart.recipient)
             self.addAddress(address, completion: { (status, message, address) -> Void in
                 if (status == Status.Success){
                     cart.customerAddressId = address?.id
+                    CartModel.update(cart)
                     
-                    self.sendOrder(cart, completion: { (status, message) -> Void in
-                        completion(status: status, message: message)
+                    self.sendOrder(cart, completion: { (status, message, cart) -> Void in
+                        completion(status: status, message: message, cart: cart)
                     })
                 } else {
-                    completion(status: status, message: message)
+                    completion(status: status, message: message, cart: cart)
                 }
             })
         } else {
-            self.sendOrder(cart, completion: { (status, message) -> Void in
-                completion(status: status, message: message)
+            self.sendOrder(cart, completion: { (status, message, cart) -> Void in
+                completion(status: status, message: message, cart: cart)
             })
         }
     }
@@ -74,7 +183,7 @@ class OrderModel: NSObject {
         }
     }
 
-    class func sendOrder(cart:Cart, completion: (status: String, message:String) -> Void){
+    class func sendOrder(cart:Cart, completion: (status: String, message:String, cart:Cart) -> Void){
         let cartItemParams : NSMutableArray = NSMutableArray()
         for cartItem in cart.cartItems{
             let cartModifierParams : NSMutableArray = NSMutableArray()
@@ -100,8 +209,8 @@ class OrderModel: NSObject {
             "price_id" : cart.priceId!,
             "customer_id" : cart.customerId!,
             "customer_address_id" : cart.customerAddressId!,
-            "payment_info" : "COD",
-            "payment_sub_info" : "CASH",
+            "payment_info" : cart.paymentInfo!,
+            "payment_sub_info" : cart.paymentSubInfo!,
             "notes" : cart.notes!,
             "source" : "MOB",
             "trans" : cartItemParams
@@ -128,34 +237,19 @@ class OrderModel: NSObject {
                         let message:String = json["message"].string ?? "Not a valid JSON object"
                         
                         if (status == "T"){
-//                            cart.status = Status.Outgoing
-//                            CartModel.update(cart)
-                            CartModel.deletePendingCart()
+                            cart.transId = json["trans_id"].string ?? ""
+                            CartModel.update(cart)
                             
-                            let newPendingCart:Cart = Cart.init()
-                            newPendingCart.status = Status.Pending
-                            newPendingCart.storeId = cart.storeId
-                            newPendingCart.priceId = cart.priceId
-                            newPendingCart.customerId = cart.customerId
-                            
-                            newPendingCart.customerAddressId = cart.customerAddressId
-                            newPendingCart.address = cart.address
-                            newPendingCart.addressDetail = cart.addressDetail
-                            newPendingCart.long = cart.long
-                            newPendingCart.lat = cart.lat
-                            newPendingCart.recipient = cart.recipient
-                            CartModel.create(newPendingCart)
-                            
-                            completion(status: Status.Success, message: message)
+                            completion(status: Status.Success, message: message, cart: cart)
                         } else {
-                            completion(status: Status.Error, message: message)
+                            completion(status: Status.Error, message: message, cart: cart)
                         }
                     } else {
-                        completion(status: Status.Error, message: "Not a valid JSON object")
+                        completion(status: Status.Error, message: "Not a valid JSON object", cart: cart)
                     }
                     break;
                 case .Failure(let error):
-                    completion(status: Status.Error, message: error.localizedDescription)
+                    completion(status: Status.Error, message: error.localizedDescription, cart: cart)
                     break;
                 }
                 
@@ -210,7 +304,9 @@ class OrderModel: NSObject {
                                     recipient: tranJSON["trans_detail"]["customer_address_recipient"].string,
                                     transId: tranJSON["trans_detail"]["trans_id"].string,
                                     transNo: tranJSON["trans_detail"]["trans_no"].string,
-                                    transDate: dateformatter.dateFromString(NSString.init(format:"%@ %@", tranJSON["trans_date"].string ?? "", tranJSON["trans_time"].string!) as String)
+                                    transDate: dateformatter.dateFromString(NSString.init(format:"%@ %@", tranJSON["trans_date"].string ?? "", tranJSON["trans_time"].string!) as String),
+                                    paymentInfo: nil,
+                                    paymentSubInfo: nil
                                 )
                                 
                                 var quantity = 0

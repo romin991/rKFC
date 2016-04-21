@@ -37,9 +37,12 @@ class Cart: NSObject {
     var transNo:String? = ""
     var transDate:NSDate? = NSDate()
     
+    var paymentInfo:String? = ""
+    var paymentSubInfo:String? = ""
+    
     var cartItems: [CartItem] = [CartItem]()
     
-    init(guid: String?, notes:String?, status:String?, subtotal:String?, ppn:String?, deliveryTax:String?, rounding:String?, tax:String?, delivery:String?, total:String?, customerId:String?, customerAddressId:String?, storeId:String?, priceId:String?, quantity:Int?, address:String?, addressDetail:String?, long:Double?, lat:Double?, recipient:String?, transId:String?, transNo:String?, transDate:NSDate?) {
+    init(guid: String?, notes:String?, status:String?, subtotal:String?, ppn:String?, deliveryTax:String?, rounding:String?, tax:String?, delivery:String?, total:String?, customerId:String?, customerAddressId:String?, storeId:String?, priceId:String?, quantity:Int?, address:String?, addressDetail:String?, long:Double?, lat:Double?, recipient:String?, transId:String?, transNo:String?, transDate:NSDate?, paymentInfo:String?, paymentSubInfo:String?) {
         self.guid = guid
         self.notes = notes
         self.status = status
@@ -63,6 +66,8 @@ class Cart: NSObject {
         self.transId = transId
         self.transNo = transNo
         self.transDate = transDate
+        self.paymentInfo = paymentInfo
+        self.paymentSubInfo = paymentSubInfo
         
         super.init()
     }

@@ -13,22 +13,19 @@ class CheckoutViewController: UIViewController {
     @IBOutlet weak var addressField: UITextField!
     @IBOutlet weak var addressDetailTextField: UITextField!
     @IBOutlet weak var notesTextField: UITextField!
-    @IBOutlet weak var dokuPayButton: UIButton!
-    @IBOutlet weak var codButton: UIButton!
     
     @IBOutlet weak var navigationTitleLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var addressDetailLabel: UILabel!
     @IBOutlet weak var notesLabel: UILabel!
-    @IBOutlet weak var choosePaymentLabel: UILabel!
+    @IBOutlet weak var sendButton: UIButton!
     
     var cart:Cart?
+    var drawerDelegate:DrawerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        CustomView.custom(self.dokuPayButton, borderColor: self.dokuPayButton.titleColorForState(UIControlState.Normal)!, cornerRadius: 22, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
-        CustomView.custom(self.codButton, borderColor: self.codButton.titleColorForState(UIControlState.Normal)!, cornerRadius: 22, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
         self.cart = CartModel.getPendingCart()
         self.addressField.text = self.cart?.address
         self.addressDetailTextField.text = self.cart?.addressDetail
@@ -36,14 +33,13 @@ class CheckoutViewController: UIViewController {
         //change language label
         let languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
         
-        self.navigationTitleLabel.text = Wording.ShoppingCart.Checkout[languageId]
+        self.navigationTitleLabel.text = Wording.ShoppingCart.DeliveryAddress[languageId]
         self.addressLabel.text = Wording.ShoppingCart.Address[languageId]
         self.addressField.placeholder = Wording.ShoppingCart.Address[languageId]
         self.addressDetailLabel.text = Wording.ShoppingCart.AddressDetail[languageId]
         self.addressDetailTextField.placeholder = Wording.ShoppingCart.AddressDetail[languageId]
         self.notesLabel.text = Wording.ShoppingCart.Notes[languageId]
         self.notesTextField.placeholder = Wording.ShoppingCart.AddAdditionalNotes[languageId]
-        self.choosePaymentLabel.text = Wording.ShoppingCart.ChoosePayment[languageId]
     }
 
     override func didReceiveMemoryWarning() {
@@ -54,54 +50,51 @@ class CheckoutViewController: UIViewController {
     @IBAction func backButtonClicked(sender: AnyObject) {
         self.navigationController?.popViewControllerAnimated(true)
     }
-    
-    @IBAction func dokuPayButtonClicked(sender: AnyObject) {
-        
-    }
 
-    @IBAction func codButtonClicked(sender: AnyObject) {
-        let activityIndicator = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        activityIndicator.mode = MBProgressHUDMode.Indeterminate;
-        activityIndicator.labelText = "Loading";
-        
-        if (self.addressField.text != ""){
+    @IBAction func sendButtonClicked(sender: AnyObject) {
+        let languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+        if (self.addressField.text == ""){
+            let alert: UIAlertController = UIAlertController(title: Status.Error, message: Wording.Warning.AddressCannotEmpty[languageId], preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: Wording.Common.OK[languageId], style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+            
+        } else if (self.addressDetailTextField.text == ""){
+            let alert: UIAlertController = UIAlertController(title: Status.Error, message: Wording.Warning.AddressDetailCannotEmpty[languageId], preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: Wording.Common.OK[languageId], style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+            
+        } else {
             self.cart?.address = self.addressField.text
-        }
-        if (self.addressDetailTextField.text != ""){
             self.cart?.addressDetail = self.addressDetailTextField.text
-        }
-        if (self.notesTextField.text != ""){
             self.cart?.notes = self.notesTextField.text
-        }
-        
-        OrderModel.addAddressAndSendOrder(self.cart!) { (status, message) -> Void in
-            let languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
             
-            if (status == Status.Success){
-                let lastViewController = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 3]
-                self.navigationController?.popToViewController(lastViewController!, animated: true)
-                
-                let alert: UIAlertController = UIAlertController(title: Status.Success, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(UIAlertAction(title: Wording.Common.OK[languageId], style: UIAlertActionStyle.Default, handler: nil))
-                lastViewController!.presentViewController(alert, animated: true, completion: nil)
-                
-            } else {
-                let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(UIAlertAction(title: Wording.Common.OK[languageId], style: UIAlertActionStyle.Default, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
-            }
+            CartModel.update(self.cart!)
             
-            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+            PaymentModel.deleteAllPayment()
+            OrderModel.getPaymentChannel({ (status, message) -> Void in
+                if (status == Status.Success){
+                    self.performSegueWithIdentifier("PaymentSegue", sender: nil)
+                } else {
+                    let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                    alert.addAction(UIAlertAction(title: Wording.Common.OK[languageId], style: UIAlertActionStyle.Default, handler: nil))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                }
+            })
+            
+            
         }
     }
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        if (segue.identifier == "PaymentSegue"){
+            let paymentViewController:PaymentViewController = segue.destinationViewController as! PaymentViewController
+            paymentViewController.drawerDelegate = self.drawerDelegate
+        }
     }
-    */
 
 }

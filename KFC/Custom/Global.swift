@@ -17,6 +17,7 @@ struct NotificationKey {
     static let ImageAdsDownloaded = "ImageAdsDownloaded"
     static let ImageItemDownloaded = "ImageItemDownloaded"
     static let ImageCategoryDownloaded = "ImageCategoryDownloaded"
+    static let ImagePaymentDownloaded = "ImagePaymentDownloaded"
     static let LanguageChanged = "LanguageChanged"
 }
     
@@ -24,6 +25,7 @@ struct Path {
     static let ProductImage = "productImage"
     static let CategoryImage = "categoryImage"
     static let AdsImage = "adsImage"
+    static let PaymentImage = "paymentImage"
 }
 
 struct Status {
@@ -36,6 +38,11 @@ struct Status {
     //need to make it the same as server
     static let InProgress = "IN PROGRESS"
     static let Completed = "COMPLETED"
+}
+
+struct PaymentInfo {
+    static let COD = "COD"
+    static let Online = "ONLINE"
 }
 
 struct LanguageID {
@@ -90,6 +97,8 @@ struct Color {
 //below this line need to localized
 struct Wording {
     struct Common {
+        static let YES:[String:String] = [LanguageID.Indonesia : "Ya", LanguageID.English : "YES"]
+        static let NO:[String:String] = [LanguageID.Indonesia : "Tidak", LanguageID.English : "NO"]
         static let Save:[String:String] = [LanguageID.Indonesia : "Simpan", LanguageID.English : "Save"]
         static let OK:[String:String] = [LanguageID.Indonesia : "OK", LanguageID.English : "OK"]
         static let Cancel:[String:String] = [LanguageID.Indonesia : "Batal", LanguageID.English : "Cancel"]
@@ -136,6 +145,18 @@ struct Wording {
         static let LocationOutOfRange:[String:String] = [
             LanguageID.Indonesia : "Lokasi anda belum dapat dilayani oleh outlet kami. Silahkan menghubungi 14022 untuk bantuan. Terima Kasih",
             LanguageID.English : "No store found for your location. Please call 14022 for help. Thank You"
+        ]
+        static let AddressCannotEmpty:[String:String] = [
+            LanguageID.Indonesia : "Field alamat harus diisi",
+            LanguageID.English : "Address field cannot be empty"
+        ]
+        static let AddressDetailCannotEmpty:[String:String] = [
+            LanguageID.Indonesia : "Field detil alamat harus diisi",
+            LanguageID.English : "Address detail field cannot be empty"
+        ]
+        static let PaymentFailed:[String:String] = [
+            LanguageID.Indonesia : "Pembayaran anda tidak berhasil, apakah Anda ingin memilih metode pembayaran yang lain?",
+            LanguageID.English : "Your payment is failed, do you want to choose another payment method?"
         ]
     }
     
@@ -198,5 +219,8 @@ struct Wording {
         static let Notes:[String:String] = [LanguageID.Indonesia : "Catatan", LanguageID.English : "Notes"]
         static let AddAdditionalNotes:[String:String] = [LanguageID.Indonesia : "Tambahkan catatan", LanguageID.English : "Add your additional notes"]
         static let ChoosePayment:[String:String] = [LanguageID.Indonesia : "Pilih metode pembayaran", LanguageID.English : "Choose your payment method"]
+        static let DeliveryAddress:[String:String] = [LanguageID.Indonesia : "Alamat Pengiriman", LanguageID.English : "Delivery Address"]
+        static let Payment:[String:String] = [LanguageID.Indonesia : "Pembayaran", LanguageID.English : "Payment"]
+        static let TotalAmountToBePaid:[String:String] = [LanguageID.Indonesia : "Total harga yang harus dibayarkan", LanguageID.English : "Total amount to be paid"]
     }
 }

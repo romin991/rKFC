@@ -43,6 +43,8 @@ class CartModel: NSObject {
         cdCart.setValue(cart.transId, forKey: "transId")
         cdCart.setValue(cart.transNo, forKey: "transNo")
         cdCart.setValue(cart.transDate, forKey: "transDate")
+        cdCart.setValue(cart.paymentInfo, forKey: "paymentInfo")
+        cdCart.setValue(cart.paymentSubInfo, forKey: "paymentSubInfo")
         
         let setItems = cdCart.mutableSetValueForKey("cartItems")
         for cartItem in cart.cartItems{
@@ -155,6 +157,8 @@ class CartModel: NSObject {
                 cdCart.setValue(cart.transId, forKey: "transId")
                 cdCart.setValue(cart.transNo, forKey: "transNo")
                 cdCart.setValue(cart.transDate, forKey: "transDate")
+                cdCart.setValue(cart.paymentInfo, forKey: "paymentInfo")
+                cdCart.setValue(cart.paymentSubInfo, forKey: "paymentSubInfo")
                 
                 try cdCart.managedObjectContext?.save()
             }
@@ -410,6 +414,8 @@ class CartModel: NSObject {
                 cart.transId = (cdCart.valueForKey("transId") as? String)!
                 cart.transNo = (cdCart.valueForKey("transNo") as? String)!
                 cart.transDate = (cdCart.valueForKey("transDate") as? NSDate)!
+                cart.paymentInfo = (cdCart.valueForKey("paymentInfo") as? String)!
+                cart.paymentSubInfo = (cdCart.valueForKey("paymentSubInfo") as? String)!
                 
                 let cdCartItems = cdCart.mutableSetValueForKey("cartItems")
                 for cdCartItem in cdCartItems{
@@ -484,6 +490,9 @@ class CartModel: NSObject {
         let fetchRequest = NSFetchRequest(entityName: "Cart")
         fetchRequest.predicate = NSPredicate(format: "status != %@", Status.Pending)
         
+        let sorter = NSSortDescriptor.init(key: "transDate", ascending: false)
+        fetchRequest.sortDescriptors = [sorter]
+        
         var carts:[Cart] = [Cart]()
         
         do {
@@ -513,7 +522,9 @@ class CartModel: NSObject {
                     recipient: (cdCart.valueForKey("recipient") as? String),
                     transId: (cdCart.valueForKey("transId") as? String),
                     transNo: (cdCart.valueForKey("transNo") as? String),
-                    transDate: (cdCart.valueForKey("transDate") as? NSDate)
+                    transDate: (cdCart.valueForKey("transDate") as? NSDate),
+                    paymentInfo: (cdCart.valueForKey("paymentInfo") as? String),
+                    paymentSubInfo: (cdCart.valueForKey("paymentSubInfo") as? String)
                 )
                 
                 let cdCartItems = cdCart.mutableSetValueForKey("cartItems")
