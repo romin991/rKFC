@@ -37,6 +37,7 @@ class LeftViewController: UIViewController, UITableViewDelegate, UITableViewData
                 Menu.Menu,
                 Menu.Promo,
                 Menu.ChangeLanguage,
+                Menu.Toc,
                 Menu.Login
             ]
         } else {
@@ -47,6 +48,7 @@ class LeftViewController: UIViewController, UITableViewDelegate, UITableViewData
                 Menu.Menu,
                 Menu.Promo,
                 Menu.ChangeLanguage,
+                Menu.Toc,
                 Menu.Logout
             ]
         }
@@ -128,6 +130,9 @@ class LeftViewController: UIViewController, UITableViewDelegate, UITableViewData
             } else if (menu == Menu.Login){
                 cell.imageBackground.image = UIImage.init(named: "MenuLogout")
                 cell.mainTitleLabel.text = Wording.Menu.Login[self.languageId]
+            } else if (menu == Menu.Toc){
+                cell.imageBackground.image = UIImage.init(named: "")
+                cell.mainTitleLabel.text = Wording.Menu.Toc[self.languageId]
             } else {
                 cell.imageBackground.image = nil
                 cell.mainTitleLabel.text = ""

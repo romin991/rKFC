@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2A57C416F428E182D7B0FED7 /* Pods_KFC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D75EA3A83EE73FEDA917AAD /* Pods_KFC.framework */; };
+		34CA90071CC90D3F003CA6DA /* tocViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CA90061CC90D3F003CA6DA /* tocViewController.swift */; };
 		480786B51CC8BE31006EB629 /* PaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480786B41CC8BE31006EB629 /* PaymentViewController.swift */; };
 		480786B71CC8CC9E006EB629 /* Payment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480786B61CC8CC9E006EB629 /* Payment.swift */; };
 		480786B91CC8CD16006EB629 /* PaymentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480786B81CC8CD16006EB629 /* PaymentModel.swift */; };
@@ -78,6 +79,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		34CA90061CC90D3F003CA6DA /* tocViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = tocViewController.swift; sourceTree = "<group>"; };
 		480786B41CC8BE31006EB629 /* PaymentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PaymentViewController.swift; path = ViewController/PaymentViewController.swift; sourceTree = "<group>"; };
 		480786B61CC8CC9E006EB629 /* Payment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Payment.swift; path = Object/Payment.swift; sourceTree = "<group>"; };
 		480786B81CC8CD16006EB629 /* PaymentModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PaymentModel.swift; path = Model/PaymentModel.swift; sourceTree = "<group>"; };
@@ -166,6 +168,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		34CA90081CC90D49003CA6DA /* TOC */ = {
+			isa = PBXGroup;
+			children = (
+				34CA90061CC90D3F003CA6DA /* tocViewController.swift */,
+			);
+			name = TOC;
+			sourceTree = "<group>";
+		};
 		480B75A81C8EA48800177712 /* Custom */ = {
 			isa = PBXGroup;
 			children = (
@@ -188,6 +198,7 @@
 		481589A91C7D46D800C41B0D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				34CA90081CC90D49003CA6DA /* TOC */,
 				482162791C915002008B571C /* Component */,
 				487A4C4E1C96A7B200B90EEE /* Outside */,
 				4853F2ED1CB0DE550091AC21 /* Ads */,
@@ -586,6 +597,7 @@
 				487BDDEB1C9448AA00FED8B5 /* ModifierDetailTableViewCell.swift in Sources */,
 				48A5131F1CC6F96800E2F007 /* ImageModel.swift in Sources */,
 				482162AD1C917EDA008B571C /* ProductModel.swift in Sources */,
+				34CA90071CC90D3F003CA6DA /* tocViewController.swift in Sources */,
 				48580F861C97F0AE00A44166 /* CartItem.swift in Sources */,
 				48EC85141CBF41B400215F43 /* CustomCollectionViewCell.swift in Sources */,
 				487BDDE21C9411D900FED8B5 /* ModifierModel.swift in Sources */,

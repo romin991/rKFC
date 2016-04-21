@@ -105,19 +105,33 @@ class DrawerViewController: UIViewController, DrawerDelegate {
             } else {
                 user.languageId = LanguageID.English
             }
-            LoginModel.updateLanguage(user, completion: { (status, message, user) -> Void in
-                if (status == Status.Success && user != nil){
-                    UserModel.updateUser(user!)
-                    NSUserDefaults.standardUserDefaults().setObject(user!.languageId, forKey: "LanguageId")
-                    NSNotificationCenter.defaultCenter().postNotificationName(NotificationKey.LanguageChanged, object: nil)
-                } else {
-                    let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-                    self.presentViewController(alert, animated: true, completion: nil)
-                }
-            })
+            if (!user.customerId!.isEmpty) {
+                LoginModel.updateLanguage(user, completion: { (status, message, user) -> Void in
+                    if (status == Status.Success && user != nil){
+                        UserModel.updateUser(user!)
+                        NSUserDefaults.standardUserDefaults().setObject(user!.languageId, forKey: "LanguageId")
+                        NSNotificationCenter.defaultCenter().postNotificationName(NotificationKey.LanguageChanged, object: nil)
+                    } else {
+                        let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+                        self.presentViewController(alert, animated: true, completion: nil)
+                    }
+                })
+            }
+            else
+            {
+                UserModel.updateUser(user)
+                NSUserDefaults.standardUserDefaults().setObject(user.languageId, forKey: "LanguageId")
+                NSNotificationCenter.defaultCenter().postNotificationName(NotificationKey.LanguageChanged, object: nil)
+            }
             
-        } else if (menu == Menu.Logout){
+            
+        } else if (menu == Menu.Toc){
+            let centerViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("tocViewController") as? tocViewController)!
+            centerViewController.drawerDelegate = self
+            self.drawerController?.centerViewController = centerViewController
+            
+        }else if (menu == Menu.Logout){
             let activityIndicator = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
             activityIndicator.mode = MBProgressHUDMode.Indeterminate;
             activityIndicator.labelText = "Loading";
