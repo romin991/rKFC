@@ -306,7 +306,11 @@ class OrderModel: NSObject {
                                     transNo: tranJSON["trans_detail"]["trans_no"].string,
                                     transDate: dateformatter.dateFromString(NSString.init(format:"%@ %@", tranJSON["trans_date"].string ?? "", tranJSON["trans_time"].string!) as String),
                                     paymentInfo: nil,
-                                    paymentSubInfo: nil
+                                    paymentSubInfo: nil,
+                                    statusDetail: tranJSON["status_detail"].string,
+                                    feedbackRating: tranJSON["feedback_rating"].string,
+                                    feedbackAnswerId: nil,
+                                    feedbackNotes: nil
                                 )
                                 
                                 var quantity = 0
@@ -353,6 +357,86 @@ class OrderModel: NSObject {
                                 CartModel.create(cart)
                             }
                             
+                            completion(status: Status.Success, message: message)
+                        } else {
+                            completion(status: Status.Error, message: message)
+                        }
+                    } else {
+                        completion(status: Status.Error, message: "Not a valid JSON object")
+                    }
+                    break;
+                case .Failure(let error):
+                    completion(status: Status.Error, message: error.localizedDescription)
+                    break;
+                }
+                
+        }
+    }
+    
+    class func getFeedbackForm(completion: (status: String, message:String) -> Void){
+        Alamofire.request(.POST, NSString.init(format: "%@/GetFeedbackForm", ApiKey.BaseURL) as String, parameters: nil, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
+                        
+                        if (status == "T"){
+                            let ratingListsJSON = json["rating_list"].array ?? []
+                            for ratingListJSON in ratingListsJSON{
+                                let questions = HelperModel.parseNames2(ratingListJSON["question"].array ?? [])
+                                
+                                let answerListsJSON = ratingListJSON["answer_list"].array ?? []
+                                for answerListJSON in answerListsJSON{
+                                    let feedback = Feedback.init(
+                                        guid: nil,
+                                        id: answerListJSON["id"].string,
+                                        rating: NSString.init(format: "%li", ratingListJSON["rating"].int!) as String
+                                    )
+                                    
+                                    feedback.questions = questions
+                                    feedback.answers = HelperModel.parseNames2(answerListJSON["titles"].array ?? [])
+                                    
+                                    FeedbackModel.create(feedback)
+                                }
+                            }
+                            
+                            completion(status: Status.Success, message: message)
+                        } else {
+                            completion(status: Status.Error, message: message)
+                        }
+                    } else {
+                        completion(status: Status.Error, message: "Not a valid JSON object")
+                    }
+                    break;
+                case .Failure(let error):
+                    completion(status: Status.Error, message: error.localizedDescription)
+                    break;
+                }
+                
+        }
+    }
+    
+    class func sendFeedback(cart:Cart, completion: (status: String, message:String) -> Void){
+        let parameters:[String:AnyObject] = [
+            "trans_id" : cart.transId!,
+            "answer_id" : cart.feedbackAnswerId!,
+            "notes" : cart.feedbackNotes!,
+            "rating" : cart.feedbackRating!
+        ]
+        
+        Alamofire.request(.POST, NSString.init(format: "%@/SendFeedback", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
+                        
+                        if (status == "T"){
                             completion(status: Status.Success, message: message)
                         } else {
                             completion(status: Status.Error, message: message)

@@ -45,6 +45,10 @@ class CartModel: NSObject {
         cdCart.setValue(cart.transDate, forKey: "transDate")
         cdCart.setValue(cart.paymentInfo, forKey: "paymentInfo")
         cdCart.setValue(cart.paymentSubInfo, forKey: "paymentSubInfo")
+        cdCart.setValue(cart.statusDetail, forKey: "statusDetail")
+        cdCart.setValue(cart.feedbackRating, forKey: "feedbackRating")
+        cdCart.setValue(cart.feedbackAnswerId, forKey: "feedbackAnswerId")
+        cdCart.setValue(cart.feedbackNotes, forKey: "feedbackNotes")
         
         let setItems = cdCart.mutableSetValueForKey("cartItems")
         for cartItem in cart.cartItems{
@@ -159,6 +163,10 @@ class CartModel: NSObject {
                 cdCart.setValue(cart.transDate, forKey: "transDate")
                 cdCart.setValue(cart.paymentInfo, forKey: "paymentInfo")
                 cdCart.setValue(cart.paymentSubInfo, forKey: "paymentSubInfo")
+                cdCart.setValue(cart.statusDetail, forKey: "statusDetail")
+                cdCart.setValue(cart.feedbackRating, forKey: "feedbackRating")
+                cdCart.setValue(cart.feedbackAnswerId, forKey: "feedbackAnswerId")
+                cdCart.setValue(cart.feedbackNotes, forKey: "feedbackNotes")
                 
                 try cdCart.managedObjectContext?.save()
             }
@@ -416,6 +424,10 @@ class CartModel: NSObject {
                 cart.transDate = (cdCart.valueForKey("transDate") as? NSDate)!
                 cart.paymentInfo = (cdCart.valueForKey("paymentInfo") as? String)!
                 cart.paymentSubInfo = (cdCart.valueForKey("paymentSubInfo") as? String)!
+                cart.statusDetail = (cdCart.valueForKey("statusDetail") as? String)!
+                cart.feedbackRating = (cdCart.valueForKey("feedbackRating") as? String)!
+                cart.feedbackAnswerId = (cdCart.valueForKey("feedbackAnswerId") as? String)!
+                cart.feedbackNotes = (cdCart.valueForKey("feedbackNotes") as? String)!
                 
                 let cdCartItems = cdCart.mutableSetValueForKey("cartItems")
                 for cdCartItem in cdCartItems{
@@ -524,7 +536,11 @@ class CartModel: NSObject {
                     transNo: (cdCart.valueForKey("transNo") as? String),
                     transDate: (cdCart.valueForKey("transDate") as? NSDate),
                     paymentInfo: (cdCart.valueForKey("paymentInfo") as? String),
-                    paymentSubInfo: (cdCart.valueForKey("paymentSubInfo") as? String)
+                    paymentSubInfo: (cdCart.valueForKey("paymentSubInfo") as? String),
+                    statusDetail: (cdCart.valueForKey("statusDetail") as? String),
+                    feedbackRating: (cdCart.valueForKey("feedbackRating") as? String),
+                    feedbackAnswerId: (cdCart.valueForKey("feedbackAnswerId") as? String),
+                    feedbackNotes: (cdCart.valueForKey("feedbackNotes") as? String)
                 )
                 
                 let cdCartItems = cdCart.mutableSetValueForKey("cartItems")

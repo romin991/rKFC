@@ -25,10 +25,7 @@ class HistoryViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         CustomView.custom(self.shoppingCartBadgesView, borderColor: UIColor.whiteColor(), cornerRadius: 8, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
+
         let activityIndicator = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         activityIndicator.mode = MBProgressHUDMode.Indeterminate;
         activityIndicator.labelText = "Loading";
@@ -40,6 +37,8 @@ class HistoryViewController: UIViewController {
                 
                 let month = NSDateFormatter.init()
                 month.dateFormat = "MMMM"
+                
+                var selectedCart:Cart?
                 for cart in self.carts{
                     let monthString = month.stringFromDate(cart.transDate!)
                     if (!self.sectionTitle.contains(monthString)) {
@@ -49,6 +48,14 @@ class HistoryViewController: UIViewController {
                         self.dataSource[monthString] = [Cart]()
                     }
                     self.dataSource[monthString]?.append(cart)
+                    
+                    if (cart.statusDetail == "CLS" && cart.feedbackRating == "0" && selectedCart == nil){
+                        selectedCart = cart
+                    }
+                }
+                
+                if (selectedCart != true){
+                    self.performSegueWithIdentifier("FeedbackSegue", sender: selectedCart)
                 }
                 
                 self.tableView.reloadData()
@@ -174,6 +181,12 @@ class HistoryViewController: UIViewController {
                 let historyDetailViewController:HistoryDetailViewController = segue.destinationViewController as! HistoryDetailViewController
                 historyDetailViewController.drawerDelegate = self.drawerDelegate
                 historyDetailViewController.cart = cart
+            }
+        }
+        if (segue.identifier == "FeedbackSegue"){
+            if let cart = sender as? Cart{
+                let feedbackViewController:FeedbackViewController = segue.destinationViewController as! FeedbackViewController
+                feedbackViewController.selectedCart = cart
             }
         }
     }

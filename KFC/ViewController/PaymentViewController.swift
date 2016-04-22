@@ -20,6 +20,23 @@ class PaymentViewController: UIViewController, UICollectionViewDataSource, UICol
     var cart:Cart?
     var drawerDelegate:DrawerDelegate?
 
+    func registerNotification(){
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"refresh", name: NotificationKey.ImagePaymentDownloaded, object: nil)
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.registerNotification()
+    }
+    
+    deinit{
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func refresh(){
+        self.collectionView.reloadData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.

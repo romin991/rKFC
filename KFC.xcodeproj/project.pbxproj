@@ -13,6 +13,9 @@
 		480786B71CC8CC9E006EB629 /* Payment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480786B61CC8CC9E006EB629 /* Payment.swift */; };
 		480786B91CC8CD16006EB629 /* PaymentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480786B81CC8CD16006EB629 /* PaymentModel.swift */; };
 		480786BB1CC8EC9B006EB629 /* OnlinePaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480786BA1CC8EC9B006EB629 /* OnlinePaymentViewController.swift */; };
+		480786BD1CC911CE006EB629 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480786BC1CC911CE006EB629 /* FeedbackViewController.swift */; };
+		480786BF1CC918C8006EB629 /* Feedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480786BE1CC918C8006EB629 /* Feedback.swift */; };
+		480786C11CC91944006EB629 /* FeedbackModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480786C01CC91944006EB629 /* FeedbackModel.swift */; };
 		480B75AA1C8EA4A700177712 /* CommonFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480B75A91C8EA4A700177712 /* CommonFunction.swift */; };
 		480B75AC1C8EA70E00177712 /* CustomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480B75AB1C8EA70E00177712 /* CustomView.swift */; };
 		481589AC1C7D47D400C41B0D /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481589AB1C7D47D400C41B0D /* LoginViewController.swift */; };
@@ -84,6 +87,9 @@
 		480786B61CC8CC9E006EB629 /* Payment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Payment.swift; path = Object/Payment.swift; sourceTree = "<group>"; };
 		480786B81CC8CD16006EB629 /* PaymentModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PaymentModel.swift; path = Model/PaymentModel.swift; sourceTree = "<group>"; };
 		480786BA1CC8EC9B006EB629 /* OnlinePaymentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OnlinePaymentViewController.swift; path = ViewController/OnlinePaymentViewController.swift; sourceTree = "<group>"; };
+		480786BC1CC911CE006EB629 /* FeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FeedbackViewController.swift; path = ViewController/FeedbackViewController.swift; sourceTree = "<group>"; };
+		480786BE1CC918C8006EB629 /* Feedback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Feedback.swift; path = Object/Feedback.swift; sourceTree = "<group>"; };
+		480786C01CC91944006EB629 /* FeedbackModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FeedbackModel.swift; path = Model/FeedbackModel.swift; sourceTree = "<group>"; };
 		480B75A91C8EA4A700177712 /* CommonFunction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommonFunction.swift; path = Custom/CommonFunction.swift; sourceTree = "<group>"; };
 		480B75AB1C8EA70E00177712 /* CustomView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomView.swift; path = Custom/CustomView.swift; sourceTree = "<group>"; };
 		481589AB1C7D47D400C41B0D /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = ViewController/LoginViewController.swift; sourceTree = "<group>"; };
@@ -278,6 +284,7 @@
 			children = (
 				48EB97D01CAA259200CB7870 /* HistoryViewController.swift */,
 				48EB97D21CAA2A0900CB7870 /* HistoryDetailViewController.swift */,
+				480786BC1CC911CE006EB629 /* FeedbackViewController.swift */,
 			);
 			name = History;
 			sourceTree = "<group>";
@@ -311,6 +318,7 @@
 				48A5131A1CC6F07600E2F007 /* Ads.swift */,
 				48A5131C1CC6F2D200E2F007 /* Image.swift */,
 				480786B61CC8CC9E006EB629 /* Payment.swift */,
+				480786BE1CC918C8006EB629 /* Feedback.swift */,
 			);
 			name = Object;
 			sourceTree = "<group>";
@@ -410,6 +418,7 @@
 				48A513181CC6F03E00E2F007 /* AdsModel.swift */,
 				48A5131E1CC6F96800E2F007 /* ImageModel.swift */,
 				480786B81CC8CD16006EB629 /* PaymentModel.swift */,
+				480786C01CC91944006EB629 /* FeedbackModel.swift */,
 			);
 			name = CoreData;
 			sourceTree = "<group>";
@@ -585,6 +594,7 @@
 				480786B91CC8CD16006EB629 /* PaymentModel.swift in Sources */,
 				4853F3001CB15E390091AC21 /* ErrorViewController.swift in Sources */,
 				48580F921C98400400A44166 /* UserModel.swift in Sources */,
+				480786C11CC91944006EB629 /* FeedbackModel.swift in Sources */,
 				481589AC1C7D47D400C41B0D /* LoginViewController.swift in Sources */,
 				4853F2F21CB0DEAF0091AC21 /* AdsViewController.swift in Sources */,
 				481589B01C7D4F4600C41B0D /* LoginModel.swift in Sources */,
@@ -622,12 +632,14 @@
 				48EB97D31CAA2A0900CB7870 /* HistoryDetailViewController.swift in Sources */,
 				48B397BC1C9B8FEE0016D01C /* OrderModel.swift in Sources */,
 				487BDDE01C940D9900FED8B5 /* ModifierOption.swift in Sources */,
+				480786BF1CC918C8006EB629 /* Feedback.swift in Sources */,
 				481A33881C7EF2B30074FD23 /* SearchAddressViewController.swift in Sources */,
 				48F04A7B1CA3C63300E82C18 /* HelperModel.swift in Sources */,
 				48EB97D51CAA52D400CB7870 /* HistoryTableViewCell.swift in Sources */,
 				487A4C4A1C9687D200B90EEE /* DrawerViewController.swift in Sources */,
 				482162721C91372B008B571C /* CategoryViewController.swift in Sources */,
 				48F04A481C9BD65500E82C18 /* CheckoutViewController.swift in Sources */,
+				480786BD1CC911CE006EB629 /* FeedbackViewController.swift in Sources */,
 				4853F2FE1CB128280091AC21 /* PromoModel.swift in Sources */,
 				487A4C4C1C9688FF00B90EEE /* LeftViewController.swift in Sources */,
 				483AD84A1C8EA21600B6629C /* ValidationViewController.swift in Sources */,

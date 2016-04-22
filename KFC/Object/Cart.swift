@@ -40,9 +40,14 @@ class Cart: NSObject {
     var paymentInfo:String? = ""
     var paymentSubInfo:String? = ""
     
+    var statusDetail:String? = ""
+    var feedbackRating:String? = ""
+    var feedbackAnswerId:String? = ""
+    var feedbackNotes:String? = ""
+    
     var cartItems: [CartItem] = [CartItem]()
     
-    init(guid: String?, notes:String?, status:String?, subtotal:String?, ppn:String?, deliveryTax:String?, rounding:String?, tax:String?, delivery:String?, total:String?, customerId:String?, customerAddressId:String?, storeId:String?, priceId:String?, quantity:Int?, address:String?, addressDetail:String?, long:Double?, lat:Double?, recipient:String?, transId:String?, transNo:String?, transDate:NSDate?, paymentInfo:String?, paymentSubInfo:String?) {
+    init(guid: String?, notes:String?, status:String?, subtotal:String?, ppn:String?, deliveryTax:String?, rounding:String?, tax:String?, delivery:String?, total:String?, customerId:String?, customerAddressId:String?, storeId:String?, priceId:String?, quantity:Int?, address:String?, addressDetail:String?, long:Double?, lat:Double?, recipient:String?, transId:String?, transNo:String?, transDate:NSDate?, paymentInfo:String?, paymentSubInfo:String?, statusDetail:String?, feedbackRating:String?, feedbackAnswerId:String?, feedbackNotes:String?) {
         self.guid = guid
         self.notes = notes
         self.status = status
@@ -68,6 +73,10 @@ class Cart: NSObject {
         self.transDate = transDate
         self.paymentInfo = paymentInfo
         self.paymentSubInfo = paymentSubInfo
+        self.statusDetail = statusDetail
+        self.feedbackRating = feedbackRating
+        self.feedbackAnswerId = feedbackAnswerId
+        self.feedbackNotes = feedbackNotes
         
         super.init()
     }

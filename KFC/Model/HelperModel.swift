@@ -27,4 +27,22 @@ class HelperModel: NSObject {
         return names
     }
     
+    class func parseNames2(objects:[JSON]) -> [Name]{
+        var names:[Name] = [Name]()
+        for object in objects{
+            for key in (object.dictionaryObject?.keys)!{
+                let name = Name.init(
+                    guid: nil,
+                    languageId: key,
+                    name: object.dictionaryObject![key] as? String,
+                    refId: nil,
+                    refGuid: nil,
+                    refTable: nil
+                )
+                names.append(name)
+            }
+        }
+        return names
+    }
+
 }

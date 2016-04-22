@@ -40,6 +40,17 @@ struct Status {
     static let Completed = "COMPLETED"
 }
 
+struct StatusDetail{
+    static let NewOrder = "NEW"
+    static let SentToStore = "ORD"
+    static let OrderReject = "CAN"
+    static let OrderConfirm = "CNF"
+    static let PackedOrder = "PCK"
+    static let OrderSent = "DLV"
+    static let Complete = "CLS"
+    static let FakeOrder = "BAD"
+}
+
 struct PaymentInfo {
     static let COD = "COD"
     static let Online = "ONLINE"
@@ -69,6 +80,7 @@ struct Table{
     static let ModifierOption = "ModifierOption"
     static let CartItem = "CartItem"
     static let CartModifier = "CartModifier"
+    static let Feedback = "Feedback"
 }
 
 struct AdsType {
@@ -104,6 +116,7 @@ struct Wording {
         static let OK:[String:String] = [LanguageID.Indonesia : "OK", LanguageID.English : "OK"]
         static let Cancel:[String:String] = [LanguageID.Indonesia : "Batal", LanguageID.English : "Cancel"]
         static let Alert:[String:String] = [LanguageID.Indonesia : "Peringatan", LanguageID.English : "Alert"]
+        static let Send:[String:String] = [LanguageID.Indonesia : "Kirim", LanguageID.English : "Send"]
     }
     
     struct Gender {
@@ -115,6 +128,8 @@ struct Wording {
         static let OrderHistoryDetail:[String:String] = [LanguageID.Indonesia : "Detil Riwayat Pemesanan", LanguageID.English : "Order History Detail"]
         static let OrderNumber:[String:String] = [LanguageID.Indonesia : "Nomer Pesanan", LanguageID.English : "Order Number"]
         static let Order:[String:String] = [LanguageID.Indonesia : "Pesanan", LanguageID.English : "Order"]
+        static let RateThisOrder:[String:String] = [LanguageID.Indonesia : "Beri penilaian anda terhadap layanan pesan antar KFC", LanguageID.English : "Rate this order"]
+        static let WriteYourReviewHere:[String:String] = [LanguageID.Indonesia : "Tuliskan pendapat anda di sini", LanguageID.English : "Write your review here"]
     }
     
     struct Menu {
