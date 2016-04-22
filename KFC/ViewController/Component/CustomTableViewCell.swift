@@ -8,13 +8,21 @@
 
 import UIKit
 
+protocol FavoriteAddressDelegate{
+    func favoriteButtonClicked(address:Address?, favoriteButton:UIButton?)
+}
+
 class CustomTableViewCell: UITableViewCell {
     @IBOutlet weak var mainTitleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var imageBackground: UIImageView!
     @IBOutlet weak var quantityLabel: UILabel!
     @IBOutlet weak var subtotalLabel: UILabel!
-
+    @IBOutlet weak var favoriteButton: UIButton!
+    
+    var address:Address?
+    var favoriteAddressDelegate:FavoriteAddressDelegate?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -24,6 +32,11 @@ class CustomTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    @IBAction func favoriteButtonClicked(sender: AnyObject) {
+        if (self.favoriteAddressDelegate != nil) {
+            self.favoriteAddressDelegate?.favoriteButtonClicked(self.address, favoriteButton: self.favoriteButton)
+        }
     }
 
 }

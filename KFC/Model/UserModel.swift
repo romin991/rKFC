@@ -45,6 +45,7 @@ class UserModel: NSObject {
             cdAddress.setValue(address.long, forKey: "long")
             cdAddress.setValue(address.lat, forKey: "lat")
             cdAddress.setValue(address.recipient, forKey: "recipient")
+            cdAddress.setValue(address.favorite, forKey: "favorite")
             
             addresses.addObject(cdAddress)
         }
@@ -97,6 +98,7 @@ class UserModel: NSObject {
                     cdAddress.setValue(address.long, forKey: "long")
                     cdAddress.setValue(address.lat, forKey: "lat")
                     cdAddress.setValue(address.recipient, forKey: "recipient")
+                    cdAddress.setValue(address.favorite, forKey: "favorite")
                     
                     setAddresses.addObject(cdAddress)
                 }
@@ -147,7 +149,8 @@ class UserModel: NSObject {
                         addressDetail: (cdAddress.valueForKey("addressDetail") as? String)!,
                         long: (cdAddress.valueForKey("long") as? Double)!,
                         lat: (cdAddress.valueForKey("lat") as? Double)!,
-                        recipient: (cdAddress.valueForKey("recipient") as? String)!
+                        recipient: (cdAddress.valueForKey("recipient") as? String)!,
+                        favorite: (cdAddress.valueForKey("favorite") as? Bool)!
                     )
                     user.addresses.append(address)
                 }

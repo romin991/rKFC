@@ -3,6 +3,7 @@
     <entity name="Address" syncable="YES">
         <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="addressDetail" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="favorite" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="guid" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lat" optional="YES" attributeType="Double" syncable="YES"/>
@@ -189,7 +190,7 @@
         <relationship name="addresses" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Address" inverseName="user" inverseEntity="Address" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Address" positionX="-162" positionY="126" width="128" height="165"/>
+        <element name="Address" positionX="-162" positionY="126" width="128" height="180"/>
         <element name="Ads" positionX="-162" positionY="144" width="128" height="135"/>
         <element name="Cart" positionX="-162" positionY="90" width="128" height="495"/>
         <element name="CartItem" positionX="-153" positionY="99" width="128" height="225"/>

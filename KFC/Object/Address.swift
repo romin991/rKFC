@@ -17,6 +17,7 @@ class Address: NSObject {
     var id:String? = ""
     var addressDetail:String? = ""
     var recipient:String? = ""
+    var favorite:Bool?
     
     init(address:String?, addressDetail:String?, long:Double?, lat:Double?, recipient:String?){
         self.address = address
@@ -28,7 +29,7 @@ class Address: NSObject {
         super.init()
     }
     
-    init(guid:String?, id:String?, address: String?, addressDetail:String?, long: Double?, lat: Double?, recipient: String?) {
+    init(guid:String?, id:String?, address: String?, addressDetail:String?, long: Double?, lat: Double?, recipient: String?, favorite:Bool?) {
         self.guid = guid
         self.id = id
         self.address = address
@@ -36,6 +37,7 @@ class Address: NSObject {
         self.long = long
         self.lat = lat
         self.recipient = recipient
+        self.favorite = favorite
         
         super.init()
     }

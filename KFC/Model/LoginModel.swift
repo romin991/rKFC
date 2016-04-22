@@ -204,7 +204,8 @@ class LoginModel: NSObject {
                                     addressDetail: addressJSON["address_detail"].string,
                                     long: Double(addressJSON["lng"].string ?? "0"),
                                     lat: Double(addressJSON["lat"].string ?? "0"),
-                                    recipient: addressJSON["recipient"].string
+                                    recipient: addressJSON["recipient"].string,
+                                    favorite: addressJSON["is_favorite"].string == "1" ? true: false
                                 )
                                 
                                 addresses.append(address)
@@ -220,6 +221,37 @@ class LoginModel: NSObject {
                     break;
                 case .Failure(let error):
                     completion(status: Status.Error, message: error.localizedDescription, addresses: nil)
+                    break;
+                }
+                
+        }
+    }
+    
+    class func addFavoriteAddress(address:Address, completion: (status: String, message:String) -> Void){
+        let parameters : [String:AnyObject] = [
+            "customer_address_id" : address.id!
+        ]
+        
+        Alamofire.request(.POST, NSString.init(format: "%@/AddFavoriteAddress", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
+                        
+                        if (status == "T"){
+                            completion(status: Status.Success, message: message)
+                        } else {
+                            completion(status: Status.Error, message: message)
+                        }
+                    } else {
+                        completion(status: Status.Error, message: "Not a valid JSON object")
+                    }
+                    break;
+                case .Failure(let error):
+                    completion(status: Status.Error, message: error.localizedDescription)
                     break;
                 }
                 

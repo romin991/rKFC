@@ -14,7 +14,7 @@ protocol SearchAddressDelegate{
     func navigateTo(address: Address)
 }
 
-class SearchAddressViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
+class SearchAddressViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, FavoriteAddressDelegate {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchField: UITextField!
     
@@ -137,15 +137,46 @@ class SearchAddressViewController: UIViewController, UITextFieldDelegate, UITabl
         if (self.isSearching()){
             if (self.searchResult.count == 0){
                 cell.mainTitleLabel?.text = Wording.Map.NotFound[self.languageId]
+                cell.favoriteButton.hidden = true
+                cell.address = nil
             } else {
                 let address:Address = self.searchResult[indexPath.row]
                 cell.mainTitleLabel?.text = address.address
+                cell.favoriteButton.hidden = false
+                cell.favoriteButton.selected = address.favorite == true ? true : false
+                cell.address = address
             }
         } else {
             let address:Address = self.addresses[indexPath.row]
             cell.mainTitleLabel?.text = address.address
+            cell.favoriteButton.hidden = false
+            cell.favoriteButton.selected = address.favorite == true ? true : false
+            cell.address = address
         }
+        cell.favoriteAddressDelegate = self
         
         return cell
+    }
+    
+    func favoriteButtonClicked(address: Address?, favoriteButton: UIButton?) {
+        if (address != nil) {
+            let activityIndicator = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+            activityIndicator.mode = MBProgressHUDMode.Indeterminate;
+            activityIndicator.labelText = "Loading";
+            
+            LoginModel.addFavoriteAddress(address!) { (status, message) -> Void in
+                if (status == Status.Success){
+                    favoriteButton?.selected = true
+                    address?.favorite = true
+                    
+                } else {
+                    let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                    alert.addAction(UIAlertAction(title: Wording.Common.OK[self.languageId], style: UIAlertActionStyle.Default, handler: nil))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                    
+                }
+                MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+            }
+        }
     }
 }
