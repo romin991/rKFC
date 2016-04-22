@@ -8,7 +8,7 @@
 
 import UIKit
 
-class tocViewController: UIViewController {
+class TocViewController: UIViewController {
 
     @IBOutlet weak var webView: UIWebView!
     var drawerDelegate:DrawerDelegate?

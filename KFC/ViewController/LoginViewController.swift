@@ -76,6 +76,8 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
                 } else {
                     self .performSegueWithIdentifier("MainSegue", sender: nil)
                 }
+                NSUserDefaults.standardUserDefaults().setObject(true, forKey: "FirstTime")
+                
             } else {
                 //should show alert error
                 let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)

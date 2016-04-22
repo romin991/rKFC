@@ -112,7 +112,7 @@ class CategoryViewController: UIViewController, UICollectionViewDelegate, UIColl
             let category = self.categories[indexPath.row]
             if (category.id! == "16"){ //breakfast menu category
                 let store = StoreModel.getSelectedStore()
-                if (store.isBreakfast == true){
+                if (store.isBreakfast != false){
                     let now = NSDate()
                     let dateFormatter = NSDateFormatter.init()
                     dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -153,7 +153,7 @@ class CategoryViewController: UIViewController, UICollectionViewDelegate, UIColl
             if (category.id! == "16"){ //breakfast menu category
                 let store = StoreModel.getSelectedStore()
                 if (store.isBreakfast == false){
-                    cell.breakfastFilterView.hidden = true
+                    cell.breakfastFilterView.hidden = false
                     
                 } else {
                     let now = NSDate()

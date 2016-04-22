@@ -210,6 +210,7 @@ struct Wording {
         static let Welcome:[String:String] = [LanguageID.Indonesia : "Selamat Datang", LanguageID.English : "Welcome"]
         static let OrderNow:[String:String] = [LanguageID.Indonesia : "Pesan Sekarang", LanguageID.English : "Order Now"]
         static let YouAreNotLoggedIn:[String:String] = [LanguageID.Indonesia : "Anda belum masuk", LanguageID.English : "You are not logged in"]
+        static let HereIsYourShoppingCart:[String:String] = [LanguageID.Indonesia : "Keranjang belanja Anda di sini. Klik setelah selesai belanja", LanguageID.English : "Here is your shopping cart. Click when done shopping"]
     }
     
     struct Status{
@@ -226,7 +227,7 @@ struct Wording {
         static let Total:[String:String] = [LanguageID.Indonesia : "Total", LanguageID.English : "Total"]
         static let KeepShopping:[String:String] = [LanguageID.Indonesia : "Lanjutkan Belanja", LanguageID.English : "Keep Shopping"]
         static let Checkout:[String:String] = [LanguageID.Indonesia : "Bayar", LanguageID.English : "Checkout"]
-        static let Cart:[String:String] = [LanguageID.Indonesia : "Keranjang Belanja", LanguageID.English : "Your Cart"]
+        static let Cart:[String:String] = [LanguageID.Indonesia : "Keranjang Belanja", LanguageID.English : "Shopping Cart"]
         static let OrderSummary:[String:String] = [LanguageID.Indonesia : "Ringkasan Pemesanan", LanguageID.English : "Order Summary"]
         static let AddToCart:[String:String] = [LanguageID.Indonesia : "Tambahkan ke dalam keranjang", LanguageID.English : "Add to cart"]
         static let ChooseQuantity:[String:String] = [LanguageID.Indonesia : "Pilih Jumlah", LanguageID.English : "Choose Quantity"]

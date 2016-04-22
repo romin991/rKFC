@@ -13908,7 +13908,7 @@
         <!--Toc View Controller-->
         <scene sceneID="QIL-w1-Pjj">
             <objects>
-                <viewController storyboardIdentifier="tocViewController" id="LHc-Hq-7Fk" customClass="tocViewController" customModule="KFC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TocViewController" id="LHc-Hq-7Fk" customClass="TocViewController" customModule="KFC" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="2UI-JW-nho"/>
                         <viewControllerLayoutGuide type="bottom" id="N8f-SZ-Ee3"/>
@@ -13945,7 +13945,7 @@
                                             <action selector="backButtonClicked:" destination="0D1-3g-e9J" eventType="touchUpInside" id="H57-TD-ko8"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Payment" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cvj-zq-P1v">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Term and Condition" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cvj-zq-P1v">
                                         <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="y3W-tP-Sba"/>
@@ -14062,6 +14062,128 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NwC-xi-IUh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="6240" y="459.75"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="saO-Zi-6J4">
+            <objects>
+                <viewController storyboardIdentifier="FTUEViewController" id="KMc-8W-6uG" customClass="FTUEViewController" customModule="KFC" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="cr0-ve-B8M"/>
+                        <viewControllerLayoutGuide type="bottom" id="yb0-0Y-gq1"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kp9-7V-RM1">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bHa-dA-QpV">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Shopping Cart" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RBl-PC-flG">
+                                <rect key="frame" x="-42" y="-21" width="42" height="21"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="22"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Here is your shopping cart. Click when done shopping" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xV5-vG-vZx">
+                                <rect key="frame" x="-42" y="-21" width="42" height="21"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gGC-mW-RpY">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <action selector="dismissButtonClicked:" destination="KMc-8W-6uG" eventType="touchUpInside" id="D4p-r1-GFY"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="gGC-mW-RpY" secondAttribute="trailing" id="0uo-64-Gjh"/>
+                            <constraint firstItem="bHa-dA-QpV" firstAttribute="leading" secondItem="kp9-7V-RM1" secondAttribute="leading" id="0wW-NQ-k8H"/>
+                            <constraint firstItem="gGC-mW-RpY" firstAttribute="top" secondItem="kp9-7V-RM1" secondAttribute="top" id="1BU-YI-2ET"/>
+                            <constraint firstAttribute="trailing" secondItem="bHa-dA-QpV" secondAttribute="trailing" id="5Zh-6Z-NXm">
+                                <variation key="heightClass=regular-widthClass=compact" constant="-20"/>
+                            </constraint>
+                            <constraint firstAttribute="bottom" secondItem="gGC-mW-RpY" secondAttribute="bottom" id="Afe-l5-5af"/>
+                            <constraint firstAttribute="trailing" secondItem="RBl-PC-flG" secondAttribute="trailing" id="AuM-QI-arU">
+                                <variation key="heightClass=regular-widthClass=compact" constant="20"/>
+                            </constraint>
+                            <constraint firstAttribute="bottom" secondItem="bHa-dA-QpV" secondAttribute="bottom" id="ESm-2B-F6M"/>
+                            <constraint firstItem="RBl-PC-flG" firstAttribute="top" secondItem="cr0-ve-B8M" secondAttribute="bottom" constant="130" id="Iv4-8p-KWC"/>
+                            <constraint firstItem="bHa-dA-QpV" firstAttribute="top" secondItem="kp9-7V-RM1" secondAttribute="top" id="SbJ-8c-zHR"/>
+                            <constraint firstItem="xV5-vG-vZx" firstAttribute="top" secondItem="RBl-PC-flG" secondAttribute="bottom" constant="8" id="Van-9x-79K"/>
+                            <constraint firstAttribute="trailing" secondItem="xV5-vG-vZx" secondAttribute="trailing" id="avX-HZ-PLY">
+                                <variation key="heightClass=regular-widthClass=compact" constant="20"/>
+                            </constraint>
+                            <constraint firstItem="xV5-vG-vZx" firstAttribute="leading" secondItem="kp9-7V-RM1" secondAttribute="leading" id="gzx-ak-f5u">
+                                <variation key="heightClass=regular-widthClass=compact" constant="20"/>
+                            </constraint>
+                            <constraint firstItem="RBl-PC-flG" firstAttribute="leading" secondItem="kp9-7V-RM1" secondAttribute="leading" id="mOi-US-mXX">
+                                <variation key="heightClass=regular-widthClass=compact" constant="20"/>
+                            </constraint>
+                            <constraint firstItem="gGC-mW-RpY" firstAttribute="leading" secondItem="kp9-7V-RM1" secondAttribute="leading" id="sgo-t7-y3s"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="bHa-dA-QpV"/>
+                                <exclude reference="RBl-PC-flG"/>
+                                <exclude reference="xV5-vG-vZx"/>
+                                <exclude reference="gGC-mW-RpY"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="0wW-NQ-k8H"/>
+                                <exclude reference="5Zh-6Z-NXm"/>
+                                <exclude reference="ESm-2B-F6M"/>
+                                <exclude reference="SbJ-8c-zHR"/>
+                                <exclude reference="0uo-64-Gjh"/>
+                                <exclude reference="1BU-YI-2ET"/>
+                                <exclude reference="Afe-l5-5af"/>
+                                <exclude reference="sgo-t7-y3s"/>
+                                <exclude reference="AuM-QI-arU"/>
+                                <exclude reference="Iv4-8p-KWC"/>
+                                <exclude reference="mOi-US-mXX"/>
+                                <exclude reference="Van-9x-79K"/>
+                                <exclude reference="avX-HZ-PLY"/>
+                                <exclude reference="gzx-ak-f5u"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="bHa-dA-QpV"/>
+                                <include reference="RBl-PC-flG"/>
+                                <include reference="xV5-vG-vZx"/>
+                                <include reference="gGC-mW-RpY"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="0wW-NQ-k8H"/>
+                                <include reference="5Zh-6Z-NXm"/>
+                                <include reference="ESm-2B-F6M"/>
+                                <include reference="SbJ-8c-zHR"/>
+                                <include reference="0uo-64-Gjh"/>
+                                <include reference="1BU-YI-2ET"/>
+                                <include reference="Afe-l5-5af"/>
+                                <include reference="sgo-t7-y3s"/>
+                                <include reference="AuM-QI-arU"/>
+                                <include reference="Iv4-8p-KWC"/>
+                                <include reference="mOi-US-mXX"/>
+                                <include reference="Van-9x-79K"/>
+                                <include reference="avX-HZ-PLY"/>
+                                <include reference="gzx-ak-f5u"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <outlet property="backgroundImage" destination="bHa-dA-QpV" id="8WF-aS-Lof"/>
+                        <outlet property="dismissButton" destination="gGC-mW-RpY" id="3od-GC-jID"/>
+                        <outlet property="subtitleLabel" destination="xV5-vG-vZx" id="Gmv-t1-MCO"/>
+                        <outlet property="titleLabel" destination="RBl-PC-flG" id="DNJ-dt-h3g"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xyM-Mm-zQM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1713" y="2598.75"/>
         </scene>
     </scenes>
     <resources>

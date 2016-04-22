@@ -46,6 +46,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSUserDefaults.standardUserDefaults().setObject(LanguageID.English, forKey: "LanguageId")
         }
         
+        let firstTime = NSUserDefaults.standardUserDefaults().objectForKey("FirstTime")
+        if (firstTime == nil){
+            NSUserDefaults.standardUserDefaults().setObject(true, forKey: "FirstTime")
+        }
+        
         AdsModel.deleteAdsByType(AdsType.General)
         PromoModel.getGeneralPromo { (status, message) -> Void in
             

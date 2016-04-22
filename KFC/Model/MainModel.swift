@@ -86,7 +86,7 @@ class MainModel: NSObject {
                                 deliveryTax: json["result"]["store"]["delivery_charge_tax_percent"].string,
                                 tax: json["result"]["store"]["tax_percent"].string,
                                 ppn: json["result"]["store"]["ppn_percent"].string,
-                                isBreakfast: json["result"]["store"]["is_breakfast"].bool,
+                                isBreakfast: json["result"]["store"]["is_breakfast"].string == "1" ? true : false,
                                 breakfastStart: json["result"]["store"]["breakfast_start"].string,
                                 breakfastEnd: json["result"]["store"]["breakfast_end"].string
                             )

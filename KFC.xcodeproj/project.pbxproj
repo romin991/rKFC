@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2A57C416F428E182D7B0FED7 /* Pods_KFC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D75EA3A83EE73FEDA917AAD /* Pods_KFC.framework */; };
-		34CA90071CC90D3F003CA6DA /* tocViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CA90061CC90D3F003CA6DA /* tocViewController.swift */; };
+		34CA90071CC90D3F003CA6DA /* TocViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CA90061CC90D3F003CA6DA /* TocViewController.swift */; };
 		480786B51CC8BE31006EB629 /* PaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480786B41CC8BE31006EB629 /* PaymentViewController.swift */; };
 		480786B71CC8CC9E006EB629 /* Payment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480786B61CC8CC9E006EB629 /* Payment.swift */; };
 		480786B91CC8CD16006EB629 /* PaymentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480786B81CC8CD16006EB629 /* PaymentModel.swift */; };
@@ -16,6 +16,7 @@
 		480786BD1CC911CE006EB629 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480786BC1CC911CE006EB629 /* FeedbackViewController.swift */; };
 		480786BF1CC918C8006EB629 /* Feedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480786BE1CC918C8006EB629 /* Feedback.swift */; };
 		480786C11CC91944006EB629 /* FeedbackModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480786C01CC91944006EB629 /* FeedbackModel.swift */; };
+		480786C81CC9E6E9006EB629 /* FTUEViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480786C71CC9E6E9006EB629 /* FTUEViewController.swift */; };
 		480B75AA1C8EA4A700177712 /* CommonFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480B75A91C8EA4A700177712 /* CommonFunction.swift */; };
 		480B75AC1C8EA70E00177712 /* CustomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480B75AB1C8EA70E00177712 /* CustomView.swift */; };
 		481589AC1C7D47D400C41B0D /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481589AB1C7D47D400C41B0D /* LoginViewController.swift */; };
@@ -82,7 +83,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		34CA90061CC90D3F003CA6DA /* tocViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = tocViewController.swift; sourceTree = "<group>"; };
+		34CA90061CC90D3F003CA6DA /* TocViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TocViewController.swift; sourceTree = "<group>"; };
 		480786B41CC8BE31006EB629 /* PaymentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PaymentViewController.swift; path = ViewController/PaymentViewController.swift; sourceTree = "<group>"; };
 		480786B61CC8CC9E006EB629 /* Payment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Payment.swift; path = Object/Payment.swift; sourceTree = "<group>"; };
 		480786B81CC8CD16006EB629 /* PaymentModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PaymentModel.swift; path = Model/PaymentModel.swift; sourceTree = "<group>"; };
@@ -90,6 +91,7 @@
 		480786BC1CC911CE006EB629 /* FeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FeedbackViewController.swift; path = ViewController/FeedbackViewController.swift; sourceTree = "<group>"; };
 		480786BE1CC918C8006EB629 /* Feedback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Feedback.swift; path = Object/Feedback.swift; sourceTree = "<group>"; };
 		480786C01CC91944006EB629 /* FeedbackModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FeedbackModel.swift; path = Model/FeedbackModel.swift; sourceTree = "<group>"; };
+		480786C71CC9E6E9006EB629 /* FTUEViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FTUEViewController.swift; path = ViewController/FTUEViewController.swift; sourceTree = "<group>"; };
 		480B75A91C8EA4A700177712 /* CommonFunction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommonFunction.swift; path = Custom/CommonFunction.swift; sourceTree = "<group>"; };
 		480B75AB1C8EA70E00177712 /* CustomView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomView.swift; path = Custom/CustomView.swift; sourceTree = "<group>"; };
 		481589AB1C7D47D400C41B0D /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = ViewController/LoginViewController.swift; sourceTree = "<group>"; };
@@ -177,7 +179,7 @@
 		34CA90081CC90D49003CA6DA /* TOC */ = {
 			isa = PBXGroup;
 			children = (
-				34CA90061CC90D3F003CA6DA /* tocViewController.swift */,
+				34CA90061CC90D3F003CA6DA /* TocViewController.swift */,
 			);
 			name = TOC;
 			sourceTree = "<group>";
@@ -344,6 +346,7 @@
 			children = (
 				482162731C91373B008B571C /* ProductViewController.swift */,
 				482162751C91375E008B571C /* ProductDetailViewController.swift */,
+				480786C71CC9E6E9006EB629 /* FTUEViewController.swift */,
 			);
 			name = Product;
 			sourceTree = "<group>";
@@ -607,7 +610,7 @@
 				487BDDEB1C9448AA00FED8B5 /* ModifierDetailTableViewCell.swift in Sources */,
 				48A5131F1CC6F96800E2F007 /* ImageModel.swift in Sources */,
 				482162AD1C917EDA008B571C /* ProductModel.swift in Sources */,
-				34CA90071CC90D3F003CA6DA /* tocViewController.swift in Sources */,
+				34CA90071CC90D3F003CA6DA /* TocViewController.swift in Sources */,
 				48580F861C97F0AE00A44166 /* CartItem.swift in Sources */,
 				48EC85141CBF41B400215F43 /* CustomCollectionViewCell.swift in Sources */,
 				487BDDE21C9411D900FED8B5 /* ModifierModel.swift in Sources */,
@@ -618,6 +621,7 @@
 				48F785961C7C459F00D5D3E3 /* AppDelegate.swift in Sources */,
 				48580F881C97F0CE00A44166 /* CartModifier.swift in Sources */,
 				48A5131B1CC6F07600E2F007 /* Ads.swift in Sources */,
+				480786C81CC9E6E9006EB629 /* FTUEViewController.swift in Sources */,
 				480786BB1CC8EC9B006EB629 /* OnlinePaymentViewController.swift in Sources */,
 				4853F2F41CB0E5380091AC21 /* AdsCollectionViewCell.swift in Sources */,
 				481A33861C7ED7E50074FD23 /* MainModel.swift in Sources */,

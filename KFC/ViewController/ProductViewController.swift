@@ -43,10 +43,25 @@ class ProductViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.navigationTItleLabel.text = self.category.names.filter{$0.languageId == self.languageId}.first?.name ?? ""
     }
     
+    func loadFTUE(){
+        let ftueViewController:FTUEViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("FTUEViewController") as? FTUEViewController)!
+        ftueViewController.view.layoutSubviews()
+        ftueViewController.modalPresentationStyle = UIModalPresentationStyle.Custom
+        ftueViewController.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
+        
+        self.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
+        self.presentViewController(ftueViewController, animated: true, completion: nil)
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         let cart:Cart = CartModel.getPendingCart()
         self.shoppingCartBadgesLabel.text = "\(cart.quantity!)"
+        
+        let firstTime = NSUserDefaults.standardUserDefaults().objectForKey("FirstTime") as! Bool
+        if (cart.cartItems.count > 0  && firstTime == true){
+            self.loadFTUE()
+        }
     }
 
     override func didReceiveMemoryWarning() {

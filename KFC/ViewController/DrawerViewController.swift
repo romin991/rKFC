@@ -127,7 +127,7 @@ class DrawerViewController: UIViewController, DrawerDelegate {
             
             
         } else if (menu == Menu.Toc){
-            let centerViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("tocViewController") as? tocViewController)!
+            let centerViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("TocViewController") as? TocViewController)!
             centerViewController.drawerDelegate = self
             self.drawerController?.centerViewController = centerViewController
             
