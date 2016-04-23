@@ -9,11 +9,13 @@
 import UIKit
 import MBProgressHUD
 
-class ValidationViewController: UIViewController, UITextFieldDelegate {
+class ValidationViewController: UIViewController {
     @IBOutlet weak var validationCodeField: UITextField!
     @IBOutlet weak var navigationTitleLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
+    @IBOutlet weak var emailField: UITextField!
+    @IBOutlet weak var sendButton: UIButton!
     
     var user:User?
     var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
@@ -22,10 +24,17 @@ class ValidationViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         CustomView.custom(self.validationCodeField, borderColor: self.validationCodeField.backgroundColor!, cornerRadius: 10, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
+        CustomView.custom(self.emailField, borderColor: self.emailField.backgroundColor!, cornerRadius: 10, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
+        CustomView.custom(self.sendButton, borderColor: self.sendButton.backgroundColor!, cornerRadius: 10, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
         
         self.navigationTitleLabel.text = Wording.Login.Validation[self.languageId]
         self.titleLabel.text = Wording.Login.OneStepCloser[self.languageId]
         self.subtitleLabel.text = Wording.Login.InputValidationCode[self.languageId]
+        self.sendButton.setTitle(Wording.Common.Send[self.languageId], forState: UIControlState.Normal)
+        
+        if (self.user?.username != ""){
+            self.emailField.text = self.user?.username
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -34,14 +43,17 @@ class ValidationViewController: UIViewController, UITextFieldDelegate {
     }
     
     //MARK: UITextFieldDelegate
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    @IBAction func sendButtonClicked(sender: AnyObject) {
         self.validationCodeField.resignFirstResponder()
+        self.emailField.resignFirstResponder()
         
         let activityIndicator = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         activityIndicator.mode = MBProgressHUDMode.Indeterminate;
         activityIndicator.labelText = "Loading";
         
-        user?.verificationCode = textField.text
+        user?.verificationCode = self.validationCodeField.text
+        user?.username = self.emailField.text
+        
         LoginModel.validate(user!) { (status, message) -> Void in
             if (status == Status.Success){
                 let lastViewController = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 3]
@@ -54,12 +66,16 @@ class ValidationViewController: UIViewController, UITextFieldDelegate {
             
             MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
         }
-        
-        return true
     }
     
     @IBAction func backButtonClicked(sender: AnyObject) {
-        let lastViewController = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 3]
+        self.validationCodeField.resignFirstResponder()
+        self.emailField.resignFirstResponder()
+        
+        var lastViewController = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 2]
+        if (!(lastViewController is LoginViewController)) {
+            lastViewController = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 3]
+        }
         self.navigationController?.popToViewController(lastViewController!, animated: true)
     }
 

@@ -14,6 +14,7 @@ class ForgotPasswordViewController: UIViewController {
     @IBOutlet weak var navigationTitleLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
+    @IBOutlet weak var sendButton: UIButton!
 
     var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
     
@@ -21,6 +22,7 @@ class ForgotPasswordViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         CustomView.custom(self.emailAddressField, borderColor: self.emailAddressField.backgroundColor!, cornerRadius: 10, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
+        CustomView.custom(self.sendButton, borderColor: self.sendButton.backgroundColor!, cornerRadius: 10, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
         
         self.navigationTitleLabel.text = Wording.Login.ForgotPassword[self.languageId]
         self.titleLabel.text = Wording.Login.ForgotPassword[self.languageId]
@@ -32,15 +34,14 @@ class ForgotPasswordViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    //MARK: UITextFieldDelegate
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    @IBAction func sendButtonClicked(sender: AnyObject) {
         self.emailAddressField.resignFirstResponder()
         
         let activityIndicator = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         activityIndicator.mode = MBProgressHUDMode.Indeterminate;
         activityIndicator.labelText = "Loading";
         
-        LoginModel.forgotPassword(textField.text!) { (status, message) -> Void in
+        LoginModel.forgotPassword(self.emailAddressField.text!) { (status, message) -> Void in
             if (status == Status.Success){
                 self.navigationController?.popViewControllerAnimated(true)
             } else {
@@ -51,8 +52,6 @@ class ForgotPasswordViewController: UIViewController {
             
             MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
         }
-        
-        return true
     }
     
     @IBAction func backButtonClicked(sender: AnyObject) {

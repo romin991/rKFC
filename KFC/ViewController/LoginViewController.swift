@@ -21,6 +21,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var registerButton: UIButton!
+    @IBOutlet weak var verificationButton: UIButton!
     @IBOutlet weak var forgotPasswordButton: UIButton!
     @IBOutlet weak var loginWithFacebookButton: UIButton!
     @IBOutlet weak var loginWithGoogleButton: UIButton!
@@ -86,6 +87,10 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
             }
             MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
         })
+    }
+    
+    @IBAction func verificationButtonClicked(sender: AnyObject) {
+        self.performSegueWithIdentifier("VerificationSegue", sender: nil)
     }
     
     @IBAction func registerButtonClicked(sender: AnyObject) {
