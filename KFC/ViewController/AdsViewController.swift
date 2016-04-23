@@ -21,6 +21,7 @@ class AdsViewController: UIViewController, UICollectionViewDelegate, UICollectio
 
     func registerNotification(){
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"refreshCollectionView", name: NotificationKey.ImageAdsDownloaded, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"refreshLanguage", name: NotificationKey.LanguageChanged, object: nil)
     }
     
     override func awakeFromNib() {
@@ -32,17 +33,26 @@ class AdsViewController: UIViewController, UICollectionViewDelegate, UICollectio
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
+    func refreshLanguage(){
+        self.languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+        self.messageLabel.text = UserModel.getUser().fullname != "" ? UserModel.getUser().fullname : Wording.Main.YouAreNotLoggedIn[self.languageId]
+        self.titleLabel.text = Wording.Main.Welcome[self.languageId]
+        self.setLocationButton.setTitle(Wording.Main.OrderNow[self.languageId], forState: UIControlState.Normal)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
         CustomView.custom(self.setLocationButton, borderColor: self.setLocationButton.backgroundColor!, cornerRadius: 29, roundingCorners: UIRectCorner.AllCorners, borderWidth: 0)
         
-        self.pageControl.numberOfPages = self.ads.count;
-        self.ads.append(self.ads.first!)
-        self.messageLabel.text = UserModel.getUser().fullname != "" ? UserModel.getUser().fullname : Wording.Main.YouAreNotLoggedIn[self.languageId]
-        self.titleLabel.text = Wording.Main.Welcome[self.languageId]
-        self.setLocationButton.setTitle(Wording.Main.OrderNow[self.languageId], forState: UIControlState.Normal)
+        self.ads = AdsModel.getAdsType(AdsType.General)
+        if (self.ads.count > 0){
+            self.pageControl.numberOfPages = self.ads.count;
+            self.ads.append(self.ads.first!)
+        }
+        
+        self.refreshLanguage()
     }
     
     override func viewDidLayoutSubviews() {

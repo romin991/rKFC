@@ -21,6 +21,25 @@ class HistoryViewController: UIViewController {
     var dataSource:[String:[Cart]] = [String:[Cart]]()
     var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
 
+    func registerNotification(){
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"refreshLanguage", name: NotificationKey.LanguageChanged, object: nil)
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.registerNotification()
+    }
+    
+    deinit{
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func refreshLanguage(){
+        self.languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+        self.tableView.reloadData()
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
