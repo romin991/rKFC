@@ -36,7 +36,7 @@ class HistoryViewController: UIViewController {
                 self.carts = CartModel.getAllNotPendingCart()
                 
                 let month = NSDateFormatter.init()
-                month.dateFormat = "MMMM"
+                month.dateFormat = "MMMM yyyy"
                 
                 var selectedCart:Cart?
                 for cart in self.carts{
@@ -88,6 +88,25 @@ class HistoryViewController: UIViewController {
     }
     
     //MARK: UITableViewDelegate && UITableViewDataSource
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let monthString = self.sectionTitle[section]
+        
+        let view = UIView.init(frame: CGRect(x: 0, y: 0, width: self.tableView.frame.size.width, height: self.tableView.frame.size.height))
+        view.backgroundColor = UIColor.clearColor()
+        
+        let label = UILabel.init(frame: CGRect.init(x: self.tableView.frame.size.width / 2 - 60, y: 10, width: 120, height: 15))
+        label.font = UIFont.init(name: "HelveticaNeue", size: 14)
+        label.textAlignment = NSTextAlignment.Center
+        label.text = monthString
+        label.textColor = UIColor.whiteColor()
+        label.backgroundColor = UIColor.grayColor()
+        
+        CustomView.custom(label, borderColor: label.backgroundColor!, cornerRadius: 7, roundingCorners: UIRectCorner.AllCorners, borderWidth: 0)
+        view.addSubview(label)
+        
+        return view
+    }
+    
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         let cart:Cart = self.carts[indexPath.row]
         
