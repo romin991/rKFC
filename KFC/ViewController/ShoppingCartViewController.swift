@@ -108,6 +108,12 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         if (self.cart.customerId == ""){
             let loginViewController:LoginViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController)!
             self.navigationController?.pushViewController(loginViewController, animated: true)
+        } else if (self.cart.cartItems.count == 0){
+            let message = Wording.Warning.EmptyCart[self.languageId]
+            let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+            
         } else {
             self.performSegueWithIdentifier("CheckoutSegue", sender: nil)
         }

@@ -33,20 +33,20 @@ class LeftViewController: UIViewController, UITableViewDelegate, UITableViewData
         // Do any additional setup after loading the view.
         if (UserModel.getUser().customerId == ""){
             self.menus = [
+                Menu.Home,
                 Menu.Main,
                 Menu.Menu,
-                Menu.Promo,
                 Menu.ChangeLanguage,
                 Menu.Toc,
                 Menu.Login
             ]
         } else {
             self.menus = [
+                Menu.Home,
                 Menu.Account,
                 Menu.Main,
                 Menu.History,
                 Menu.Menu,
-                Menu.Promo,
                 Menu.ChangeLanguage,
                 Menu.Toc,
                 Menu.Logout
@@ -118,9 +118,9 @@ class LeftViewController: UIViewController, UITableViewDelegate, UITableViewData
             } else if (menu == Menu.Menu){
                 cell.imageBackground.image = UIImage.init(named: "MenuMenu")
                 cell.mainTitleLabel.text = Wording.Menu.Menu[self.languageId]
-            } else if (menu == Menu.Promo){
-                cell.imageBackground.image = UIImage.init(named: "MenuPromo")
-                cell.mainTitleLabel.text = Wording.Menu.Promo[self.languageId]
+            } else if (menu == Menu.Home){
+                cell.imageBackground.image = UIImage.init(named: "MenuHome")
+                cell.mainTitleLabel.text = Wording.Menu.Home[self.languageId]
             } else if (menu == Menu.ChangeLanguage){
                 cell.imageBackground.image = UIImage.init(named: "MenuLanguage")
                 cell.mainTitleLabel.text = Wording.Menu.ChangeLanguage[self.languageId]
@@ -131,7 +131,7 @@ class LeftViewController: UIViewController, UITableViewDelegate, UITableViewData
                 cell.imageBackground.image = UIImage.init(named: "MenuLogout")
                 cell.mainTitleLabel.text = Wording.Menu.Login[self.languageId]
             } else if (menu == Menu.Toc){
-                cell.imageBackground.image = UIImage.init(named: "")
+                cell.imageBackground.image = UIImage.init(named: "MenuToc")
                 cell.mainTitleLabel.text = Wording.Menu.Toc[self.languageId]
             } else {
                 cell.imageBackground.image = nil

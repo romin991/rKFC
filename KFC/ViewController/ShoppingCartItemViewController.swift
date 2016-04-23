@@ -132,71 +132,92 @@ class ShoppingCartItemViewController: UIViewController, ModifierParentDelegate {
         self.tableView.reloadData()
     }
     
-    @IBAction func saveButtonClicked(sender: AnyObject) {
-        //remove old cartItem
-        //then add new cartItem
-        CartModel.removeCartItem(self.cartItem)
-        
-        let store = StoreModel.getSelectedStore()
-        var price:NSDecimalNumber = NSDecimalNumber.init(longLong: 0)
-        
-        var cartModifiers:[CartModifier] = [CartModifier]()
+    func validate() -> String{
+        var message = ""
         for modifier in self.modifiers{
-            for modifierOption in modifier.modifierOptions{
-                if (modifierOption.quantity != 0){
-                    let cartModifier:CartModifier = CartModifier.init(
-                        guid: nil,
-                        cartGuid: nil,
-                        cartItemGuid: nil,
-                        modifierId: modifier.id,
-                        modifierOptionId: modifierOption.id,
-                        quantity: modifierOption.quantity
-                    )
-                    cartModifier.names = modifierOption.names
-                    
-                    let modifierPrice:NSDecimalNumber = NSDecimalNumber.init(string: modifierOption.price)
-                    price = price.decimalNumberByAdding(modifierPrice)
-                    
-                    cartModifiers.append(cartModifier)
-                }
+            if (modifier.status == Status.Invalid){
+                message = NSString.init(format: "%@ %@", Wording.Warning.QuantityFailed[self.languageId]!, modifier.names.filter{$0.languageId == self.languageId}.first?.name ?? "") as String
             }
         }
         
-        let subtotal:NSDecimalNumber = price.decimalNumberByMultiplyingBy(NSDecimalNumber.init(integer:self.product.quantity))
+        return message
+    }
+    
+    @IBAction func saveButtonClicked(sender: AnyObject) {
+        let message = self.validate()
         
-        var ppn:NSDecimalNumber = NSDecimalNumber.init(string: store.ppn).decimalNumberByDividingBy(NSDecimalNumber.init(long:100)).decimalNumberByMultiplyingBy(subtotal)
-        var tax:NSDecimalNumber = NSDecimalNumber.init(string: store.tax).decimalNumberByDividingBy(NSDecimalNumber.init(long:100)).decimalNumberByMultiplyingBy(subtotal)
-        
-        var total:NSDecimalNumber = subtotal
-        
-        if (self.product.taxable == true){
-            total = total.decimalNumberByAdding(tax)
+        if (message != ""){
+            let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+            
         } else {
-            tax = NSDecimalNumber.init(long: 0)
+            //remove old cartItem
+            //then add new cartItem
+            CartModel.removeCartItem(self.cartItem)
+            
+            let store = StoreModel.getSelectedStore()
+            var price:NSDecimalNumber = NSDecimalNumber.init(longLong: 0)
+            
+            var cartModifiers:[CartModifier] = [CartModifier]()
+            for modifier in self.modifiers{
+                for modifierOption in modifier.modifierOptions{
+                    if (modifierOption.quantity != 0){
+                        let cartModifier:CartModifier = CartModifier.init(
+                            guid: nil,
+                            cartGuid: nil,
+                            cartItemGuid: nil,
+                            modifierId: modifier.id,
+                            modifierOptionId: modifierOption.id,
+                            quantity: modifierOption.quantity
+                        )
+                        cartModifier.names = modifierOption.names
+                        
+                        let modifierPrice:NSDecimalNumber = NSDecimalNumber.init(string: modifierOption.price)
+                        price = price.decimalNumberByAdding(modifierPrice)
+                        
+                        cartModifiers.append(cartModifier)
+                    }
+                }
+            }
+            
+            let subtotal:NSDecimalNumber = price.decimalNumberByMultiplyingBy(NSDecimalNumber.init(integer:self.product.quantity))
+            
+            var ppn:NSDecimalNumber = NSDecimalNumber.init(string: store.ppn).decimalNumberByDividingBy(NSDecimalNumber.init(long:100)).decimalNumberByMultiplyingBy(subtotal)
+            var tax:NSDecimalNumber = NSDecimalNumber.init(string: store.tax).decimalNumberByDividingBy(NSDecimalNumber.init(long:100)).decimalNumberByMultiplyingBy(subtotal)
+            
+            var total:NSDecimalNumber = subtotal
+            
+            if (self.product.taxable == true){
+                total = total.decimalNumberByAdding(tax)
+            } else {
+                tax = NSDecimalNumber.init(long: 0)
+            }
+            
+            if (self.product.ppn == true){
+                total = total.decimalNumberByAdding(ppn)
+            } else {
+                ppn = NSDecimalNumber.init(long: 0)
+            }
+            
+            let cartItem:CartItem = CartItem.init(
+                guid: nil,
+                cartGuid: nil,
+                productId: self.product.id,
+                quantity: self.product.quantity,
+                price: price.stringValue,
+                tax: tax.stringValue,
+                ppn: ppn.stringValue,
+                subtotal: subtotal.stringValue,
+                total: total.stringValue
+            )
+            cartItem.names = self.product.names
+            cartItem.cartModifiers = cartModifiers
+            
+            CartModel.addCartItem(cartItem)
+            self.navigationController?.popViewControllerAnimated(true)
+            
         }
-        
-        if (self.product.ppn == true){
-            total = total.decimalNumberByAdding(ppn)
-        } else {
-            ppn = NSDecimalNumber.init(long: 0)
-        }
-        
-        let cartItem:CartItem = CartItem.init(
-            guid: nil,
-            cartGuid: nil,
-            productId: self.product.id,
-            quantity: self.product.quantity,
-            price: price.stringValue,
-            tax: tax.stringValue,
-            ppn: ppn.stringValue,
-            subtotal: subtotal.stringValue,
-            total: total.stringValue
-        )
-        cartItem.names = self.product.names
-        cartItem.cartModifiers = cartModifiers
-        
-        CartModel.addCartItem(cartItem)
-        self.navigationController?.popViewControllerAnimated(true)
     }
     
     //MARK: UITableViewDelegate && UITableViewDataSource

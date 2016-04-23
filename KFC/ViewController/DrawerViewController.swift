@@ -32,7 +32,7 @@ class DrawerViewController: UIViewController, DrawerDelegate {
         self.drawerController?.centerHiddenInteractionMode = MMDrawerOpenCenterInteractionMode.None
         self.drawerController?.maximumLeftDrawerWidth = self.view.frame.width - 40
         
-        self.selectMenu(Menu.Promo)
+        self.selectMenu(Menu.Home)
     
         self.navigationController?.pushViewController(self.drawerController!, animated: false)
     }
@@ -93,7 +93,7 @@ class DrawerViewController: UIViewController, DrawerDelegate {
                 self.drawerController?.centerViewController = centerViewController
             }
             
-        } else if (menu == Menu.Promo){
+        } else if (menu == Menu.Home){
             let centerViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("AdsViewController") as? AdsViewController)!
             centerViewController.drawerDelegate = self
             self.drawerController?.centerViewController = centerViewController

@@ -89,12 +89,12 @@ struct AdsType {
 }
 
 struct Menu {
+    static let Home = "Home"
     static let Main = "Main"
     static let History = "History"
     static let Menu = "Menu"
     static let ChangeLanguage = "Change Language"
     static let Account = "Account"
-    static let Promo = "Promo"
     static let Logout = "Logout"
     static let Login = "Login"
     static let Toc = "Term And Condition"
@@ -138,7 +138,7 @@ struct Wording {
         static let Menu:[String:String] = [LanguageID.Indonesia : "Menu", LanguageID.English : "Menu"]
         static let ChangeLanguage:[String:String] = [LanguageID.Indonesia : "Ubah Bahasa", LanguageID.English : "Change Language"]
         static let Account:[String:String] = [LanguageID.Indonesia : "Akun", LanguageID.English : "Account"]
-        static let Promo:[String:String] = [LanguageID.Indonesia : "Promo", LanguageID.English : "Promo"]
+        static let Home:[String:String] = [LanguageID.Indonesia : "Beranda", LanguageID.English : "Home"]
         static let Logout:[String:String] = [LanguageID.Indonesia : "Keluar", LanguageID.English : "Logout"]
         static let Login:[String:String] = [LanguageID.Indonesia : "Masuk", LanguageID.English : "Login"]
         static let Toc:[String:String] = [LanguageID.Indonesia : "Syarat Dan Ketentuan", LanguageID.English : "Term And Condition"]
@@ -175,6 +175,10 @@ struct Wording {
             LanguageID.Indonesia : "Pembayaran anda tidak berhasil, apakah Anda ingin memilih metode pembayaran yang lain?",
             LanguageID.English : "Your payment is failed, do you want to choose another payment method?"
         ]
+        static let QuantityFailed:[String:String] = [
+            LanguageID.Indonesia : "Harap tambah addition ke keranjang.",
+            LanguageID.English : "Please add more addition to cart."
+        ]
     }
     
     struct Profile {
@@ -191,12 +195,12 @@ struct Wording {
     
     struct Login {
         static let NewUser:[String:String] = [LanguageID.Indonesia : "Pengguna Baru?", LanguageID.English : "New User?"]
-        static let RegisterHere:[String:String] = [LanguageID.Indonesia : "Daftar di sini", LanguageID.English : "Register Here"]
-        static let Register:[String:String] = [LanguageID.Indonesia : "Daftar", LanguageID.English : "Register"]
+        static let RegisterHere:[String:String] = [LanguageID.Indonesia : "Daftar di sini", LanguageID.English : "Sign Up Here"]
+        static let Register:[String:String] = [LanguageID.Indonesia : "Daftar", LanguageID.English : "Sign Up"]
         static let Skip:[String:String] = [LanguageID.Indonesia : "Lewati", LanguageID.English : "Skip"]
         static let ForgotPassword:[String:String] = [LanguageID.Indonesia : "Lupa Kata Sandi?", LanguageID.English : "Forgot Password?"]
-        static let Login:[String:String] = [LanguageID.Indonesia : "Masuk", LanguageID.English : "Login"]
-        static let LoginHere:[String:String] = [LanguageID.Indonesia : "Masuk Di Sini", LanguageID.English : "Login Here"]
+        static let Login:[String:String] = [LanguageID.Indonesia : "Masuk", LanguageID.English : "Sign In"]
+        static let LoginHere:[String:String] = [LanguageID.Indonesia : "Masuk Di Sini", LanguageID.English : "Sign In Here"]
         static let EditProfile:[String:String] = [LanguageID.Indonesia : "Ubah Profile", LanguageID.English : "Edit Profile"]
         static let ChooseYourLanguage:[String:String] = [LanguageID.Indonesia : "Pilih Bahasa Anda", LanguageID.English : "Choose Your Language"]
         static let AlreadyHaveAnAccount:[String:String] = [LanguageID.Indonesia : "Sudah memiliki akun?", LanguageID.English : "Already Have an Account?"]
@@ -211,6 +215,7 @@ struct Wording {
         static let OrderNow:[String:String] = [LanguageID.Indonesia : "Pesan Sekarang", LanguageID.English : "Order Now"]
         static let YouAreNotLoggedIn:[String:String] = [LanguageID.Indonesia : "Anda belum masuk", LanguageID.English : "You are not logged in"]
         static let HereIsYourShoppingCart:[String:String] = [LanguageID.Indonesia : "Keranjang belanja Anda di sini. Klik setelah selesai belanja", LanguageID.English : "Here is your shopping cart. Click when done shopping"]
+        static let YourOrderHasBeenSent:[String:String] = [LanguageID.Indonesia : "Pesanan anda telah terkirim", LanguageID.English : "Your order has been sent"]
     }
     
     struct Status{

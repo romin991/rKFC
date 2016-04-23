@@ -32,6 +32,7 @@ class CheckoutViewController: UIViewController {
         
         //change language label
         let languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+        self.sendButton.setTitle(Wording.Common.Send[languageId], forState: UIControlState.Normal)
         
         self.navigationTitleLabel.text = Wording.ShoppingCart.DeliveryAddress[languageId]
         self.addressLabel.text = Wording.ShoppingCart.Address[languageId]
@@ -52,16 +53,22 @@ class CheckoutViewController: UIViewController {
     }
 
     @IBAction func sendButtonClicked(sender: AnyObject) {
+        self.sendButton.enabled = false
+        
         let languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
         if (self.addressField.text == ""){
             let alert: UIAlertController = UIAlertController(title: Status.Error, message: Wording.Warning.AddressCannotEmpty[languageId], preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: Wording.Common.OK[languageId], style: UIAlertActionStyle.Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
+            self.presentViewController(alert, animated: true, completion: { () -> Void in
+                self.sendButton.enabled = true
+            })
             
         } else if (self.addressDetailTextField.text == ""){
             let alert: UIAlertController = UIAlertController(title: Status.Error, message: Wording.Warning.AddressDetailCannotEmpty[languageId], preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: Wording.Common.OK[languageId], style: UIAlertActionStyle.Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
+            self.presentViewController(alert, animated: true, completion: { () -> Void in
+                self.sendButton.enabled = true
+            })
             
         } else {
             self.cart?.address = self.addressField.text
@@ -74,10 +81,13 @@ class CheckoutViewController: UIViewController {
             OrderModel.getPaymentChannel({ (status, message) -> Void in
                 if (status == Status.Success){
                     self.performSegueWithIdentifier("PaymentSegue", sender: nil)
+                    self.sendButton.enabled = true
                 } else {
                     let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
                     alert.addAction(UIAlertAction(title: Wording.Common.OK[languageId], style: UIAlertActionStyle.Default, handler: nil))
-                    self.presentViewController(alert, animated: true, completion: nil)
+                    self.presentViewController(alert, animated: true, completion: { () -> Void in
+                        self.sendButton.enabled = true
+                    })
                 }
             })
         }

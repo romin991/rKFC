@@ -40,6 +40,15 @@ class OnlinePaymentViewController: UIViewController, UIWebViewDelegate {
         self.navigationController?.popViewControllerAnimated(true)
     }
     
+    func showSuccessMessage(){
+        let languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+        let message = Wording.Main.YourOrderHasBeenSent[languageId]
+        let alert: UIAlertController = UIAlertController(title: Status.Success, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: Wording.Common.OK[languageId], style: UIAlertActionStyle.Default, handler: nil))
+        let rootViewController = UIApplication.sharedApplication().keyWindow?.rootViewController
+        rootViewController!.presentViewController(alert, animated: true, completion: nil)
+    }
+    
     //MARK: UIWebView
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         let urlString = request.URL?.absoluteString
@@ -47,14 +56,16 @@ class OnlinePaymentViewController: UIViewController, UIWebViewDelegate {
         if (urlString == self.payment?.successURL){
             //set as complete, redirect to home
             OrderModel.orderComplete()
-            self.drawerDelegate?.selectMenu(Menu.Promo)
+            self.drawerDelegate?.selectMenu(Menu.Home)
+            self.showSuccessMessage()
             
         } else if (urlString == self.payment?.failedURL){
             let languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
             let alert: UIAlertController = UIAlertController(title: Status.Error, message: Wording.Warning.PaymentFailed[languageId], preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: Wording.Common.NO[languageId], style: UIAlertActionStyle.Default, handler: { (action) -> Void in
                 OrderModel.orderComplete()
-                self.drawerDelegate?.selectMenu(Menu.Promo)
+                self.drawerDelegate?.selectMenu(Menu.Home)
+                self.showSuccessMessage()
                 
             }))
             alert.addAction(UIAlertAction(title: Wording.Common.YES[languageId], style: UIAlertActionStyle.Default, handler: { (action) -> Void in
