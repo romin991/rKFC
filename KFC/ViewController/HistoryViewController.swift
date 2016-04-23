@@ -54,7 +54,7 @@ class HistoryViewController: UIViewController {
                     }
                 }
                 
-                if (selectedCart != true){
+                if (selectedCart != nil){
                     self.performSegueWithIdentifier("FeedbackSegue", sender: selectedCart)
                 }
                 
@@ -142,18 +142,13 @@ class HistoryViewController: UIViewController {
         
         cell.orderDateLabel.text = dateFormatter.stringFromDate(cart.transDate!)
         
-        var status = cart.status
-        var color = Color.Green
-        if (status == Status.InProgress) {
-            color = Color.Yellow
-            status = Wording.Status.OnProgress[self.languageId]
-        } else {
+        var color = Color.Yellow
+        if (cart.statusDetail == StatusDetail.Complete) {
             color = Color.Green
-            status = Wording.Status.Completed[self.languageId]
         }
         
-        let statusAttributedString = NSMutableAttributedString.init(string: status!)
-        statusAttributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: NSRange(location: 0, length: (status?.characters.count)!))
+        let statusAttributedString = NSMutableAttributedString.init(string: cart.status!)
+        statusAttributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: NSRange(location: 0, length: (cart.status?.characters.count)!))
         
         cell.statusLabel.attributedText = statusAttributedString
         

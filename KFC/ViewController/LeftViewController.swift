@@ -42,8 +42,8 @@ class LeftViewController: UIViewController, UITableViewDelegate, UITableViewData
             ]
         } else {
             self.menus = [
-                Menu.Home,
                 Menu.Account,
+                Menu.Home,
                 Menu.Main,
                 Menu.History,
                 Menu.Menu,

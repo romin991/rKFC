@@ -14,6 +14,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     @IBOutlet weak var buttonView: UIView!
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var subtotalValueLabel: UILabel!
     @IBOutlet weak var pb1ValueLabel: UILabel!
     @IBOutlet weak var deliveryValueLabel: UILabel!
     @IBOutlet weak var deliveryTaxValueLabel: UILabel!
@@ -21,6 +22,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     @IBOutlet weak var roundingValueLabel: UILabel!
     @IBOutlet weak var totalValueLabel: UILabel!
     
+    @IBOutlet weak var subtotalLabel: UILabel!
     @IBOutlet weak var pb1Label: UILabel!
     @IBOutlet weak var deliveryLabel: UILabel!
     @IBOutlet weak var deliveryTaxLabel: UILabel!
@@ -62,6 +64,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
 //        self.buttonView.layer.masksToBounds = false
         
         //change language label
+        self.subtotalLabel.text = Wording.ShoppingCart.Subtotal[self.languageId]
         self.pb1Label.text = Wording.ShoppingCart.Pb1[self.languageId]
         self.deliveryLabel.text = Wording.ShoppingCart.Delivery[self.languageId]
         self.deliveryTaxLabel.text = Wording.ShoppingCart.DeliveryTax[self.languageId]
@@ -85,6 +88,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     func refreshCalculation(){
         self.cart = CartModel.getPendingCart()
         
+        self.subtotalValueLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.subtotal))
         self.pb1ValueLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.tax))
         self.deliveryValueLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.delivery))
         self.deliveryTaxValueLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.deliveryTax))

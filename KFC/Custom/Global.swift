@@ -229,6 +229,7 @@ struct Wording {
         static let Pb1:[String:String] = [LanguageID.Indonesia : "Pajak Restoran", LanguageID.English : "PB1"]
         static let Tax:[String:String] = [LanguageID.Indonesia : "Pajak", LanguageID.English : "Tax"]
         static let Delivery:[String:String] = [LanguageID.Indonesia : "Biaya Antar", LanguageID.English : "Delivery"]
+        static let Subtotal:[String:String] = [LanguageID.Indonesia : "Subtotal", LanguageID.English : "Subtotal"]
         static let Total:[String:String] = [LanguageID.Indonesia : "Total", LanguageID.English : "Total"]
         static let KeepShopping:[String:String] = [LanguageID.Indonesia : "Lanjutkan Belanja", LanguageID.English : "Keep Shopping"]
         static let Checkout:[String:String] = [LanguageID.Indonesia : "Bayar", LanguageID.English : "Checkout"]
