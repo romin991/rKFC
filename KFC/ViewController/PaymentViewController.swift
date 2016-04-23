@@ -93,10 +93,15 @@ class PaymentViewController: UIViewController, UICollectionViewDataSource, UICol
         
         if (payment.paymentInfo == PaymentInfo.COD){
             if (self.cart?.transId != nil && self.cart?.transId != ""){
+                let activityIndicator = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                activityIndicator.mode = MBProgressHUDMode.Indeterminate;
+                activityIndicator.labelText = "Loading";
+                
                 OrderModel.getPaymentForm(self.cart!, completion: { (status, message) -> Void in
                     if (status == Status.Success){
                         OrderModel.orderComplete()
                         self.drawerDelegate?.selectMenu(Menu.Home)
+                        self.drawerDelegate?.showOrderDetail(self.cart!)
                         self.showSuccessMessage()
                         
                     } else {
@@ -106,6 +111,8 @@ class PaymentViewController: UIViewController, UICollectionViewDataSource, UICol
                         self.presentViewController(alert, animated: true, completion: nil)
                         
                     }
+                    
+                    MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
                 })
                 
             } else {
@@ -115,6 +122,7 @@ class PaymentViewController: UIViewController, UICollectionViewDataSource, UICol
                     if (status == Status.Success){
                         OrderModel.orderComplete()
                         self.drawerDelegate?.selectMenu(Menu.Home)
+                        self.drawerDelegate?.showOrderDetail(self.cart!)
                         self.showSuccessMessage()
                     }
                 })
@@ -150,15 +158,22 @@ class PaymentViewController: UIViewController, UICollectionViewDataSource, UICol
             let languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
             
             self.cart = cart
-            if (status == Status.Error){
+            if (status == Status.Success){
+                OrderModel.getOrderDetail(self.cart!, completion: { (status, message, cart) -> Void in
+                    self.cart = cart
+                    
+                    MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+                    completion(status: status, message: message)
+                })
+                
+            } else if (status == Status.Error){
                 let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
                 alert.addAction(UIAlertAction(title: Wording.Common.OK[languageId], style: UIAlertActionStyle.Default, handler: nil))
                 self.presentViewController(alert, animated: true, completion: nil)
+                
+                MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+                completion(status: status, message: message)
             }
-            
-            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
-            
-            completion(status: status, message: message)
         }
 
     }

@@ -21,6 +21,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     @IBOutlet weak var addressStoreLabel: UILabel!
     @IBOutlet weak var shoppingCartBadgesView: UIView!
     @IBOutlet weak var shoppingCartBadgesLabel: UILabel!
+    @IBOutlet weak var shoppingCartButton: UIButton!
     
     var currentPosition: CLLocation?
     let locationManager = CLLocationManager()
@@ -84,6 +85,11 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         super.viewWillAppear(animated)
         let cart:Cart = CartModel.getPendingCart()
         self.shoppingCartBadgesLabel.text = "\(cart.quantity!)"
+        if (cart.cartItems.count == 0) {
+            self.shoppingCartButton.enabled = false
+        } else {
+            self.shoppingCartButton.enabled = true
+        }
     }
     
     func showStoreView(){

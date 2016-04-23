@@ -57,6 +57,7 @@ class OnlinePaymentViewController: UIViewController, UIWebViewDelegate {
             //set as complete, redirect to home
             OrderModel.orderComplete()
             self.drawerDelegate?.selectMenu(Menu.Home)
+            self.drawerDelegate?.showOrderDetail(self.cart!)
             self.showSuccessMessage()
             
         } else if (urlString == self.payment?.failedURL){
@@ -65,6 +66,7 @@ class OnlinePaymentViewController: UIViewController, UIWebViewDelegate {
             alert.addAction(UIAlertAction(title: Wording.Common.NO[languageId], style: UIAlertActionStyle.Default, handler: { (action) -> Void in
                 OrderModel.orderComplete()
                 self.drawerDelegate?.selectMenu(Menu.Home)
+                self.drawerDelegate?.showOrderDetail(self.cart!)
                 self.showSuccessMessage()
                 
             }))

@@ -56,7 +56,10 @@ class ValidationViewController: UIViewController {
         
         LoginModel.validate(user!) { (status, message) -> Void in
             if (status == Status.Success){
-                let lastViewController = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 3]
+                var lastViewController = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 2]
+                if (!(lastViewController is LoginViewController)) {
+                    lastViewController = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 3]
+                }
                 self.navigationController?.popToViewController(lastViewController!, animated: true)
             } else {
                 let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)

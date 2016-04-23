@@ -3398,6 +3398,7 @@
                         <outlet property="markerWidth" destination="UDL-q3-Pyw" id="BZk-EV-zv0"/>
                         <outlet property="shoppingCartBadgesLabel" destination="TKj-C7-hTR" id="9hS-wG-eqq"/>
                         <outlet property="shoppingCartBadgesView" destination="mRr-IG-kEb" id="zn0-ho-dCI"/>
+                        <outlet property="shoppingCartButton" destination="JqB-bp-mIe" id="3Ry-2E-rZ6"/>
                         <outlet property="storeViewHeight" destination="j1I-FW-0Po" id="Qeu-Kt-e1Y"/>
                         <segue destination="SB8-uu-Pah" kind="show" identifier="SearchAddressSegue" id="933-dD-KhD"/>
                         <segue destination="qix-Gf-Bhs" kind="show" identifier="SelectCitySegue" id="HqI-GB-RCS"/>
@@ -5612,6 +5613,7 @@
                     <connections>
                         <outlet property="shoppingCartBadgesLabel" destination="p9m-Jb-W2J" id="Nz4-ze-h1L"/>
                         <outlet property="shoppingCartBadgesView" destination="s8e-Wg-Ujr" id="UYI-Ls-QDc"/>
+                        <outlet property="shoppingCartButton" destination="oxQ-np-Pcj" id="Z1h-pD-WJA"/>
                         <outlet property="tableView" destination="vKP-iO-liE" id="mbG-Y1-ioI"/>
                         <segue destination="uIB-JB-TY4" kind="show" identifier="HistorySegue" id="Qqx-v0-4eF"/>
                         <segue destination="Kt4-98-8lD" kind="show" identifier="FeedbackSegue" id="aSB-PZ-FRb"/>
@@ -5619,7 +5621,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Bh-FU-h5C" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-471" y="3408"/>
+            <point key="canvasLocation" x="3999" y="2634"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="Ick-7x-5Ni">
@@ -6798,7 +6800,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jcJ-tq-cOZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-471" y="4262.25"/>
+            <point key="canvasLocation" x="2578.5" y="2699.25"/>
         </scene>
         <!--Feedback View Controller-->
         <scene sceneID="NAS-wy-AFL">
@@ -7436,12 +7438,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zAN-iq-p27" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="493.5" y="4197"/>
+            <point key="canvasLocation" x="4963.5" y="3423"/>
         </scene>
         <!--History Detail View Controller-->
         <scene sceneID="gqt-Oh-ZRI">
             <objects>
-                <viewController id="uIB-JB-TY4" customClass="HistoryDetailViewController" customModule="KFC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="HistoryDetailViewController" id="uIB-JB-TY4" customClass="HistoryDetailViewController" customModule="KFC" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Yaz-7Q-YHC"/>
                         <viewControllerLayoutGuide type="bottom" id="SjM-mV-2av"/>
@@ -8750,6 +8752,7 @@
                         <outlet property="orderNumberValueLabel" destination="bD2-4F-Ocs" id="d7S-6P-F6X"/>
                         <outlet property="shoppingCartBadgesLabel" destination="utJ-Wf-h5q" id="xt1-4M-nGW"/>
                         <outlet property="shoppingCartBadgesView" destination="jC0-y7-pTR" id="b0R-un-eq7"/>
+                        <outlet property="shoppingCartButton" destination="GSO-7S-rFp" id="wYo-qy-qJT"/>
                         <outlet property="statusLabel" destination="yOi-jM-Mgk" id="Ibh-pe-jYL"/>
                         <outlet property="subtotalLabel" destination="lbN-x0-b0h" id="AXK-fO-Y5o"/>
                         <outlet property="subtotalValueLabel" destination="iu8-EC-NH9" id="3wc-ic-4dK"/>
@@ -8762,7 +8765,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ear-4L-yd3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="493.5" y="3408"/>
+            <point key="canvasLocation" x="4963.5" y="2634"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="q51-ac-yy6">
@@ -9662,6 +9665,7 @@
                         <outlet property="pageControl" destination="wbZ-B2-YEi" id="mI5-4i-LuH"/>
                         <outlet property="shoppingCartBadgesLabel" destination="4ri-Po-8y7" id="7ye-97-RiH"/>
                         <outlet property="shoppingCartBadgesView" destination="Pwc-cW-RRC" id="tvG-gX-lg2"/>
+                        <outlet property="shoppingCartButton" destination="1HV-NN-IYd" id="arM-JI-Swi"/>
                         <segue destination="W7w-6V-8zk" kind="show" identifier="ProductListSegue" id="hvB-Wd-F03"/>
                     </connections>
                 </viewController>
@@ -10133,6 +10137,7 @@
                         <outlet property="navigationTItleLabel" destination="Mya-8m-REv" id="HDa-gy-ZoZ"/>
                         <outlet property="shoppingCartBadgesLabel" destination="c6U-Wb-q7F" id="XuR-m4-d6z"/>
                         <outlet property="shoppingCartBadgesView" destination="jiF-L1-986" id="IQ8-6f-ENN"/>
+                        <outlet property="shoppingCartButton" destination="laL-za-BMs" id="RJ6-ne-kKw"/>
                         <segue destination="cfD-qt-Koc" kind="show" identifier="ProductDetailSegue" id="Nq6-vy-l0V"/>
                     </connections>
                 </viewController>
@@ -11314,6 +11319,7 @@
                         <outlet property="quantityView" destination="m3B-WO-ShO" id="ovQ-Rg-p3W"/>
                         <outlet property="shoppingCartBadgesLabel" destination="N3h-fC-8UR" id="GC2-jI-yPt"/>
                         <outlet property="shoppingCartBadgesView" destination="t0h-x4-dh3" id="jgV-tM-Ltu"/>
+                        <outlet property="shoppingCartButton" destination="pf3-Ik-l6m" id="XbU-wB-69L"/>
                         <outlet property="subtitleLabel" destination="ujl-pb-i1R" id="UTM-fk-BIw"/>
                         <outlet property="tableView" destination="dB8-Sg-mfA" id="9yq-P2-PSo"/>
                         <outlet property="titleLabel" destination="wR7-BK-Po9" id="Civ-ti-jN5"/>
@@ -14479,7 +14485,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xyM-Mm-zQM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1713" y="2598.75"/>
+            <point key="canvasLocation" x="1713" y="2634"/>
         </scene>
     </scenes>
     <resources>
@@ -14505,7 +14511,7 @@
         <image name="StarOn" width="38" height="37"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="WxG-yF-uXU"/>
         <segue reference="78T-bL-lxz"/>
+        <segue reference="WxG-yF-uXU"/>
     </inferredMetricsTieBreakers>
 </document>

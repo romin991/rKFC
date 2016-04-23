@@ -11,9 +11,9 @@ import MBProgressHUD
 
 class HistoryViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var navigationTitle: UILabel!
     @IBOutlet weak var shoppingCartBadgesView: UIView!
     @IBOutlet weak var shoppingCartBadgesLabel: UILabel!
+    @IBOutlet weak var shoppingCartButton: UIButton!
     
     var drawerDelegate:DrawerDelegate?
     var carts:[Cart] = [Cart]()
@@ -67,7 +67,17 @@ class HistoryViewController: UIViewController {
             
             MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
         }
-        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        let cart:Cart = CartModel.getPendingCart()
+        self.shoppingCartBadgesLabel.text = "\(cart.quantity!)"
+        if (cart.cartItems.count == 0) {
+            self.shoppingCartButton.enabled = false
+        } else {
+            self.shoppingCartButton.enabled = true
+        }
     }
 
     override func didReceiveMemoryWarning() {

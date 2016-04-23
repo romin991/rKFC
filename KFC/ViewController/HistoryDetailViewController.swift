@@ -23,6 +23,7 @@ class HistoryDetailViewController: UIViewController, UITableViewDelegate {
     @IBOutlet weak var orderNumberLabel: UILabel!
     @IBOutlet weak var orderNumberValueLabel: UILabel!
     @IBOutlet weak var borderView: UIView!
+    @IBOutlet weak var shoppingCartButton: UIButton!
     @IBOutlet weak var shoppingCartBadgesView: UIView!
     @IBOutlet weak var shoppingCartBadgesLabel: UILabel!
     @IBOutlet weak var contentView: UIView!
@@ -58,6 +59,17 @@ class HistoryDetailViewController: UIViewController, UITableViewDelegate {
         self.statusLabel.adjustsFontSizeToFitWidth = true
         
         self.generateDataSource()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        let cart:Cart = CartModel.getPendingCart()
+        self.shoppingCartBadgesLabel.text = "\(cart.quantity!)"
+        if (cart.cartItems.count == 0) {
+            self.shoppingCartButton.enabled = false
+        } else {
+            self.shoppingCartButton.enabled = true
+        }
     }
     
     func generateDataSource(){

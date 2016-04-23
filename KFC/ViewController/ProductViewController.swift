@@ -14,6 +14,7 @@ class ProductViewController: UIViewController, UICollectionViewDelegate, UIColle
     @IBOutlet weak var shoppingCartBadgesLabel: UILabel!
     @IBOutlet weak var navigationTItleLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var shoppingCartButton: UIButton!
     
     var products = [Product]()
     var category : Category!
@@ -57,6 +58,11 @@ class ProductViewController: UIViewController, UICollectionViewDelegate, UIColle
         super.viewWillAppear(animated)
         let cart:Cart = CartModel.getPendingCart()
         self.shoppingCartBadgesLabel.text = "\(cart.quantity!)"
+        if (cart.cartItems.count == 0) {
+            self.shoppingCartButton.enabled = false
+        } else {
+            self.shoppingCartButton.enabled = true
+        }
         
         let firstTime = NSUserDefaults.standardUserDefaults().objectForKey("FirstTime") as! Bool
         if (cart.cartItems.count > 0  && firstTime == true){

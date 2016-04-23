@@ -11,6 +11,7 @@ import UIKit
 class CategoryViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     @IBOutlet weak var shoppingCartBadgesView: UIView!
     @IBOutlet weak var shoppingCartBadgesLabel: UILabel!
+    @IBOutlet weak var shoppingCartButton: UIButton!
 
     @IBOutlet weak var adsCollectionView: UICollectionView!
     @IBOutlet weak var categoryCollectionView: UICollectionView!
@@ -60,6 +61,11 @@ class CategoryViewController: UIViewController, UICollectionViewDelegate, UIColl
         super.viewWillAppear(animated)
         let cart:Cart = CartModel.getPendingCart()
         self.shoppingCartBadgesLabel.text = "\(cart.quantity!)"
+        if (cart.cartItems.count == 0) {
+            self.shoppingCartButton.enabled = false
+        } else {
+            self.shoppingCartButton.enabled = true
+        }
     }
 
     override func didReceiveMemoryWarning() {

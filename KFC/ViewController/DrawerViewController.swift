@@ -13,6 +13,7 @@ import MBProgressHUD
 protocol DrawerDelegate{
     func openLeftMenu()
     func selectMenu(menu:String)
+    func showOrderDetail(cart:Cart)
 }
 
 class DrawerViewController: UIViewController, DrawerDelegate {
@@ -45,6 +46,12 @@ class DrawerViewController: UIViewController, DrawerDelegate {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func showOrderDetail(cart: Cart) {
+        let historyDetailViewController:HistoryDetailViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("HistoryDetailViewController") as? HistoryDetailViewController)!
+        historyDetailViewController.cart = cart
+        self.drawerController?.centerViewController.navigationController?.pushViewController(historyDetailViewController, animated: false)
     }
     
     func openLeftMenu(){

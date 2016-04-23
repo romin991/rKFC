@@ -373,6 +373,41 @@ class OrderModel: NSObject {
         }
     }
     
+    class func getOrderDetail(cart:Cart, completion: (status: String, message:String, cart:Cart) -> Void){ //just use once when done payment, to get data like transNo
+        let parameters:[String:AnyObject] = [
+            "trans_id" : cart.transId!
+        ]
+        
+        Alamofire.request(.POST, NSString.init(format: "%@/GetOrderDetail", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
+                        
+                        if (status == "T"){
+                            cart.transNo = json["trans"]["trans_no"].string ?? ""
+                            cart.status = json["trans"]["status"].string ?? ""
+                            cart.statusDetail = json["trans"]["status_detail"].string ?? ""
+                            
+                            completion(status: Status.Success, message: message, cart: cart)
+                        } else {
+                            completion(status: Status.Error, message: message, cart: cart)
+                        }
+                    } else {
+                        completion(status: Status.Error, message: "Not a valid JSON object", cart: cart)
+                    }
+                    break;
+                case .Failure(let error):
+                    completion(status: Status.Error, message: error.localizedDescription, cart: cart)
+                    break;
+                }
+                
+        }
+    }
+    
     class func getFeedbackForm(completion: (status: String, message:String) -> Void){
         Alamofire.request(.POST, NSString.init(format: "%@/GetFeedbackForm", ApiKey.BaseURL) as String, parameters: nil, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
             .responseJSON { response in
