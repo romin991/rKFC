@@ -12,7 +12,7 @@ import SwiftyJSON
 
 class LoginModel: NSObject {
     
-    class func register(user:User, completion: (status: String, message: String) -> Void){
+    class func register(user:User, completion: (status: String, message: String, user:User? ) -> Void){
         
         let parameters:[String:AnyObject] = [
             "language_id": user.languageId!,
@@ -29,8 +29,73 @@ class LoginModel: NSObject {
                 case .Success:
                     if let value = response.result.value {
                         let json = JSON(value)
-                        let status:String = json["status"].string!
-                        let message:String = json["message"].string!
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
+                        
+                        if (status == "T"){
+                            completion(status: Status.Success, message: message, user: user)
+                        } else {
+                            completion(status: Status.Error, message: message, user: nil)
+                        }
+                    } else {
+                        completion(status: Status.Error, message: "Not a valid JSON object", user: nil)
+                    }
+                    break;
+                case .Failure(let error):
+                    completion(status: Status.Error, message: error.localizedDescription, user: nil)
+                    break;
+                }
+                
+        }
+    }
+    
+    class func validate(user:User, completion: (status: String, message: String) -> Void){
+        
+        let parameters:[String:AnyObject] = [
+            "email" : user.username!,
+            "verification_code" : user.verificationCode!
+        ]
+        
+        Alamofire.request(.POST, NSString.init(format: "%@/VerifyRegistrant", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid json object"
+                        
+                        if (status == "T"){
+                            completion(status: Status.Success, message: message)
+                        } else {
+                            completion(status: Status.Error, message: message)
+                        }
+                    } else {
+                        completion(status: Status.Error, message: "Not a valid JSON object")
+                    }
+                    break;
+                case .Failure(let error):
+                    completion(status: Status.Error, message: error.localizedDescription)
+                    break;
+                }
+                
+        }
+    }
+    
+    class func forgotPassword(email:String, completion: (status: String, message: String) -> Void){
+        
+        let parameters:[String:AnyObject] = [
+            "email" : email
+        ]
+        
+        Alamofire.request(.POST, NSString.init(format: "%@/ForgotPassword", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
                         
                         if (status == "T"){
                             completion(status: Status.Success, message: message)
@@ -50,10 +115,14 @@ class LoginModel: NSObject {
     }
 
     class func login(user:User, completion: (status: String?, message: String?, user:User?) -> Void){
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
         let parameters:[String:AnyObject] = [
             "type" : user.type!,
             "value" : user.username!,
             "password" : user.password!,
+            "source" : "IOS",
+            "registration_id" : appDelegate.token ?? ""
         ]
         
         Alamofire.request(.POST, NSString.init(format: "%@/Login", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
@@ -62,22 +131,29 @@ class LoginModel: NSObject {
                 case .Success:
                     if let value = response.result.value {
                         let json = JSON(value)
-                        let status:String = json["status"].string!
-                        let message:String = json["message"].string!
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
                         
                         if (status == "T"){
                             var user:User = User.init()
-                            user.customerId = json["customer"]["customer_id"].string!
-                            user.languageId = json["customer"]["language_id"].string!
-                            user.fullname = json["customer"]["fullname"].string!
-                            user.handphone = json["customer"]["handphone"].string!
-                            user.username = json["customer"]["email"].string!
+                            user.customerId = json["customer"]["customer_id"].string
+                            user.languageId = json["customer"]["language_id"].string
+                            user.fullname = json["customer"]["fullname"].string
+                            user.handphone = json["customer"]["handphone"].string
+                            user.username = json["customer"]["email"].string
+                            
+                            let cart = CartModel.getPendingCart()
+                            cart.customerId = user.customerId
+                            cart.recipient = user.fullname
+                            CartModel.update(cart)
                             
                             self.getAddressList(user, completion: { (status, message, addresses) -> Void in
                                 if (status == Status.Success){
                                     user.addresses = addresses!
-                                    user = UserModel.create(user)
-                                    StoreModel.save(Store.init())
+                                    user = UserModel.updateUser(user)
+                                    
+                                    NSUserDefaults.standardUserDefaults().setObject(user.languageId, forKey: "LanguageId")
+                                    NSNotificationCenter.defaultCenter().postNotificationName(NotificationKey.LanguageChanged, object: nil)
                                     
                                     completion(status: Status.Success, message: message, user:user)
                                 } else {
@@ -114,21 +190,22 @@ class LoginModel: NSObject {
                 case .Success:
                     if let value = response.result.value {
                         let json = JSON(value)
-                        let status:String = json["status"].string!
-                        let message:String = json["message"].string!
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
                         
                         if (status == "T"){
                             var addresses: [Address] = [Address]()
-                            let addressesJSON = json["address"].array!
+                            let addressesJSON = json["address"].array ?? []
                             for addressJSON in addressesJSON{
                                 let address:Address = Address.init(
                                     guid: nil,
-                                    id: addressJSON["id"].string!,
-                                    address: addressJSON["address"].string!,
-                                    addressDetail: addressJSON["address_detail"].string!,
-                                    long: Double(addressJSON["lng"].string!),
-                                    lat: Double(addressJSON["lat"].string!),
-                                    recipient: addressJSON["recipient"].string!
+                                    id: addressJSON["id"].string,
+                                    address: addressJSON["address"].string,
+                                    addressDetail: addressJSON["address_detail"].string,
+                                    long: Double(addressJSON["lng"].string ?? "0"),
+                                    lat: Double(addressJSON["lat"].string ?? "0"),
+                                    recipient: addressJSON["recipient"].string,
+                                    favorite: addressJSON["is_favorite"].string == "1" ? true: false
                                 )
                                 
                                 addresses.append(address)
@@ -150,13 +227,78 @@ class LoginModel: NSObject {
         }
     }
     
-    class func logout(){
-        CategoryModel.deleteAllCategory()
-        ProductModel.deleteAllProduct()
-        ModifierModel.deleteAllModifier()
-        ModifierOptionModel.deleteAllModifierOption()
-        CartModel.deleteAllCart()
-        UserModel.deleteAllUser()
+    class func addFavoriteAddress(address:Address, completion: (status: String, message:String) -> Void){
+        let parameters : [String:AnyObject] = [
+            "customer_address_id" : address.id!
+        ]
+        
+        Alamofire.request(.POST, NSString.init(format: "%@/AddFavoriteAddress", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
+                        
+                        if (status == "T"){
+                            completion(status: Status.Success, message: message)
+                        } else {
+                            completion(status: Status.Error, message: message)
+                        }
+                    } else {
+                        completion(status: Status.Error, message: "Not a valid JSON object")
+                    }
+                    break;
+                case .Failure(let error):
+                    completion(status: Status.Error, message: error.localizedDescription)
+                    break;
+                }
+                
+        }
+    }
+    
+    class func logout(user:User, completion: (status: String?, message: String?) -> Void){
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        let parameters : [String:AnyObject] = [
+            "customer_id" : user.customerId!,
+            "source" : "IOS",
+            "registration_id" : appDelegate.token ?? "-"
+        ]
+        
+        Alamofire.request(.POST, NSString.init(format: "%@/Logout", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
+                        
+                        if (status == "T"){
+                            CategoryModel.deleteAllCategory()
+                            ProductModel.deleteAllProduct()
+                            ModifierModel.deleteAllModifier()
+                            ModifierOptionModel.deleteAllModifierOption()
+                            CartModel.deleteAllNotPendingCart()
+                            CartModel.deletePendingCart()
+                            UserModel.deleteAllUser()
+                            
+                            completion(status: Status.Success, message: message)
+                        } else {
+                            completion(status: Status.Error, message: message)
+                        }
+                    } else {
+                        completion(status: Status.Error, message: "Not a valid JSON object")
+                    }
+                    break;
+                case .Failure(let error):
+                    completion(status: Status.Error, message: error.localizedDescription)
+                    break;
+                }
+                
+        }
     }
     
     class func getProfile(user:User, completion: (status: String, message:String, user:User?) -> Void){
@@ -170,18 +312,94 @@ class LoginModel: NSObject {
                 case .Success:
                     if let value = response.result.value {
                         let json = JSON(value)
-                        let status:String = json["status"].string!
-                        let message:String = json["message"].string!
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
                         
                         if (status == "T"){
                             let user:User = UserModel.getUser()
-                            let customerJSON = json["customer"].dictionary!
+                            let customerJSON = json["customer"]
                             
-//                            user.fullname = customerJSON["fullname"]
-//                            user.gender = customerJSON["gender"]
-//                            user.handphone = customerJSON["handphone"]
-//                            user.birthdate = customerJSON["birthdate"] as? String!
+                            user.fullname = customerJSON["fullname"].string
+                            user.handphone = customerJSON["handphone"].string
+                            UserModel.updateUser(user)
                             
+                            completion(status: Status.Success, message: message, user: user)
+                        } else {
+                            completion(status: Status.Error, message: message, user: nil)
+                        }
+                    } else {
+                        completion(status: Status.Error, message: "Not a valid JSON object", user: nil)
+                    }
+                    break;
+                case .Failure(let error):
+                    completion(status: Status.Error, message: error.localizedDescription, user: nil)
+                    break;
+                }
+                
+        }
+    }
+    
+    class func updateProfile(user:User, completion: (status: String, message:String, user:User?) -> Void){
+        let dateformatter = NSDateFormatter.init()
+        dateformatter.dateFormat = "yyyy-MM-dd"
+        
+        let languageId = (NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as? String)!
+        
+        let parameters : [String:AnyObject] = [
+            "customer_id" : user.customerId!,
+            "email" : user.username!,
+            "handphone" : user.handphone!,
+            "fullname" : user.fullname!,
+            "gender" : user.gender! == Wording.Gender.Male[languageId]! ? "M" : "F",
+            "birthdate" : dateformatter.stringFromDate(user.birthdate!),
+            "password" : user.password!,
+            "confirm_password" : user.confirmPassword!
+            
+        ]
+        
+        Alamofire.request(.POST, NSString.init(format: "%@/UpdateProfile", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
+                        
+                        if (status == "T"){
+                            completion(status: Status.Success, message: message, user: user)
+                        } else {
+                            completion(status: Status.Error, message: message, user: nil)
+                        }
+                    } else {
+                        completion(status: Status.Error, message: "Not a valid JSON object", user: nil)
+                    }
+                    break;
+                case .Failure(let error):
+                    completion(status: Status.Error, message: error.localizedDescription, user: nil)
+                    break;
+                }
+                
+        }
+    }
+    
+    class func updateLanguage(user:User, completion: (status: String, message:String, user:User?) -> Void){
+        let parameters : [String:AnyObject] = [
+            "customer_id" : user.customerId!,
+            "language_id" : user.languageId!
+            
+        ]
+        
+        Alamofire.request(.POST, NSString.init(format: "%@/UpdateLanguage", ApiKey.BaseURL) as String, parameters: parameters, encoding: ParameterEncoding.URL, headers: ["Accept" : "application/json"])
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        let status:String = json["status"].string ?? "F"
+                        let message:String = json["message"].string ?? "Not a valid JSON object"
+                        
+                        if (status == "T"){
                             completion(status: Status.Success, message: message, user: user)
                         } else {
                             completion(status: Status.Error, message: message, user: nil)

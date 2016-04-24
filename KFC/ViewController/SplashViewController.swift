@@ -9,18 +9,17 @@
 import UIKit
 
 class SplashViewController: UIViewController {
-    @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var logoButtonYPositionConstraint: NSLayoutConstraint!
     @IBOutlet weak var logoButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        self.animateBackground()
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        self.animateBackground()
     }
 
     override func didReceiveMemoryWarning() {
@@ -38,12 +37,13 @@ class SplashViewController: UIViewController {
     }
     
     func animateBackground(){
-        UIView.animateWithDuration(0.6, animations: {
+        UIView.animateWithDuration(0.6, animations: { () -> Void in
             self.logoButtonYPositionConstraint.constant = 0
             self.logoButton.alpha = 1.0
-            self.backgroundImageView.layoutIfNeeded()
             self.view.layoutIfNeeded()
-        }, completion: nil)
+        }) { (finish) -> Void in
+            self.logoButtonClicked(self)
+        }
     }
 
 }

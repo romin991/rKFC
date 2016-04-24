@@ -11,15 +11,39 @@ import UIKit
 class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var keepShoppingButton: UIButton!
     @IBOutlet weak var checkoutButton: UIButton!
-    @IBOutlet weak var totalLabel: UILabel!
-    @IBOutlet weak var deliveryChargeLabel: UILabel!
-    @IBOutlet weak var taxLabel: UILabel!
     @IBOutlet weak var buttonView: UIView!
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var subtotalValueLabel: UILabel!
+    @IBOutlet weak var pb1ValueLabel: UILabel!
+    @IBOutlet weak var deliveryValueLabel: UILabel!
+    @IBOutlet weak var deliveryTaxValueLabel: UILabel!
+    @IBOutlet weak var taxValueLabel: UILabel!
+    @IBOutlet weak var roundingValueLabel: UILabel!
+    @IBOutlet weak var totalValueLabel: UILabel!
+    
+    @IBOutlet weak var subtotalLabel: UILabel!
+    @IBOutlet weak var pb1Label: UILabel!
+    @IBOutlet weak var deliveryLabel: UILabel!
+    @IBOutlet weak var deliveryTaxLabel: UILabel!
+    @IBOutlet weak var taxLabel: UILabel!
+    @IBOutlet weak var roundingLabel: UILabel!
+    @IBOutlet weak var totalLabel: UILabel!
+    
+    
+//    @IBOutlet weak var tax: UILabel!
+//    @IBOutlet weak var delivery: UILabel!
+//    @IBOutlet weak var total: UILabel!
+    
+    @IBOutlet weak var titleLabel: UILabel!
+    
     var drawerDelegate:DrawerDelegate?
     var cart:Cart = Cart.init()
-//    var cartItems:[CartItem] = [CartItem]()
+    var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+    
+    //for calculating height
+    let subtitleFont = UIFont.init(name: "HelveticaNeue", size: 11)
+    let titleFont = UIFont.init(name: "HelveticaNeue", size: 14)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,23 +57,48 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         CustomView.custom(self.keepShoppingButton, borderColor: self.keepShoppingButton.titleColorForState(UIControlState.Normal)!, cornerRadius: 22, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
         CustomView.custom(self.checkoutButton, borderColor: self.checkoutButton.backgroundColor!, cornerRadius: 22, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
         
-        self.buttonView.layer.shadowColor = UIColor.blackColor().CGColor
-        self.buttonView.layer.shadowOpacity = 0.5
-        self.buttonView.layer.shadowRadius = 16.0
-        self.buttonView.layer.shadowOffset = CGSize.init(width: 0, height: 1)
-        self.buttonView.layer.masksToBounds = false
+//        self.buttonView.layer.shadowColor = UIColor.blackColor().CGColor
+//        self.buttonView.layer.shadowOpacity = 0.5
+//        self.buttonView.layer.shadowRadius = 16.0
+//        self.buttonView.layer.shadowOffset = CGSize.init(width: 0, height: 1)
+//        self.buttonView.layer.masksToBounds = false
+        
+        //change language label
+        self.subtotalLabel.text = Wording.ShoppingCart.Subtotal[self.languageId]
+        self.pb1Label.text = Wording.ShoppingCart.Pb1[self.languageId]
+        self.deliveryLabel.text = Wording.ShoppingCart.Delivery[self.languageId]
+        self.deliveryTaxLabel.text = Wording.ShoppingCart.DeliveryTax[self.languageId]
+        self.taxLabel.text = Wording.ShoppingCart.Tax[self.languageId]
+        self.roundingLabel.text = Wording.ShoppingCart.Rounding[self.languageId]
+        self.totalLabel.text = Wording.ShoppingCart.Total[self.languageId]
+        
+        self.titleLabel.text = Wording.ShoppingCart.OrderSummary[self.languageId]
+        self.keepShoppingButton.setTitle(Wording.ShoppingCart.KeepShopping[self.languageId], forState: UIControlState.Normal)
+        self.checkoutButton.setTitle(Wording.ShoppingCart.Checkout[self.languageId], forState: UIControlState.Normal)
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.cart = CartModel.getPendingCart()
-        self.tableView.reloadData()
         
-        self.taxLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.tax))
-        self.deliveryChargeLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.delivery))
-        self.totalLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.total))
+        //this is need to be done here!
+        self.refreshCalculation()
+        //end
     }
-
+    
+    func refreshCalculation(){
+        self.cart = CartModel.getPendingCart()
+        
+        self.subtotalValueLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.subtotal))
+        self.pb1ValueLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.tax))
+        self.deliveryValueLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.delivery))
+        self.deliveryTaxValueLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.deliveryTax))
+        self.taxValueLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.ppn))
+        self.roundingValueLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.rounding))
+        self.totalValueLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.total))
+        
+        self.tableView.reloadData()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -60,7 +109,18 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     }
 
     @IBAction func checkoutButtonClicked(sender: AnyObject) {
-        self.performSegueWithIdentifier("CheckoutSegue", sender: nil)
+        if (self.cart.customerId == ""){
+            let loginViewController:LoginViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController)!
+            self.navigationController?.pushViewController(loginViewController, animated: true)
+        } else if (self.cart.cartItems.count == 0){
+            let message = Wording.Warning.EmptyCart[self.languageId]
+            let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+            
+        } else {
+            self.performSegueWithIdentifier("CheckoutSegue", sender: nil)
+        }
     }
     
     @IBAction func keepShoppingButtonClicked(sender: AnyObject) {
@@ -68,6 +128,30 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     //MARK: UITableViewDelegate && UITableViewDataSource
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        let cartItem:CartItem = self.cart.cartItems[indexPath.row]
+        
+        var subtitle:String = ""
+        for cartModifier in cartItem.cartModifiers{
+            subtitle = subtitle.stringByAppendingFormat("%i x %@, ", cartModifier.quantity!, cartModifier.names.filter{$0.languageId == self.languageId}.first?.name ?? "")
+        }
+        if (subtitle.characters.count > 2){
+            subtitle = subtitle.substringToIndex(subtitle.endIndex.advancedBy(-2))
+        }
+        
+        let title = cartItem.names.filter{$0.languageId == self.languageId}.first?.name ?? ""
+        
+        let maximumWidthForSubtitle:CGFloat = self.tableView.frame.size.width - 75
+        let maximumWidthForTitle:CGFloat = 245
+        
+        let subtitleHeight = subtitle == "" ? 0 : NSString.init(string: subtitle).boundingRectWithSize(CGSizeMake(maximumWidthForSubtitle, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.subtitleFont!], context: nil).height
+        let titleHeight = NSString.init(string: title).boundingRectWithSize(CGSizeMake(maximumWidthForTitle, CGFloat.max), options:  NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.titleFont!], context: nil).height
+        
+        let height = ceil(subtitleHeight) + ceil(titleHeight) + 16
+        
+        return height
+    }
+    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         let cartItem:CartItem = self.cart.cartItems[indexPath.row]
@@ -85,6 +169,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
             let index:Int = self.cart.cartItems.indexOf(wantToDeleteCartItem)!
             self.cart.cartItems.removeAtIndex(index)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            self.refreshCalculation()
         }
     }
     
@@ -101,20 +186,20 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         cell = tableView.dequeueReusableCellWithIdentifier( "Cell", forIndexPath: indexPath) as! CustomTableViewCell
         
         let cartItem:CartItem = self.cart.cartItems[indexPath.row]
-        let price:NSDecimalNumber = NSDecimalNumber.init(string: cartItem.price)
         
         var subtitle:String = ""
         for cartModifier in cartItem.cartModifiers{
-            subtitle = subtitle.stringByAppendingFormat("%i %@, ", cartModifier.quantity!, cartModifier.name!)
+            subtitle = subtitle.stringByAppendingFormat("%i x %@, ", cartModifier.quantity!, cartModifier.names.filter{$0.languageId == self.languageId}.first?.name ?? "")
         }
         if (subtitle.characters.count > 2){
             subtitle = subtitle.substringToIndex(subtitle.endIndex.advancedBy(-2))
         }
         
-        cell.mainTitleLabel.text = cartItem.name
-        cell.priceLabel.text = NSString.init(format: "%i x %@", cartItem.quantity!, CommonFunction.formatCurrency(price)) as String
-        cell.subtotalLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:cartItem.total))
+        cell.mainTitleLabel.text = cartItem.names.filter{$0.languageId == self.languageId}.first?.name ?? ""
+        cell.quantityLabel.text = NSString.init(format: "%i x", cartItem.quantity!) as String
+        cell.subtotalLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:cartItem.subtotal))
         cell.subtitleLabel.text = subtitle
+        cell.subtotalLabel.sizeToFit()
 
         let path = CommonFunction.generatePathAt(Path.ProductImage, filename: cartItem.productId!)
         let data = NSFileManager.defaultManager().contentsAtPath(path)
@@ -142,6 +227,9 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
                 shoppingCartItemViewController.modifiers = ModifierModel.getModifier(shoppingCartItemViewController.product)
                 shoppingCartItemViewController.cartItem = cartItem
             }
+        } else if (segue.identifier == "CheckoutSegue"){
+            let checkoutViewController:CheckoutViewController = segue.destinationViewController as! CheckoutViewController
+            checkoutViewController.drawerDelegate = self.drawerDelegate
         }
     }
 

@@ -15,23 +15,24 @@ class Product: NSObject {
     var categoryId : String? = ""
     var categoryGuid : String? = ""
     var image : String? = ""
-    var name : String? = ""
-    var note : String? = ""
     var price : String? = "0"
     var taxable : Bool? = true
+    var ppn : Bool? = false
+    
+    var names : [Name] = [Name]()
+    var notes : [Name] = [Name]()
     
     var quantity : Int = 1 //for shoppingCart
     
-    init(guid:String?, id:String?, categoryId:String?, categoryGuid:String?, image:String?, name:String?, note:String?, price:String?, taxable:Bool?){
+    init(guid:String?, id:String?, categoryId:String?, categoryGuid:String?, image:String?, price:String?, taxable:Bool?, ppn:Bool?){
         self.guid = guid
         self.id = id
         self.categoryId = categoryId
         self.categoryGuid = categoryGuid
         self.image = image
-        self.name = name
-        self.note = note
         self.price = price
         self.taxable = taxable
+        self.ppn = ppn
         
         super.init()
     }

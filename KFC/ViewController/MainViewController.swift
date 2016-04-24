@@ -21,12 +21,32 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     @IBOutlet weak var addressStoreLabel: UILabel!
     @IBOutlet weak var shoppingCartBadgesView: UIView!
     @IBOutlet weak var shoppingCartBadgesLabel: UILabel!
+    @IBOutlet weak var shoppingCartButton: UIButton!
     
     var currentPosition: CLLocation?
     let locationManager = CLLocationManager()
     var drawerDelegate:DrawerDelegate?
     var selectedAddress:Address?
     var selectedStore:Store?
+    var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+    
+    func registerNotification(){
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"refreshLanguage", name: NotificationKey.LanguageChanged, object: nil)
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.registerNotification()
+    }
+    
+    deinit{
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func refreshLanguage(){
+        self.languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,12 +69,27 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         self.addressTextField.backgroundImage = UIImage.init()
         
         self.hideStoreView()
+        
+        self.refreshLanguage()
+        
+        //clear data
+        CategoryModel.deleteAllCategory()
+        ProductModel.deleteAllProduct()
+        ModifierModel.deleteAllModifier()
+        ModifierOptionModel.deleteAllModifierOption()
+        CartModel.deletePendingCart()
+        StoreModel.deleteSelectedStore()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         let cart:Cart = CartModel.getPendingCart()
         self.shoppingCartBadgesLabel.text = "\(cart.quantity!)"
+        if (cart.cartItems.count == 0) {
+            self.shoppingCartButton.enabled = false
+        } else {
+            self.shoppingCartButton.enabled = true
+        }
     }
     
     func showStoreView(){
@@ -121,9 +156,19 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
                 
                 CartModel.create(cart)
                 
-                UIView.animateWithDuration(0.5, animations: {
-                    self.showStoreView()
-                })
+                self.drawerDelegate?.selectMenu(Menu.Menu)
+                
+                //change design
+//                UIView.animateWithDuration(0.5, animations: {
+//                    self.showStoreView()
+//                })
+            } else {
+                let errorViewController:ErrorViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ErrorViewController") as? ErrorViewController)!
+                self.navigationController?.pushViewController(errorViewController, animated: true)
+                
+//                let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+//                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+//                self.presentViewController(alert, animated: true, completion: nil)
             }
             
             //remove activity indicator
@@ -151,7 +196,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
             if (status == Status.Success && address != nil && address != "") {
                 resultText = address!
             } else {
-                resultText = "No Address Found"
+                resultText = Wording.Map.NotFound[self.languageId]!
             }
             
             //display address to address field

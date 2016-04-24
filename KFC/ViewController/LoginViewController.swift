@@ -15,14 +15,24 @@ import MBProgressHUD
 
 class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate {
 
+    @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var usernameField: UITextField!
+    @IBOutlet weak var passwordLabel: UILabel!
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var registerButton: UIButton!
+    @IBOutlet weak var verificationButton: UIButton!
     @IBOutlet weak var forgotPasswordButton: UIButton!
     @IBOutlet weak var loginWithFacebookButton: UIButton!
     @IBOutlet weak var loginWithGoogleButton: UIButton!
     @IBOutlet weak var loginWithTwitterButton: UIButton!
+    @IBOutlet weak var skipButton: UIButton!
+    
+    var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+    
+    func isFromCheckoutView() -> Bool{
+        return self.navigationController?.viewControllers.count > 2
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +41,18 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
         GIDSignIn.sharedInstance().uiDelegate = self
         GIDSignIn.sharedInstance().delegate = self
         
-        CustomView.custom(self.loginButton, borderColor: self.loginButton.backgroundColor!, cornerRadius: 28, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
+        if (self.isFromCheckoutView()){
+            self.skipButton.hidden = true
+        }
+        
+        CustomView.custom(self.skipButton, borderColor: UIColor.init(red: 191.0/255.0, green: 58.0/255.0, blue: 56.0/255.0, alpha: 1.0), cornerRadius: 0, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
+        
+        self.skipButton.setTitle(Wording.Login.Skip[self.languageId], forState: UIControlState.Normal)
+        self.loginButton.setTitle(Wording.Login.Login[self.languageId], forState: UIControlState.Normal)
+        self.registerButton.setTitle(Wording.Login.Register[self.languageId], forState: UIControlState.Normal)
+        self.forgotPasswordButton.setTitle(Wording.Login.ForgotPassword[self.languageId], forState: UIControlState.Normal)
+        self.usernameLabel.text = Wording.Profile.Email[self.languageId]
+        self.passwordLabel.text = Wording.Profile.Password[self.languageId]
     }
 
     override func didReceiveMemoryWarning() {
@@ -51,7 +72,13 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
             //TODO: need to check, if user already verified, then go to MainSegue, if not, then go to ValidationSegue
             
             if (status == Status.Success){
-                self .performSegueWithIdentifier("MainSegue", sender: nil)
+                if (self.isFromCheckoutView()){
+                    self.navigationController?.popViewControllerAnimated(true)
+                } else {
+                    self .performSegueWithIdentifier("MainSegue", sender: nil)
+                }
+                NSUserDefaults.standardUserDefaults().setObject(true, forKey: "FirstTime")
+                
             } else {
                 //should show alert error
                 let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
@@ -62,15 +89,22 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
         })
     }
     
+    @IBAction func verificationButtonClicked(sender: AnyObject) {
+        self.performSegueWithIdentifier("VerificationSegue", sender: nil)
+    }
+    
     @IBAction func registerButtonClicked(sender: AnyObject) {
         self.performSegueWithIdentifier("RegisterSegue", sender: nil)
     }
     
     @IBAction func forgotPasswordButtonClicked(sender: AnyObject) {
+        self.performSegueWithIdentifier("ForgotPasswordSegue", sender: nil)
     }
     
     @IBAction func skipButtonClicked(sender: AnyObject) {
-//        self.performSegueWithIdentifier("MainSegue", sender: nil)
+        NSUserDefaults.standardUserDefaults().setObject(LanguageID.English, forKey: "LanguageId")
+        UserModel.updateUser(User.init())
+        self.performSegueWithIdentifier("MainSegue", sender: nil)
     }
     
     @IBAction func loginWithFacebookButtonClicked(sender: AnyObject) {
@@ -151,7 +185,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
 //    }
     
     
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -159,6 +193,5 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
     }
-    */
 
 }

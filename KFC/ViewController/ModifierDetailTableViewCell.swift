@@ -10,7 +10,6 @@ import UIKit
 
 class ModifierDetailTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var quantityView: UIView!
     @IBOutlet weak var quantityMinusButton: UIButton!
     @IBOutlet weak var quantityPlusButton: UIButton!
     @IBOutlet weak var quantityLabel: UILabel!
@@ -22,9 +21,6 @@ class ModifierDetailTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        if (self.quantityView != nil){
-            CustomView.custom(self.quantityView, borderColor: self.quantityView.backgroundColor!, cornerRadius: 10, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
-        }
     }
 
     override func setSelected(selected: Bool, animated: Bool) {

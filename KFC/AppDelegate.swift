@@ -17,7 +17,7 @@ import TwitterKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var token: String?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -41,7 +41,55 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Fabric.with([Twitter.self])
         //End
         
+        let languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId")
+        if (languageId == nil){
+            NSUserDefaults.standardUserDefaults().setObject(LanguageID.English, forKey: "LanguageId")
+        }
+        
+        let firstTime = NSUserDefaults.standardUserDefaults().objectForKey("FirstTime")
+        if (firstTime == nil){
+            NSUserDefaults.standardUserDefaults().setObject(true, forKey: "FirstTime")
+        }
+        
+        AdsModel.deleteAdsByType(AdsType.General)
+        PromoModel.getGeneralPromo { (status, message) -> Void in
+            
+        }
+        
+        //register push notification
+        self.registerForPushNotifications(application)
+        
         return true
+    }
+    
+    //register for push notification
+    func registerForPushNotifications(application: UIApplication) {
+        let notificationSettings = UIUserNotificationSettings(
+            forTypes: [.Badge, .Sound, .Alert], categories: nil)
+        application.registerUserNotificationSettings(notificationSettings)
+    }
+    
+    func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
+        if notificationSettings.types != .None {
+            application.registerForRemoteNotifications()
+        }
+    }
+    
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+        let tokenChars = UnsafePointer<CChar>(deviceToken.bytes)
+        var tokenString = ""
+        
+        for i in 0..<deviceToken.length {
+            tokenString += String(format: "%02.2hhx", arguments: [tokenChars[i]])
+        }
+        
+        self.token = tokenString
+        
+        print("Device Token:", tokenString)
+    }
+    
+    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+        print("Failed to register:", error)
     }
     
     @available(iOS 9.0, *)

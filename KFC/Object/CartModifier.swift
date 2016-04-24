@@ -16,16 +16,15 @@ class CartModifier: NSObject {
     var modifierId: String? = ""
     var modifierOptionId: String? = ""
     var quantity: Int? = 0
-    var name: String? = ""
+    var names : [Name] = [Name]()
     
-    init(guid: String?, cartGuid:String?, cartItemGuid:String?, modifierId:String?, modifierOptionId:String?, quantity:Int?, name:String?) {
+    init(guid: String?, cartGuid:String?, cartItemGuid:String?, modifierId:String?, modifierOptionId:String?, quantity:Int?) {
         self.guid = guid
         self.cartGuid = cartGuid
         self.cartItemGuid = cartItemGuid
         self.modifierId = modifierId
         self.modifierOptionId = modifierOptionId
         self.quantity = quantity
-        self.name = name
         
         super.init()
     }

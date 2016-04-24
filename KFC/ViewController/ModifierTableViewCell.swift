@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol ModifierParentDelegate{
+    func refreshPrice()
+}
+
 protocol ModifierDelegate{
     func plusQuantity(modifierOption:ModifierOption)
     func minusQuantity(modifierOption:ModifierOption)
@@ -23,6 +27,9 @@ class ModifierTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDa
     var modifier:Modifier?
     var isFirstTime:Bool = true
     var currentQuantity:Int = 0
+    var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+    
+    var modifierParentDelegate:ModifierParentDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -63,8 +70,8 @@ class ModifierTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDa
     func refresh(){
         self.tableView.layer.shadowColor = UIColor.blackColor().CGColor
         self.tableView.layer.shadowOpacity = 0.5
-        self.tableView.layer.shadowRadius = 2.0
-        self.tableView.layer.shadowOffset = CGSize.init(width: 1, height: 1)
+        self.tableView.layer.shadowRadius = 1.0
+        self.tableView.layer.shadowOffset = CGSize.init(width: 0, height: 1)
         self.tableView.layer.masksToBounds = false
         self.tableView.reloadData()
     }
@@ -89,6 +96,9 @@ class ModifierTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDa
             }
             self.tableView.reloadData()
         }
+        if (self.modifierParentDelegate != nil){
+            self.modifierParentDelegate?.refreshPrice()
+        }
     }
     
     func minusQuantity(modifierOption: ModifierOption) {
@@ -111,6 +121,9 @@ class ModifierTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDa
             }
             self.tableView.reloadData()
         }
+        if (self.modifierParentDelegate != nil){
+            self.modifierParentDelegate?.refreshPrice()
+        }
     }
     
     func selectModifier(modifierOption: ModifierOption) {
@@ -124,6 +137,9 @@ class ModifierTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDa
             }
         }
         self.tableView.reloadData()
+        if (self.modifierParentDelegate != nil){
+            self.modifierParentDelegate?.refreshPrice()
+        }
     }
     
     func validateModifier(){
@@ -161,7 +177,7 @@ class ModifierTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDa
         
         if (indexPath.section == 0){
             cell = tableView.dequeueReusableCellWithIdentifier( "Cell", forIndexPath: indexPath) as! ModifierDetailTableViewCell
-            cell.titleLabel.text = modifier?.name
+            cell.titleLabel.text = modifier?.names.filter{$0.languageId == self.languageId}.first?.name ?? ""
             
         } else if (indexPath.section == 1){
             let modifierOption = self.modifier?.modifierOptions[indexPath.row]
@@ -169,14 +185,14 @@ class ModifierTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDa
             if (modifier?.multipleSelect == true){
                 cell = tableView.dequeueReusableCellWithIdentifier( "MultipleCell", forIndexPath: indexPath) as! ModifierDetailTableViewCell
                 cell.modifierOption = modifierOption
-                cell.titleLabel.text = modifierOption?.name
+                cell.titleLabel.text = modifierOption?.names.filter{$0.languageId == self.languageId}.first?.name ?? ""
                 cell.delegate = self
                 cell.quantityLabel.text = "\((modifierOption?.quantity)!)"
                 
             } else {
                 cell = tableView.dequeueReusableCellWithIdentifier( "SingleCell", forIndexPath: indexPath) as! ModifierDetailTableViewCell
                 cell.modifierOption = modifierOption
-                cell.titleLabel.text = modifierOption?.name
+                cell.titleLabel.text = modifierOption?.names.filter{$0.languageId == self.languageId}.first?.name ?? ""
                 cell.delegate = self
                 if (modifierOption?.selected != nil && modifierOption?.selected == true){
                     cell.selectedButton.selected = true

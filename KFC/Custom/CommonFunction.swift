@@ -75,5 +75,18 @@ class CommonFunction: NSObject {
             .stringByReplacingOccurrencesOfString("Rp ", withString: "")
     }
     
+    class func getRounder() -> NSDecimalNumberHandler {
+        let round:NSDecimalNumberHandler = NSDecimalNumberHandler.init(roundingMode: NSRoundingMode.RoundPlain, scale: 0, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: true)
+        return round
+    }
+    
+    class func resizeImage(image:UIImage, size:CGSize) -> UIImage{
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        image.drawInRect(CGRectMake(0, 0, size.width, size.height))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage
+    }
+    
 }
 
