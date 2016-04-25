@@ -106,6 +106,14 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    @IBAction func skipButtonClicked(sender: AnyObject) {
+        NSUserDefaults.standardUserDefaults().setObject(LanguageID.English, forKey: "LanguageId")
+        UserModel.updateUser(User.init())
+        let loginViewController = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 2];
+        self.navigationController?.popViewControllerAnimated(false)
+        loginViewController?.performSegueWithIdentifier("MainSegue", sender: nil)
+    }
+    
     @IBAction func signInButtonClicked(sender: AnyObject) {
         self.navigationController?.popViewControllerAnimated(true);
     }
