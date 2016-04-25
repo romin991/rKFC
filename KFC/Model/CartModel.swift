@@ -498,12 +498,20 @@ class CartModel: NSObject {
         return cart
     }
     
-    class func getAllNotPendingCart() -> [Cart] {
+    class func getAllInProgressCart() -> [Cart]{
+        return self.getCartsWithPredicate(NSPredicate(format: "status != %@ && statusDetail != %@", Status.Pending, StatusDetail.Complete))
+    }
+    
+    class func getAllCompletedCart() -> [Cart] {
+        return self.getCartsWithPredicate(NSPredicate(format: "status != %@ && statusDetail == %@", Status.Pending, StatusDetail.Complete))
+    }
+    
+    class func getCartsWithPredicate(predicate:NSPredicate) -> [Cart]{
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedContext = appDelegate.managedObjectContext
         
         let fetchRequest = NSFetchRequest(entityName: "Cart")
-        fetchRequest.predicate = NSPredicate(format: "status != %@", Status.Pending)
+        fetchRequest.predicate = predicate
         
         let sorter = NSSortDescriptor.init(key: "transDate", ascending: false)
         fetchRequest.sortDescriptors = [sorter]
