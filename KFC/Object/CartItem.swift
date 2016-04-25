@@ -13,6 +13,7 @@ class CartItem: NSObject {
     var guid: String? = ""
     var cartGuid: String? = ""
     var productId: String? = ""
+    var categoryId: String? = ""
     var quantity: Int? = 0
     var price: String? = "0"
     var subtotal: String? = "0"
@@ -23,10 +24,11 @@ class CartItem: NSObject {
     var cartModifiers:[CartModifier] = [CartModifier]()
     var names : [Name] = [Name]()
     
-    init(guid: String?, cartGuid:String?, productId:String?, quantity:Int?, price:String?, tax:String?, ppn:String?, subtotal:String?, total:String?) {
+    init(guid: String?, cartGuid:String?, productId:String?, categoryId:String?, quantity:Int?, price:String?, tax:String?, ppn:String?, subtotal:String?, total:String?) {
         self.guid = guid
         self.cartGuid = cartGuid
         self.productId = productId
+        self.categoryId = categoryId
         self.quantity = quantity
         self.price = price
         self.tax = tax

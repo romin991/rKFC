@@ -29,6 +29,7 @@ class ShoppingCartItemViewController: UIViewController, ModifierParentDelegate {
     @IBOutlet weak var chooseQuantityLabel: UILabel!
     
     var product : Product!
+    var category : Category!
     var modifiers : [Modifier]!
     var cartItem : CartItem!
     var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
@@ -204,6 +205,7 @@ class ShoppingCartItemViewController: UIViewController, ModifierParentDelegate {
                 guid: nil,
                 cartGuid: nil,
                 productId: self.product.id,
+                categoryId: self.category.id,
                 quantity: self.product.quantity,
                 price: price.stringValue,
                 tax: tax.stringValue,

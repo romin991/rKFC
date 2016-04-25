@@ -61,6 +61,7 @@ class CartModel: NSObject {
             cdCartItem.setValue(cartItem.guid, forKey: "guid")
             cdCartItem.setValue(cart.guid, forKey: "cartGuid")
             cdCartItem.setValue(cartItem.productId, forKey: "productId")
+            cdCartItem.setValue(cartItem.categoryId, forKey: "categoryId")
             cdCartItem.setValue(cartItem.quantity, forKey: "quantity")
             cdCartItem.setValue(cartItem.price, forKey: "price")
             cdCartItem.setValue(cartItem.tax, forKey: "tax")
@@ -233,6 +234,7 @@ class CartModel: NSObject {
                 cdCartItem.setValue(cartItem.guid, forKey: "guid")
                 cdCartItem.setValue(cartGuid, forKey: "cartGuid")
                 cdCartItem.setValue(cartItem.productId, forKey: "productId")
+                cdCartItem.setValue(cartItem.categoryId, forKey: "categoryId")
                 cdCartItem.setValue(cartItem.quantity, forKey: "quantity")
                 cdCartItem.setValue(cartItem.price, forKey: "price")
                 cdCartItem.setValue(cartItem.tax, forKey: "tax")
@@ -435,6 +437,7 @@ class CartModel: NSObject {
                         guid: (cdCartItem.valueForKey("guid") as? String)!,
                         cartGuid: (cdCartItem.valueForKey("cartGuid") as? String),
                         productId: (cdCartItem.valueForKey("productId") as? String),
+                        categoryId: (cdCartItem.valueForKey("categoryId") as? String),
                         quantity: (cdCartItem.valueForKey("quantity") as? Int),
                         price: (cdCartItem.valueForKey("price") as? String),
                         tax: (cdCartItem.valueForKey("tax") as? String),
@@ -549,6 +552,7 @@ class CartModel: NSObject {
                         guid: (cdCartItem.valueForKey("guid") as? String)!,
                         cartGuid: (cdCartItem.valueForKey("cartGuid") as? String),
                         productId: (cdCartItem.valueForKey("productId") as? String),
+                        categoryId: (cdCartItem.valueForKey("categoryId") as? String),
                         quantity: (cdCartItem.valueForKey("quantity") as? Int),
                         price: (cdCartItem.valueForKey("price") as? String),
                         tax: (cdCartItem.valueForKey("tax") as? String),

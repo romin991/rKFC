@@ -142,6 +142,28 @@ class ProductDetailViewController: UIViewController, ModifierParentDelegate {
             }
         }
         
+        if (self.category.id! == ImportantID.Breakfast){ //breakfast menu category
+            let store = StoreModel.getSelectedStore()
+            if (store.isBreakfast != false){
+                let now = NSDate()
+                let dateFormatter = NSDateFormatter.init()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                let nowStringForDate = dateFormatter.stringFromDate(now)
+                
+                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSSZZZZZ"
+                let breakfastStart = dateFormatter.dateFromString(NSString.init(format: "%@ %@", nowStringForDate, store.breakfastStart!) as String)
+                let breakfastEnd = dateFormatter.dateFromString(NSString.init(format: "%@ %@", nowStringForDate, store.breakfastEnd!) as String)
+                
+                if (now.compare(breakfastStart!) == NSComparisonResult.OrderedAscending || now.compare(breakfastEnd!) == NSComparisonResult.OrderedDescending){
+                    dateFormatter.dateFormat = "HH aa"
+                    
+                    message = NSString.init(format: "%@ %@ - %@", Wording.Warning.BreakfastFailed[self.languageId]!, dateFormatter.stringFromDate(breakfastStart!), dateFormatter.stringFromDate(breakfastEnd!)) as String
+                }
+            } else {
+                message = Wording.Warning.BreakfastNotAvailable[self.languageId]!
+            }
+        }
+        
         return message
     }
     
@@ -282,6 +304,7 @@ class ProductDetailViewController: UIViewController, ModifierParentDelegate {
                     guid: nil,
                     cartGuid: nil,
                     productId: self.product.id,
+                    categoryId: self.category.id,
                     quantity: self.product.quantity,
                     price: price.stringValue,
                     tax: tax.stringValue,

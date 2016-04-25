@@ -116,25 +116,7 @@ class CategoryViewController: UIViewController, UICollectionViewDelegate, UIColl
         if (collectionView == self.categoryCollectionView){
             collectionView.deselectItemAtIndexPath(indexPath, animated: true)
             let category = self.categories[indexPath.row]
-            if (category.id! == "16"){ //breakfast menu category
-                let store = StoreModel.getSelectedStore()
-                if (store.isBreakfast != false){
-                    let now = NSDate()
-                    let dateFormatter = NSDateFormatter.init()
-                    dateFormatter.dateFormat = "yyyy-MM-dd"
-                    let nowStringForDate = dateFormatter.stringFromDate(now)
-                    
-                    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSSZZZZZ"
-                    let breakfastStart = dateFormatter.dateFromString(NSString.init(format: "%@ %@", nowStringForDate, store.breakfastStart!) as String)
-                    let breakfastEnd = dateFormatter.dateFromString(NSString.init(format: "%@ %@", nowStringForDate, store.breakfastEnd!) as String)
-                    
-                    if (now.compare(breakfastStart!) != NSComparisonResult.OrderedAscending && now.compare(breakfastEnd!) != NSComparisonResult.OrderedDescending){
-                        self.performSegueWithIdentifier("ProductListSegue", sender: category)
-                    }
-                }
-            } else {
-                self.performSegueWithIdentifier("ProductListSegue", sender: category)
-            }
+            self.performSegueWithIdentifier("ProductListSegue", sender: category)
         }
     }
     
@@ -156,7 +138,7 @@ class CategoryViewController: UIViewController, UICollectionViewDelegate, UIColl
             
             cell.breakfastFilterView.hidden = true
             cell.breakfastTimeLabel.hidden = true
-            if (category.id! == "16"){ //breakfast menu category
+            if (category.id! == ImportantID.Breakfast){ //breakfast menu category
                 let store = StoreModel.getSelectedStore()
                 if (store.isBreakfast == false){
                     cell.breakfastFilterView.hidden = false

@@ -107,14 +107,49 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     @IBAction func backButtonClicked(sender: AnyObject) {
         self.navigationController?.popViewControllerAnimated(true)
     }
+    
+    func validate() -> String{
+        var message = ""
+        for cartItem in self.cart.cartItems{
+            if (cartItem.categoryId! == ImportantID.Breakfast){
+                let store = StoreModel.getSelectedStore()
+                if (store.isBreakfast != false){
+                    let now = NSDate()
+                    let dateFormatter = NSDateFormatter.init()
+                    dateFormatter.dateFormat = "yyyy-MM-dd"
+                    let nowStringForDate = dateFormatter.stringFromDate(now)
+                    
+                    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSSZZZZZ"
+                    let breakfastStart = dateFormatter.dateFromString(NSString.init(format: "%@ %@", nowStringForDate, store.breakfastStart!) as String)
+                    let breakfastEnd = dateFormatter.dateFromString(NSString.init(format: "%@ %@", nowStringForDate, store.breakfastEnd!) as String)
+                    
+                    if (now.compare(breakfastStart!) == NSComparisonResult.OrderedAscending || now.compare(breakfastEnd!) == NSComparisonResult.OrderedDescending){
+                        dateFormatter.dateFormat = "HH aa"
+                        
+                        message = NSString.init(format: "%@ %@ - %@", Wording.Warning.BreakfastFailed[self.languageId]!, dateFormatter.stringFromDate(breakfastStart!), dateFormatter.stringFromDate(breakfastEnd!)) as String
+                    }
+                } else {
+                    message = Wording.Warning.BreakfastNotAvailable[self.languageId]!
+                }
+            }
+        }
+        
+        return message
+    }
 
     @IBAction func checkoutButtonClicked(sender: AnyObject) {
+        let validateMessage = self.validate()
         if (self.cart.customerId == ""){
             let loginViewController:LoginViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController)!
             self.navigationController?.pushViewController(loginViewController, animated: true)
         } else if (self.cart.cartItems.count == 0){
             let message = Wording.Warning.EmptyCart[self.languageId]
             let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+            
+        } else if (validateMessage != ""){
+            let alert: UIAlertController = UIAlertController(title: Status.Error, message: validateMessage, preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
             
@@ -224,6 +259,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
             if let cartItem = sender as? CartItem {
                 let shoppingCartItemViewController:ShoppingCartItemViewController = segue.destinationViewController as! ShoppingCartItemViewController
                 shoppingCartItemViewController.product = ProductModel.getProductByCartItem(cartItem)
+                shoppingCartItemViewController.category = CategoryModel.getCategoryByCartItem(cartItem)
                 shoppingCartItemViewController.modifiers = ModifierModel.getModifier(shoppingCartItemViewController.product)
                 shoppingCartItemViewController.cartItem = cartItem
             }

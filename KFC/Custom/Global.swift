@@ -13,6 +13,10 @@ struct ApiKey {
     static let Google = "AIzaSyDL2_fjawveP2tkRDgtk3mT6sDErddQ-a8"
 }
 
+struct ImportantID{
+    static let Breakfast = "16"
+}
+
 struct NotificationKey {
     static let ImageAdsDownloaded = "ImageAdsDownloaded"
     static let ImageItemDownloaded = "ImageItemDownloaded"
@@ -178,6 +182,14 @@ struct Wording {
         static let QuantityFailed:[String:String] = [
             LanguageID.Indonesia : "Harap tambah addition ke keranjang.",
             LanguageID.English : "Please add more addition to cart."
+        ]
+        static let BreakfastFailed:[String:String] = [
+            LanguageID.Indonesia : "Menu hanya tersedia mulai dari jam",
+            LanguageID.English : "This menu only available at"
+        ]
+        static let BreakfastNotAvailable:[String:String] = [
+            LanguageID.Indonesia : "Menu breakfast tidak tersedia di sini",
+            LanguageID.English : "Breakfast menu is not available at this store"
         ]
     }
     

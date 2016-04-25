@@ -320,6 +320,7 @@ class OrderModel: NSObject {
                                         guid: nil,
                                         cartGuid: nil,
                                         productId: listJSON["product_id"].string,
+                                        categoryId: nil,
                                         quantity: Int(listJSON["quantity"].string ?? "0"),
                                         price: "0",
                                         tax: "0",
