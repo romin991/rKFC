@@ -149,6 +149,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //For Facebook
         FBSDKAppEvents.activateApp()
         //End
+        
+        application.applicationIconBadgeNumber = 0;
     }
 
     func applicationWillTerminate(application: UIApplication) {
