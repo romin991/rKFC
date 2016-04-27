@@ -176,11 +176,11 @@ class MainModel: NSObject {
                             for modifierJSON in modifiersJSON! {
                                 var modifier:Modifier = Modifier.init(
                                     guid: nil,
-                                    id: modifierJSON["id"].string!,
-                                    amount: modifierJSON["amount"].string!,
-                                    minimumSelect: Int(modifierJSON["minimum_select"].string!)!,
-                                    maximumSelect: Int(modifierJSON["maximum_select"].string!)!,
-                                    multipleSelect: modifierJSON["multiple_select"].string! == "1" ? true : false,
+                                    id: modifierJSON["id"].string,
+                                    amount: modifierJSON["amount"].string,
+                                    minimumSelect: Int(modifierJSON["minimum_select"].string!),
+                                    maximumSelect: Int(modifierJSON["maximum_select"].string!),
+                                    multipleSelect: modifierJSON["multiple_select"].string == "1" ? true : false,
                                     productId: product.id,
                                     productGuid: product.guid)
                                 modifier.names = HelperModel.parseNames(modifierJSON["additionCategoryNames"]["additionCategoryName"].array ?? [])
@@ -192,13 +192,16 @@ class MainModel: NSObject {
                                     for modifierOptionJSON in modifierOptionsJSON!{
                                         let modifierOption : ModifierOption = ModifierOption.init(
                                             guid: nil,
-                                            id: modifierOptionJSON["id"].string!,
-                                            code: modifierOptionJSON["code"].string!,
-                                            defaultSelect: modifierOptionJSON["default"].string! == "1" ? true : false,
-                                            image: modifierOptionJSON["image"].null != nil ? "" : modifierOptionJSON["image"].string! ,
+                                            id: modifierOptionJSON["id"].string,
+                                            code: modifierOptionJSON["code"].string,
+                                            defaultSelect: modifierOptionJSON["default"].string == "1" ? true : false,
+                                            image: modifierOptionJSON["image"].null != nil ? "" : modifierOptionJSON["image"].string ,
                                             modifierId: modifier.id,
                                             modifierGuid: modifier.guid,
-                                            price: modifierOptionJSON["price"].string!)
+                                            price: modifierOptionJSON["price"].string,
+                                            taxable: modifierOptionJSON["taxable"].string == "1" ? true : false,
+                                            ppn: modifierOptionJSON["ppn"].string == "1" ? true : false
+                                        )
                                         modifierOption.names = HelperModel.parseNames(modifierOptionJSON["additionNames"]["additionName"].array ?? [])
                                         ModifierOptionModel.create(modifierOption)
                                         modifierOptions.append(modifierOption)

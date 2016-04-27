@@ -24,6 +24,8 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var selectLanguageLabel: UILabel!
     @IBOutlet weak var languageEnglishButton: UIButton!
     @IBOutlet weak var languageIndonesiaButton: UIButton!
+    @IBOutlet weak var tocSwitch: UISwitch!
+    @IBOutlet weak var tocButton: UIButton!
     
     @IBOutlet weak var signUpButton: UIButton!
     @IBOutlet weak var signInButton: UIButton!
@@ -48,8 +50,9 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
         self.confirmPasswordLabel.text = Wording.Profile.ConfirmPassword[self.languageId]
         self.selectLanguageLabel.text = Wording.Profile.Language[self.languageId]
         self.signUpButton.setTitle(Wording.Login.Register[self.languageId], forState: UIControlState.Normal)
-        self.signInButton.setTitle(NSString.init(format:"%@ $@", Wording.Login.AlreadyHaveAnAccount[self.languageId]!, Wording.Login.LoginHere[self.languageId]!) as String, forState: UIControlState.Normal)
+        self.signInButton.setTitle(NSString.init(format:"%@ %@", Wording.Login.AlreadyHaveAnAccount[self.languageId]!, Wording.Login.LoginHere[self.languageId]!) as String, forState: UIControlState.Normal)
         self.skipButton.setTitle(Wording.Login.Skip[self.languageId], forState: UIControlState.Normal)
+        self.tocButton.setTitle(Wording.Menu.Toc[self.languageId], forState: UIControlState.Normal)
         
         CustomView.custom(self.skipButton, borderColor: UIColor.init(red: 191.0/255.0, green: 58.0/255.0, blue: 56.0/255.0, alpha: 1.0), cornerRadius: 0, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
     }
@@ -69,40 +72,52 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    @IBAction func tocButtonClicked(sender: AnyObject) {
+        self.performSegueWithIdentifier("TOCSegue", sender: nil)
+    }
+    
     @IBAction func signUpButtonClicked(sender: AnyObject) {
-        //show activity indicator
-        let activityIndicator = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        activityIndicator.mode = MBProgressHUDMode.Indeterminate;
-        activityIndicator.labelText = "Loading";
-        
-        let languageID = self.languageEnglishButton.selected == true ? LanguageID.English : LanguageID.Indonesia
-        
-        let formatter = NSDateFormatter.init()
-        formatter.dateFormat = "yyyy-MM-dd"
-        
-        let user:User = User.init(
-            username: self.emailField.text,
-            fullname: self.nameField.text,
-            handphone: self.phoneField.text,
-            password: self.passwordField.text,
-            confirmPassword: self.confirmPasswordField.text,
-            languageId: languageID,
-            gender: "",
-            address: "",
-            birthdate: NSDate()
-        )
-        
-        LoginModel.register(user) { (status, message, user) -> Void in
-            if (status == Status.Success){
-                self.performSegueWithIdentifier("ValidationSegue", sender: user)
-            } else {
-                //should show alert error
-                let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
-            }
+        if (self.tocSwitch.on == false){
+            //should show alert error
+            let alert: UIAlertController = UIAlertController(title: Status.Error, message: Wording.Warning.TOCNotAgree[self.languageId], preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
             
-            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+        } else {
+            //show activity indicator
+            let activityIndicator = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+            activityIndicator.mode = MBProgressHUDMode.Indeterminate;
+            activityIndicator.labelText = "Loading";
+            
+            let languageID = self.languageEnglishButton.selected == true ? LanguageID.English : LanguageID.Indonesia
+            
+            let formatter = NSDateFormatter.init()
+            formatter.dateFormat = "yyyy-MM-dd"
+            
+            let user:User = User.init(
+                username: self.emailField.text,
+                fullname: self.nameField.text,
+                handphone: self.phoneField.text,
+                password: self.passwordField.text,
+                confirmPassword: self.confirmPasswordField.text,
+                languageId: languageID,
+                gender: "",
+                address: "",
+                birthdate: NSDate()
+            )
+            
+            LoginModel.register(user) { (status, message, user) -> Void in
+                if (status == Status.Success){
+                    self.performSegueWithIdentifier("ValidationSegue", sender: user)
+                } else {
+                    //should show alert error
+                    let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                }
+                
+                MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+            }
         }
     }
     

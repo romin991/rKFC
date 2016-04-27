@@ -191,6 +191,10 @@ struct Wording {
             LanguageID.Indonesia : "Menu breakfast tidak tersedia di sini",
             LanguageID.English : "Breakfast menu is not available at this store"
         ]
+        static let TOCNotAgree:[String:String] = [
+            LanguageID.Indonesia : "Anda harus menyetujui syarat dan ketentuan",
+            LanguageID.English : "You must agree to the terms and conditions"
+        ]
     }
     
     struct Profile {

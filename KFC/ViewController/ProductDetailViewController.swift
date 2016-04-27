@@ -209,6 +209,10 @@ class ProductDetailViewController: UIViewController, ModifierParentDelegate {
             if (savedCartItem != nil){
                 CartModel.removeCartItem(savedCartItem!)
                 
+                var price:NSDecimalNumber = NSDecimalNumber.init(longLong: 0)
+                var tax:NSDecimalNumber = NSDecimalNumber.init(longLong: 0)
+                var ppn:NSDecimalNumber = NSDecimalNumber.init(longLong: 0)
+                
                 for modifier in self.modifiers{
                     for modifierOption in modifier.modifierOptions{
                         if (modifierOption.quantity != 0){
@@ -227,30 +231,39 @@ class ProductDetailViewController: UIViewController, ModifierParentDelegate {
                                     quantity: modifierOption.quantity
                                 )
                                 cartModifier.names = modifierOption.names
-                                
                                 savedCartItem?.cartModifiers.append(cartModifier)
-                                savedCartItem?.price = NSDecimalNumber.init(string:savedCartItem?.price).decimalNumberByAdding(NSDecimalNumber.init(string:modifierOption.price)).stringValue
+                                
                             }
+                            
+                            let modifierPrice:NSDecimalNumber = NSDecimalNumber.init(string: modifierOption.price)
+                            var modifierPPN:NSDecimalNumber = NSDecimalNumber.init(long: 0)
+                            var modifierTax:NSDecimalNumber = NSDecimalNumber.init(long: 0)
+                            
+                            if (modifierOption.taxable == true) {
+                                modifierTax =  NSDecimalNumber.init(string: store.tax).decimalNumberByDividingBy(NSDecimalNumber.init(long:100)).decimalNumberByMultiplyingBy(modifierPrice)
+                                tax = tax.decimalNumberByAdding(modifierTax)
+                            }
+                            if (modifierOption.ppn == true) {
+                                modifierPPN = NSDecimalNumber.init(string: store.ppn).decimalNumberByDividingBy(NSDecimalNumber.init(long:100)).decimalNumberByMultiplyingBy(modifierPrice)
+                                ppn = ppn.decimalNumberByAdding(modifierPPN)
+                            }
+                            
+                            price = price.decimalNumberByAdding(modifierPrice)
                         }
                     }
                 }
                 
-                savedCartItem?.quantity = (savedCartItem?.quantity)! + self.product.quantity
-                let subtotal:NSDecimalNumber = NSDecimalNumber.init(string: savedCartItem?.price).decimalNumberByMultiplyingBy(NSDecimalNumber.init(integer:savedCartItem!.quantity!))
+                let quantity = (savedCartItem?.quantity)! + self.product.quantity
+                let subtotal:NSDecimalNumber = price.decimalNumberByMultiplyingBy(NSDecimalNumber.init(integer:quantity))
+                tax = tax.decimalNumberByMultiplyingBy(NSDecimalNumber.init(integer:quantity))
+                ppn = ppn.decimalNumberByMultiplyingBy(NSDecimalNumber.init(integer:quantity))
+                
+                let total:NSDecimalNumber = subtotal.decimalNumberByAdding(tax).decimalNumberByAdding(ppn)
+                
+                savedCartItem?.quantity = quantity
                 savedCartItem?.subtotal = subtotal.stringValue
-                
-                let ppn:NSDecimalNumber = NSDecimalNumber.init(string: store.ppn).decimalNumberByDividingBy(NSDecimalNumber.init(long: 100)).decimalNumberByMultiplyingBy(subtotal)
-                let tax:NSDecimalNumber = NSDecimalNumber.init(string: store.tax).decimalNumberByDividingBy(NSDecimalNumber.init(long: 100)).decimalNumberByMultiplyingBy(subtotal)
-                
-                var total:NSDecimalNumber = subtotal
-                if (self.product.taxable == true) {
-                    total = total.decimalNumberByAdding(tax)
-                    savedCartItem?.tax = tax.stringValue
-                }
-                if (self.product.ppn == true){
-                    total = total.decimalNumberByAdding(ppn)
-                    savedCartItem?.ppn = ppn.stringValue
-                }
+                savedCartItem?.tax = tax.stringValue
+                savedCartItem?.ppn = ppn.stringValue
                 savedCartItem?.total = total.stringValue
                 
                 CartModel.addCartItem(savedCartItem!)
@@ -258,6 +271,8 @@ class ProductDetailViewController: UIViewController, ModifierParentDelegate {
             } else {
                 
                 var price:NSDecimalNumber = NSDecimalNumber.init(longLong: 0)
+                var tax:NSDecimalNumber = NSDecimalNumber.init(longLong: 0)
+                var ppn:NSDecimalNumber = NSDecimalNumber.init(longLong: 0)
                 
                 var cartModifiers:[CartModifier] = [CartModifier]()
                 for modifier in self.modifiers{
@@ -274,6 +289,18 @@ class ProductDetailViewController: UIViewController, ModifierParentDelegate {
                             cartModifier.names = modifierOption.names
                             
                             let modifierPrice:NSDecimalNumber = NSDecimalNumber.init(string: modifierOption.price)
+                            var modifierPPN:NSDecimalNumber = NSDecimalNumber.init(long: 0)
+                            var modifierTax:NSDecimalNumber = NSDecimalNumber.init(long: 0)
+                            
+                            if (modifierOption.taxable == true) {
+                                modifierTax =  NSDecimalNumber.init(string: store.tax).decimalNumberByDividingBy(NSDecimalNumber.init(long:100)).decimalNumberByMultiplyingBy(modifierPrice)
+                                tax = tax.decimalNumberByAdding(modifierTax)
+                            }
+                            if (modifierOption.ppn == true) {
+                                modifierPPN = NSDecimalNumber.init(string: store.ppn).decimalNumberByDividingBy(NSDecimalNumber.init(long:100)).decimalNumberByMultiplyingBy(modifierPrice)
+                                ppn = ppn.decimalNumberByAdding(modifierPPN)
+                            }
+                            
                             price = price.decimalNumberByAdding(modifierPrice)
                             
                             cartModifiers.append(cartModifier)
@@ -282,23 +309,10 @@ class ProductDetailViewController: UIViewController, ModifierParentDelegate {
                 }
                 
                 let subtotal:NSDecimalNumber = price.decimalNumberByMultiplyingBy(NSDecimalNumber.init(integer:self.product.quantity))
+                tax = tax.decimalNumberByMultiplyingBy(NSDecimalNumber.init(integer:self.product.quantity))
+                ppn = ppn.decimalNumberByMultiplyingBy(NSDecimalNumber.init(integer:self.product.quantity))
                 
-                var ppn:NSDecimalNumber = NSDecimalNumber.init(string: store.ppn).decimalNumberByDividingBy(NSDecimalNumber.init(long:100)).decimalNumberByMultiplyingBy(subtotal)
-                var tax:NSDecimalNumber = NSDecimalNumber.init(string: store.tax).decimalNumberByDividingBy(NSDecimalNumber.init(long:100)).decimalNumberByMultiplyingBy(subtotal)
-                
-                var total:NSDecimalNumber = subtotal
-                
-                if (self.product.taxable == true){
-                    total = total.decimalNumberByAdding(tax)
-                } else {
-                    tax = NSDecimalNumber.init(long: 0)
-                }
-                
-                if (self.product.ppn == true){
-                    total = total.decimalNumberByAdding(ppn)
-                } else {
-                    ppn = NSDecimalNumber.init(long: 0)
-                }
+                let total:NSDecimalNumber = subtotal.decimalNumberByAdding(tax).decimalNumberByAdding(ppn)
                 
                 let cartItem:CartItem = CartItem.init(
                     guid: nil,

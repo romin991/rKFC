@@ -119,7 +119,9 @@
         <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="modifierGuid" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="modifierId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ppn" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="price" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="taxable" optional="YES" attributeType="Boolean" syncable="YES"/>
         <relationship name="modifier" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Modifier" inverseName="modifierOptions" inverseEntity="Modifier" syncable="YES"/>
         <relationship name="names" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Name" inverseName="modifierOptionNames" inverseEntity="Name" syncable="YES"/>
     </entity>
@@ -200,7 +202,7 @@
         <element name="Feedback" positionX="-144" positionY="162" width="128" height="120"/>
         <element name="Image" positionX="-153" positionY="153" width="128" height="135"/>
         <element name="Modifier" positionX="-162" positionY="63" width="128" height="210"/>
-        <element name="ModifierOption" positionX="-153" positionY="72" width="128" height="195"/>
+        <element name="ModifierOption" positionX="-153" positionY="72" width="128" height="225"/>
         <element name="Name" positionX="-162" positionY="144" width="128" height="270"/>
         <element name="Payment" positionX="-162" positionY="144" width="128" height="150"/>
         <element name="Product" positionX="-54" positionY="-9" width="128" height="225"/>

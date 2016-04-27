@@ -16,7 +16,7 @@ class Product: NSObject {
     var categoryGuid : String? = ""
     var image : String? = ""
     var price : String? = "0"
-    var taxable : Bool? = true
+    var taxable : Bool? = false
     var ppn : Bool? = false
     
     var names : [Name] = [Name]()

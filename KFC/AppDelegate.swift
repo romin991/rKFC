@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var token: String?
+    var drawerDelegate:DrawerDelegate?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -127,6 +128,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
             }
             return false
+    }
+    
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+        if (application.applicationState == UIApplicationState.Inactive) {
+            let transId = userInfo["trans_id"] as? String ?? nil
+            
+            if (transId != nil && transId != "" && self.drawerDelegate != nil){
+                let cart = Cart.init()
+                cart.transId = transId
+                OrderModel.getOrderDetail(cart, completion: { (status, message, cart) -> Void in
+                    self.drawerDelegate!.showOrderDetail(cart)
+                })
+            }
+        }
     }
     
     func applicationWillResignActive(application: UIApplication) {

@@ -34,6 +34,9 @@ class DrawerViewController: UIViewController, DrawerDelegate {
         self.drawerController?.maximumLeftDrawerWidth = self.view.frame.width - 40
         
         self.selectMenu(Menu.Home)
+        
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        appDelegate.drawerDelegate = self
     
         self.navigationController?.pushViewController(self.drawerController!, animated: false)
     }
