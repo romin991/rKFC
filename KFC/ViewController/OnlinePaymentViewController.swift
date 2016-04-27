@@ -57,8 +57,11 @@ class OnlinePaymentViewController: UIViewController, UIWebViewDelegate {
             //set as complete, redirect to home
             OrderModel.orderComplete()
             self.drawerDelegate?.selectMenu(Menu.Home)
-            self.drawerDelegate?.showOrderDetail(self.cart!)
-            self.showSuccessMessage()
+            self.drawerDelegate?.showOrderDetail(self.cart!, completion: { (status, message, cart) -> Void in
+                if (status == Status.Success) {
+                    self.showSuccessMessage()
+                }
+            })
             
         } else if (urlString == self.payment?.failedURL){
             let languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
@@ -66,8 +69,11 @@ class OnlinePaymentViewController: UIViewController, UIWebViewDelegate {
             alert.addAction(UIAlertAction(title: Wording.Common.NO[languageId], style: UIAlertActionStyle.Default, handler: { (action) -> Void in
                 OrderModel.orderComplete()
                 self.drawerDelegate?.selectMenu(Menu.Home)
-                self.drawerDelegate?.showOrderDetail(self.cart!)
-                self.showSuccessMessage()
+                self.drawerDelegate?.showOrderDetail(self.cart!, completion: { (status, message, cart) -> Void in
+                    if (status == Status.Success) {
+                        self.showSuccessMessage()
+                    }
+                })
                 
             }))
             alert.addAction(UIAlertAction(title: Wording.Common.YES[languageId], style: UIAlertActionStyle.Default, handler: { (action) -> Void in

@@ -137,9 +137,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if (transId != nil && transId != "" && self.drawerDelegate != nil){
                 let cart = Cart.init()
                 cart.transId = transId
-                OrderModel.getOrderDetail(cart, completion: { (status, message, cart) -> Void in
-                    self.drawerDelegate!.showOrderDetail(cart)
-                })
+                self.drawerDelegate!.showOrderDetail(cart, completion: nil)
             }
         }
     }
