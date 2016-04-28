@@ -17,6 +17,7 @@ class CustomCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var ribbonView: UIImageView!
     @IBOutlet weak var breakfastFilterView: UIView!
     @IBOutlet weak var breakfastTimeLabel: UILabel!
+    @IBOutlet weak var breakfastTitleLabel: UILabel!
     
     override var bounds: CGRect {
         didSet {

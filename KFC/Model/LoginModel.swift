@@ -319,8 +319,15 @@ class LoginModel: NSObject {
                             let user:User = UserModel.getUser()
                             let customerJSON = json["customer"]
                             
+                            let dateformatter = NSDateFormatter.init()
+                            dateformatter.dateFormat = "yyyy-MM-dd"
+                            
                             user.fullname = customerJSON["fullname"].string
                             user.handphone = customerJSON["handphone"].string
+                            user.birthdate = dateformatter.dateFromString(customerJSON["birthdate"].string ?? "")
+                            user.username = customerJSON["email"].string
+                            user.languageId = customerJSON["language_id"].string
+                            user.gender = customerJSON["gender"].string == "M" ? Wording.Gender.Male[user.languageId!] : Wording.Gender.Female[user.languageId!]
                             UserModel.updateUser(user)
                             
                             completion(status: Status.Success, message: message, user: user)

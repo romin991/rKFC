@@ -232,6 +232,8 @@ struct Wording {
         static let YouAreNotLoggedIn:[String:String] = [LanguageID.Indonesia : "Anda belum masuk", LanguageID.English : "You are not logged in"]
         static let HereIsYourShoppingCart:[String:String] = [LanguageID.Indonesia : "Keranjang belanja Anda di sini. Klik setelah selesai belanja", LanguageID.English : "Here is your shopping cart. Click when done shopping"]
         static let YourOrderHasBeenSent:[String:String] = [LanguageID.Indonesia : "Pesanan anda telah terkirim", LanguageID.English : "Your order has been sent"]
+        static let NotAvailable:[String:String] = [LanguageID.Indonesia : "Tidak Tersedia", LanguageID.English : "Not Available"]
+        static let Close:[String:String] = [LanguageID.Indonesia : "Tutup", LanguageID.English : "Close"]
     }
     
     struct Status{

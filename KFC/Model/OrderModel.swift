@@ -402,6 +402,8 @@ class OrderModel: NSObject {
                             cart.address = json["trans"]["customer_address"].string ?? ""
                             cart.recipient = json["trans"]["customer_address_recipient"].string ?? ""
                             
+                            cart.cartItems = [CartItem]()
+                            
                             var quantity = 0
                             let listsJSON = json["trans"]["list"].array ?? []
                             for listJSON in listsJSON{

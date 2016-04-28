@@ -36,6 +36,14 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
 //    @IBOutlet weak var total: UILabel!
     
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var buttonViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var subtotalHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var pb1HeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var deliveryHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var deliveryTaxHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var taxHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var roundingHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var totalHeightConstraint: NSLayoutConstraint!
     
     var drawerDelegate:DrawerDelegate?
     var cart:Cart = Cart.init()
@@ -85,6 +93,10 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         //end
     }
     
+    override func viewWillLayoutSubviews() {
+       self.refreshView()
+    }
+    
     func refreshCalculation(){
         self.cart = CartModel.getPendingCart()
         
@@ -96,7 +108,24 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         self.roundingValueLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.rounding))
         self.totalValueLabel.text = CommonFunction.formatCurrency(NSDecimalNumber.init(string:self.cart.total))
         
+        self.refreshView()
+        
         self.tableView.reloadData()
+    }
+    
+    func refreshView(){
+        self.subtotalHeightConstraint.constant = self.cart.subtotal == "0" ? 0 : 20
+        self.pb1HeightConstraint.constant = self.cart.tax == "0" ? 0 : 20
+        self.deliveryHeightConstraint.constant = self.cart.delivery == "0" ? 0 : 20
+        self.deliveryTaxHeightConstraint.constant = self.cart.deliveryTax == "0" ? 0 : 20
+        self.taxHeightConstraint.constant = self.cart.ppn == "0" ? 0 : 20
+        self.roundingHeightConstraint.constant = self.cart.rounding == "0" ? 0 : 20
+        self.totalHeightConstraint.constant = self.cart.total == "0" ? 0 : 20
+        
+        let totalHeight = self.subtotalHeightConstraint.constant + self.pb1HeightConstraint.constant + self.deliveryHeightConstraint.constant + self.deliveryTaxHeightConstraint.constant + self.taxHeightConstraint.constant + self.roundingHeightConstraint.constant + self.totalHeightConstraint.constant
+        
+        self.buttonViewHeightConstraint.constant = totalHeight == 0 ? 0 : totalHeight + 74
+        self.view.layoutIfNeeded()
     }
     
     override func didReceiveMemoryWarning() {

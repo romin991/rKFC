@@ -199,6 +199,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
                 MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
                 
                 if (status == Status.Success){
+                    UserModel.updateUser(user!)
                     let activityIndicator = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
                     activityIndicator.mode = MBProgressHUDMode.Text;
                     activityIndicator.labelText = message;

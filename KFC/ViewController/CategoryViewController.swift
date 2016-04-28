@@ -116,7 +116,9 @@ class CategoryViewController: UIViewController, UICollectionViewDelegate, UIColl
         if (collectionView == self.categoryCollectionView){
             collectionView.deselectItemAtIndexPath(indexPath, animated: true)
             let category = self.categories[indexPath.row]
-            self.performSegueWithIdentifier("ProductListSegue", sender: category)
+            if (category.id! != "16" || StoreModel.getSelectedStore().isBreakfast == true){ //breakfast menu category
+                self.performSegueWithIdentifier("ProductListSegue", sender: category)
+            }
         }
     }
     
@@ -142,6 +144,7 @@ class CategoryViewController: UIViewController, UICollectionViewDelegate, UIColl
                 let store = StoreModel.getSelectedStore()
                 if (store.isBreakfast == false){
                     cell.breakfastFilterView.hidden = false
+                    cell.breakfastTitleLabel.text = Wording.Main.NotAvailable[self.languageId]?.uppercaseString
                     
                 } else {
                     let now = NSDate()
@@ -160,6 +163,7 @@ class CategoryViewController: UIViewController, UICollectionViewDelegate, UIColl
                         cell.breakfastTimeLabel.text = NSString.init(format: "%@ - %@", dateFormatter.stringFromDate(breakfastStart!), dateFormatter.stringFromDate(breakfastEnd!)) as String
                         cell.breakfastFilterView.hidden = false
                         cell.breakfastTimeLabel.hidden = false
+                        cell.breakfastTitleLabel.text = Wording.Main.Close[self.languageId]?.uppercaseString
                         
                     }
                 }
