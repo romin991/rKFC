@@ -29,9 +29,12 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
     @IBOutlet weak var skipButton: UIButton!
     
     var languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
+    var drawerDelegate:DrawerDelegate?
+    var pendingCart:Cart?
     
     func isFromCheckoutView() -> Bool{
-        return self.navigationController?.viewControllers.count > 2
+        let viewController = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 2]
+        return !(viewController is SplashViewController)
     }
     
     override func viewDidLoad() {
@@ -41,13 +44,17 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
         GIDSignIn.sharedInstance().uiDelegate = self
         GIDSignIn.sharedInstance().delegate = self
         
-        if (self.isFromCheckoutView()){
-            self.skipButton.hidden = true
+        self.pendingCart = CartModel.getPendingCart()
+        
+        if (self.pendingCart?.cartItems.count > 0){
+            self.skipButton.setTitle(Wording.Login.ClearCart[self.languageId], forState: UIControlState.Normal)
+        } else {
+            self.skipButton.setTitle(Wording.Login.Skip[self.languageId], forState: UIControlState.Normal)
         }
         
         CustomView.custom(self.skipButton, borderColor: UIColor.init(red: 191.0/255.0, green: 58.0/255.0, blue: 56.0/255.0, alpha: 1.0), cornerRadius: 0, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
         
-        self.skipButton.setTitle(Wording.Login.Skip[self.languageId], forState: UIControlState.Normal)
+        
         self.loginButton.setTitle(Wording.Login.Login[self.languageId], forState: UIControlState.Normal)
         self.registerButton.setTitle(Wording.Login.Register[self.languageId], forState: UIControlState.Normal)
         self.forgotPasswordButton.setTitle(Wording.Login.ForgotPassword[self.languageId], forState: UIControlState.Normal)
@@ -104,7 +111,12 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDeleg
     @IBAction func skipButtonClicked(sender: AnyObject) {
         NSUserDefaults.standardUserDefaults().setObject(LanguageID.English, forKey: "LanguageId")
         UserModel.updateUser(User.init())
-        self.performSegueWithIdentifier("MainSegue", sender: nil)
+        OrderModel.clearCart()
+        if (self.isFromCheckoutView() && self.drawerDelegate != nil){
+            self.drawerDelegate?.selectMenu(Menu.Home)
+        } else {
+            self.performSegueWithIdentifier("MainSegue", sender: nil)
+        }
     }
     
     @IBAction func loginWithFacebookButtonClicked(sender: AnyObject) {

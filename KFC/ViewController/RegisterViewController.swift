@@ -43,6 +43,13 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
             self.emailField.text = self.username
         }
         
+        let pendingCart = CartModel.getPendingCart()
+        if (pendingCart.cartItems.count > 0){
+            self.skipButton.setTitle(Wording.Login.ClearCart[self.languageId], forState: UIControlState.Normal)
+        } else {
+            self.skipButton.setTitle(Wording.Login.Skip[self.languageId], forState: UIControlState.Normal)
+        }
+        
         self.emailLabel.text = Wording.Profile.Email[self.languageId]
         self.nameLabel.text = Wording.Profile.Name[self.languageId]
         self.phoneLabel.text = Wording.Profile.PhoneNumber[self.languageId]
@@ -51,7 +58,6 @@ class RegisterViewController: UIViewController, UITextFieldDelegate {
         self.selectLanguageLabel.text = Wording.Profile.Language[self.languageId]
         self.signUpButton.setTitle(Wording.Login.Register[self.languageId], forState: UIControlState.Normal)
         self.signInButton.setTitle(NSString.init(format:"%@ %@", Wording.Login.AlreadyHaveAnAccount[self.languageId]!, Wording.Login.LoginHere[self.languageId]!) as String, forState: UIControlState.Normal)
-        self.skipButton.setTitle(Wording.Login.Skip[self.languageId], forState: UIControlState.Normal)
         self.tocButton.setTitle(Wording.Menu.Toc[self.languageId], forState: UIControlState.Normal)
         
         CustomView.custom(self.skipButton, borderColor: UIColor.init(red: 191.0/255.0, green: 58.0/255.0, blue: 56.0/255.0, alpha: 1.0), cornerRadius: 0, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)

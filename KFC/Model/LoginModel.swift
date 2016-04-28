@@ -154,6 +154,7 @@ class LoginModel: NSObject {
                                     
                                     NSUserDefaults.standardUserDefaults().setObject(user.languageId, forKey: "LanguageId")
                                     NSNotificationCenter.defaultCenter().postNotificationName(NotificationKey.LanguageChanged, object: nil)
+                                    NSNotificationCenter.defaultCenter().postNotificationName(NotificationKey.Login, object: nil)
                                     
                                     completion(status: Status.Success, message: message, user:user)
                                 } else {

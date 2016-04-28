@@ -170,7 +170,9 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         let validateMessage = self.validate()
         if (self.cart.customerId == ""){
             let loginViewController:LoginViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController)!
+            loginViewController.drawerDelegate = self.drawerDelegate
             self.navigationController?.pushViewController(loginViewController, animated: true)
+            
         } else if (self.cart.cartItems.count == 0){
             let message = Wording.Warning.EmptyCart[self.languageId]
             let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)

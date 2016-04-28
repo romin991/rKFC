@@ -23,6 +23,7 @@ struct NotificationKey {
     static let ImageCategoryDownloaded = "ImageCategoryDownloaded"
     static let ImagePaymentDownloaded = "ImagePaymentDownloaded"
     static let LanguageChanged = "LanguageChanged"
+    static let Login = "Login"
 }
     
 struct Path {
@@ -214,6 +215,7 @@ struct Wording {
         static let RegisterHere:[String:String] = [LanguageID.Indonesia : "Daftar di sini", LanguageID.English : "Sign Up Here"]
         static let Register:[String:String] = [LanguageID.Indonesia : "Daftar", LanguageID.English : "Sign Up"]
         static let Skip:[String:String] = [LanguageID.Indonesia : "Lewati", LanguageID.English : "Skip"]
+        static let ClearCart:[String:String] = [LanguageID.Indonesia : "Kosongkan Keranjang", LanguageID.English : "Clear Cart"]
         static let ForgotPassword:[String:String] = [LanguageID.Indonesia : "Lupa Kata Sandi?", LanguageID.English : "Forgot Password?"]
         static let Login:[String:String] = [LanguageID.Indonesia : "Masuk", LanguageID.English : "Sign In"]
         static let LoginHere:[String:String] = [LanguageID.Indonesia : "Masuk Di Sini", LanguageID.English : "Sign In Here"]

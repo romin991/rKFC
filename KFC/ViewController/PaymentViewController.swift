@@ -99,7 +99,7 @@ class PaymentViewController: UIViewController, UICollectionViewDataSource, UICol
                 
                 OrderModel.getPaymentForm(self.cart!, completion: { (status, message) -> Void in
                     if (status == Status.Success){
-                        OrderModel.orderComplete()
+                        OrderModel.clearCart()
                         self.drawerDelegate?.selectMenu(Menu.Home)
                         self.drawerDelegate?.showOrderDetail(self.cart!, completion: { (status, message, cart) -> Void in
                             if (status == Status.Success) {
@@ -123,7 +123,7 @@ class PaymentViewController: UIViewController, UICollectionViewDataSource, UICol
                 //set as complete
                 self.sendOrder({ (status, message) -> Void in
                     if (status == Status.Success){
-                        OrderModel.orderComplete()
+                        OrderModel.clearCart()
                         self.drawerDelegate?.selectMenu(Menu.Home)
                         self.drawerDelegate?.showOrderDetail(self.cart!, completion: { (status, message, cart) -> Void in
                             if (status == Status.Success) {

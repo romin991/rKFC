@@ -12,7 +12,7 @@ import SwiftyJSON
 
 class OrderModel: NSObject {
     
-    class func orderComplete(){
+    class func clearCart(){
         let cart = CartModel.getPendingCart()
         CartModel.deletePendingCart()
         
