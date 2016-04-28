@@ -192,6 +192,9 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
                 user.gender = Wording.Gender.Female[user.languageId!]
             }
             
+            user.password = self.passwordField.text
+            user.confirmPassword = self.confirmPasswordField.text
+            
             //parse data to object 
             //call API update profile
             LoginModel.updateProfile(user, completion: { (status, message, user) -> Void in
