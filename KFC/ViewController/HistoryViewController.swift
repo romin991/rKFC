@@ -14,6 +14,7 @@ class HistoryViewController: UIViewController {
     @IBOutlet weak var shoppingCartBadgesView: UIView!
     @IBOutlet weak var shoppingCartBadgesLabel: UILabel!
     @IBOutlet weak var shoppingCartButton: UIButton!
+    @IBOutlet weak var segmentControl: UISegmentedControl!
     
     var drawerDelegate:DrawerDelegate?
     var carts:[Cart] = [Cart]()
@@ -37,13 +38,16 @@ class HistoryViewController: UIViewController {
     func refreshLanguage(){
         self.languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
         self.tableView.reloadData()
-        
+        self.segmentControl.setTitle(Wording.Status.OnProgress[self.languageId], forSegmentAtIndex: 0)
+        self.segmentControl.setTitle(Wording.Status.Completed[self.languageId], forSegmentAtIndex: 1)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         CustomView.custom(self.shoppingCartBadgesView, borderColor: UIColor.whiteColor(), cornerRadius: 8, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
+        
+        self.segmentControl.tintColor = Color.Red
 
         let activityIndicator = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         activityIndicator.mode = MBProgressHUDMode.Indeterminate;
@@ -52,22 +56,10 @@ class HistoryViewController: UIViewController {
         CartModel.deleteAllNotPendingCart()
         OrderModel.getOrderList { (status, message) -> Void in
             if (status == Status.Success){
-                self.carts = CartModel.getAllNotPendingCart()
-                
-                let month = NSDateFormatter.init()
-                month.dateFormat = "MMMM yyyy"
+                self.refreshDataSource()
                 
                 var selectedCart:Cart?
                 for cart in self.carts{
-                    let monthString = month.stringFromDate(cart.transDate!)
-                    if (!self.sectionTitle.contains(monthString)) {
-                        self.sectionTitle.append(monthString)
-                    }
-                    if (!self.dataSource.keys.contains(monthString)){
-                        self.dataSource[monthString] = [Cart]()
-                    }
-                    self.dataSource[monthString]?.append(cart)
-                    
                     if (cart.statusDetail == "CLS" && cart.feedbackRating == "0" && selectedCart == nil){
                         selectedCart = cart
                     }
@@ -77,7 +69,7 @@ class HistoryViewController: UIViewController {
                     self.performSegueWithIdentifier("FeedbackSegue", sender: selectedCart)
                 }
                 
-                self.tableView.reloadData()
+                
             } else {
                 let alert: UIAlertController = UIAlertController(title: Status.Error, message: message, preferredStyle: UIAlertControllerStyle.Alert)
                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
@@ -86,6 +78,7 @@ class HistoryViewController: UIViewController {
             
             MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
         }
+        self.refreshLanguage()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -102,6 +95,36 @@ class HistoryViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func refreshDataSource(){
+        let selected = self.segmentControl.selectedSegmentIndex
+        
+        if (selected == 0) {
+            self.carts = CartModel.getAllInProgressCart()
+        } else {
+            self.carts = CartModel.getAllCompletedCart()
+        }
+        self.dataSource = [String: [Cart]]()
+        
+        let month = NSDateFormatter.init()
+        month.dateFormat = "MMMM yyyy"
+        
+        for cart in self.carts{
+            let monthString = month.stringFromDate(cart.transDate!)
+            if (!self.sectionTitle.contains(monthString)) {
+                self.sectionTitle.append(monthString)
+            }
+            if (!self.dataSource.keys.contains(monthString)){
+                self.dataSource[monthString] = [Cart]()
+            }
+            self.dataSource[monthString]?.append(cart)
+        }
+        self.tableView.reloadData()
+    }
+    
+    @IBAction func segmenControlValueChanged(sender: AnyObject) {
+        self.refreshDataSource()
     }
     
     @IBAction func cartButtonClicked(sender: AnyObject) {
@@ -137,7 +160,8 @@ class HistoryViewController: UIViewController {
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        let cart:Cart = self.carts[indexPath.row]
+        let monthString = self.sectionTitle[indexPath.section]
+        let cart:Cart = self.dataSource[monthString]![indexPath.row]
         
         var subtitle:String = ""
         for cartItem in cart.cartItems{

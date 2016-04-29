@@ -28,6 +28,8 @@ class ModifierOptionModel: NSObject {
         cdModifierOption.setValue(modifierOption.modifierId, forKey: "modifierId")
         cdModifierOption.setValue(modifierOption.modifierGuid, forKey: "modifierGuid")
         cdModifierOption.setValue(modifierOption.price, forKey: "price")
+        cdModifierOption.setValue(modifierOption.taxable, forKey: "taxable")
+        cdModifierOption.setValue(modifierOption.ppn, forKey: "ppn")
         
         let setNames = cdModifierOption.mutableSetValueForKey("names")
         for name in modifierOption.names{
@@ -80,7 +82,9 @@ class ModifierOptionModel: NSObject {
                     image: (cdModifierOption.valueForKey("image") as? String),
                     modifierId: (cdModifierOption.valueForKey("modifierId") as? String),
                     modifierGuid: (cdModifierOption.valueForKey("modifierGuid") as? String),
-                    price: (cdModifierOption.valueForKey("price") as? String)
+                    price: (cdModifierOption.valueForKey("price") as? String),
+                    taxable: (cdModifierOption.valueForKey("taxable") as? Bool),
+                    ppn: (cdModifierOption.valueForKey("ppn") as? Bool)
                 )
                 let cdNames = cdModifierOption.mutableSetValueForKey("names")
                 for cdName in cdNames{

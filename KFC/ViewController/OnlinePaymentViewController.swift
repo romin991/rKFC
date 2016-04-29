@@ -55,19 +55,25 @@ class OnlinePaymentViewController: UIViewController, UIWebViewDelegate {
         
         if (urlString == self.payment?.successURL){
             //set as complete, redirect to home
-            OrderModel.orderComplete()
+            OrderModel.clearCart()
             self.drawerDelegate?.selectMenu(Menu.Home)
-            self.drawerDelegate?.showOrderDetail(self.cart!)
-            self.showSuccessMessage()
+            self.drawerDelegate?.showOrderDetail(self.cart!, completion: { (status, message, cart) -> Void in
+                if (status == Status.Success) {
+                    self.showSuccessMessage()
+                }
+            })
             
         } else if (urlString == self.payment?.failedURL){
             let languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
             let alert: UIAlertController = UIAlertController(title: Status.Error, message: Wording.Warning.PaymentFailed[languageId], preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: Wording.Common.NO[languageId], style: UIAlertActionStyle.Default, handler: { (action) -> Void in
-                OrderModel.orderComplete()
+                OrderModel.clearCart()
                 self.drawerDelegate?.selectMenu(Menu.Home)
-                self.drawerDelegate?.showOrderDetail(self.cart!)
-                self.showSuccessMessage()
+                self.drawerDelegate?.showOrderDetail(self.cart!, completion: { (status, message, cart) -> Void in
+                    if (status == Status.Success) {
+                        self.showSuccessMessage()
+                    }
+                })
                 
             }))
             alert.addAction(UIAlertAction(title: Wording.Common.YES[languageId], style: UIAlertActionStyle.Default, handler: { (action) -> Void in

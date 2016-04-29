@@ -12,7 +12,7 @@ import SwiftyJSON
 
 class OrderModel: NSObject {
     
-    class func orderComplete(){
+    class func clearCart(){
         let cart = CartModel.getPendingCart()
         CartModel.deletePendingCart()
         
@@ -320,6 +320,7 @@ class OrderModel: NSObject {
                                         guid: nil,
                                         cartGuid: nil,
                                         productId: listJSON["product_id"].string,
+                                        categoryId: nil,
                                         quantity: Int(listJSON["quantity"].string ?? "0"),
                                         price: "0",
                                         tax: "0",
@@ -391,6 +392,60 @@ class OrderModel: NSObject {
                             cart.transNo = json["trans"]["trans_no"].string ?? ""
                             cart.status = json["trans"]["status"].string ?? ""
                             cart.statusDetail = json["trans"]["status_detail"].string ?? ""
+                            cart.subtotal = json["trans"]["total_amount"].string ?? ""
+                            cart.rounding = json["trans"]["total_rounding"].string ?? ""
+                            cart.tax = json["trans"]["total_tax"].string ?? ""
+                            cart.delivery = json["trans"]["delivery_charge"].string ?? ""
+                            cart.total = json["trans"]["total_sales"].string ?? ""
+                            cart.customerAddressId = json["trans"]["customer_address_id"].string ?? ""
+                            cart.customerId = json["trans"]["customer_id"].string ?? ""
+                            cart.address = json["trans"]["customer_address"].string ?? ""
+                            cart.recipient = json["trans"]["customer_address_recipient"].string ?? ""
+                            
+                            cart.cartItems = [CartItem]()
+                            
+                            var quantity = 0
+                            let listsJSON = json["trans"]["list"].array ?? []
+                            for listJSON in listsJSON{
+                                let cartItem = CartItem.init(
+                                    guid: nil,
+                                    cartGuid: nil,
+                                    productId: listJSON["product_id"].string,
+                                    categoryId: nil,
+                                    quantity: Int(listJSON["quantity"].string ?? "0"),
+                                    price: "0",
+                                    tax: "0",
+                                    ppn: "0",
+                                    subtotal: "0",
+                                    total: "0"
+                                )
+                                cartItem.names = HelperModel.parseNames(listJSON["product_names"]["product_name"].array ?? [])
+                                
+                                quantity += cartItem.quantity!
+                                
+                                var price = NSDecimalNumber.init(string: "0")
+                                let detailListsJSON = listJSON["detail_list"].array ?? []
+                                for detailListJSON in detailListsJSON{
+                                    let cartModifier = CartModifier.init(
+                                        guid: nil,
+                                        cartGuid: nil,
+                                        cartItemGuid: nil,
+                                        modifierId: detailListJSON["product_addition_category_id"].string,
+                                        modifierOptionId: detailListJSON["product_addition_id"].string,
+                                        quantity: Int(detailListJSON["quantity"].string!)
+                                    )
+                                    cartModifier.names = HelperModel.parseNames(detailListJSON["additionNames"]["additionName"].array ?? [])
+                                    
+                                    price = price.decimalNumberByAdding(NSDecimalNumber.init(string: detailListJSON["price"].string))
+                                    cartItem.cartModifiers.append(cartModifier)
+                                }
+                                
+                                cartItem.price = price.stringValue
+                                cartItem.total = price.decimalNumberByMultiplyingBy(NSDecimalNumber.init(long:cartItem.quantity ?? 0)).stringValue
+                                cart.cartItems.append(cartItem)
+                            }
+                            
+                            cart.quantity = quantity
                             
                             completion(status: Status.Success, message: message, cart: cart)
                         } else {

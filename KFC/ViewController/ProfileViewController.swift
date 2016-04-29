@@ -192,6 +192,9 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
                 user.gender = Wording.Gender.Female[user.languageId!]
             }
             
+            user.password = self.passwordField.text
+            user.confirmPassword = self.confirmPasswordField.text
+            
             //parse data to object 
             //call API update profile
             LoginModel.updateProfile(user, completion: { (status, message, user) -> Void in
@@ -199,6 +202,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
                 MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
                 
                 if (status == Status.Success){
+                    UserModel.updateUser(user!)
                     let activityIndicator = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
                     activityIndicator.mode = MBProgressHUDMode.Text;
                     activityIndicator.labelText = message;

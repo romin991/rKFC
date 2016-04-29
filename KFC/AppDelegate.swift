@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var token: String?
+    var drawerDelegate:DrawerDelegate?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -129,6 +130,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return false
     }
     
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+        if (application.applicationState == UIApplicationState.Inactive) {
+            let transId = userInfo["trans_id"] as? String ?? nil
+            
+            if (transId != nil && transId != "" && self.drawerDelegate != nil){
+                let cart = Cart.init()
+                cart.transId = transId
+                self.drawerDelegate!.showOrderDetail(cart, completion: nil)
+            }
+        }
+    }
+    
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
@@ -149,6 +162,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //For Facebook
         FBSDKAppEvents.activateApp()
         //End
+        
+        application.applicationIconBadgeNumber = 0;
     }
 
     func applicationWillTerminate(application: UIApplication) {

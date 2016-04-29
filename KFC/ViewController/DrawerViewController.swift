@@ -13,7 +13,7 @@ import MBProgressHUD
 protocol DrawerDelegate{
     func openLeftMenu()
     func selectMenu(menu:String)
-    func showOrderDetail(cart:Cart)
+    func showOrderDetail(cart:Cart, completion: ((status: String, message:String, cart:Cart) -> Void)?)
 }
 
 class DrawerViewController: UIViewController, DrawerDelegate {
@@ -34,6 +34,9 @@ class DrawerViewController: UIViewController, DrawerDelegate {
         self.drawerController?.maximumLeftDrawerWidth = self.view.frame.width - 40
         
         self.selectMenu(Menu.Home)
+        
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        appDelegate.drawerDelegate = self
     
         self.navigationController?.pushViewController(self.drawerController!, animated: false)
     }
@@ -48,10 +51,16 @@ class DrawerViewController: UIViewController, DrawerDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    func showOrderDetail(cart: Cart) {
-        let historyDetailViewController:HistoryDetailViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("HistoryDetailViewController") as? HistoryDetailViewController)!
-        historyDetailViewController.cart = cart
-        self.drawerController?.centerViewController.navigationController?.pushViewController(historyDetailViewController, animated: false)
+    func showOrderDetail(cart: Cart, completion: ((status: String, message:String, cart:Cart) -> Void)?) {
+        OrderModel.getOrderDetail(cart, completion: { (status, message, cart) -> Void in
+            let historyDetailViewController:HistoryDetailViewController = (UIStoryboard.init(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("HistoryDetailViewController") as? HistoryDetailViewController)!
+            historyDetailViewController.cart = cart
+            self.drawerController?.centerViewController.navigationController?.pushViewController(historyDetailViewController, animated: false)
+            
+            if (completion != nil) {
+                completion!(status: status, message: message, cart: cart)
+            }
+        })
     }
     
     func openLeftMenu(){

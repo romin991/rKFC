@@ -79,11 +79,7 @@ class AdsViewController: UIViewController, UICollectionViewDelegate, UICollectio
 
     @IBAction func setLocationButtonClicked(sender: AnyObject) {
         if (self.drawerDelegate != nil){
-            if (CartModel.isPendingCartNotEmpty()){
-                self.drawerDelegate?.selectMenu(Menu.Menu)
-            } else {
-                self.drawerDelegate?.selectMenu(Menu.Main)
-            }
+            self.drawerDelegate?.selectMenu(Menu.Main)
         }
     }
     

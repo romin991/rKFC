@@ -16,7 +16,8 @@ class LeftViewController: UIViewController, UITableViewDelegate, UITableViewData
     var menus:[String] = []
     
     func registerNotification(){
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"refreshDataSource", name: NotificationKey.LanguageChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"refreshLanguage", name: NotificationKey.LanguageChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"refreshDataSource", name: NotificationKey.Login, object: nil)
     }
     
     override func awakeFromNib() {
@@ -31,6 +32,10 @@ class LeftViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        self.refreshDataSource()
+    }
+    
+    func refreshDataSource(){
         if (UserModel.getUser().customerId == ""){
             self.menus = [
                 Menu.Home,
@@ -60,7 +65,7 @@ class LeftViewController: UIViewController, UITableViewDelegate, UITableViewData
         // Dispose of any resources that can be recreated.
     }
     
-    func refreshDataSource(){
+    func refreshLanguage(){
         self.languageId = NSUserDefaults.standardUserDefaults().objectForKey("LanguageId") as! String
         self.tableView.reloadData()
     }

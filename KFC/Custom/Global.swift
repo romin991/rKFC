@@ -13,12 +13,17 @@ struct ApiKey {
     static let Google = "AIzaSyDL2_fjawveP2tkRDgtk3mT6sDErddQ-a8"
 }
 
+struct ImportantID{
+    static let Breakfast = "16"
+}
+
 struct NotificationKey {
     static let ImageAdsDownloaded = "ImageAdsDownloaded"
     static let ImageItemDownloaded = "ImageItemDownloaded"
     static let ImageCategoryDownloaded = "ImageCategoryDownloaded"
     static let ImagePaymentDownloaded = "ImagePaymentDownloaded"
     static let LanguageChanged = "LanguageChanged"
+    static let Login = "Login"
 }
     
 struct Path {
@@ -179,6 +184,18 @@ struct Wording {
             LanguageID.Indonesia : "Harap tambah addition ke keranjang.",
             LanguageID.English : "Please add more addition to cart."
         ]
+        static let BreakfastFailed:[String:String] = [
+            LanguageID.Indonesia : "Menu hanya tersedia mulai dari jam",
+            LanguageID.English : "This menu only available at"
+        ]
+        static let BreakfastNotAvailable:[String:String] = [
+            LanguageID.Indonesia : "Menu breakfast tidak tersedia di sini",
+            LanguageID.English : "Breakfast menu is not available at this store"
+        ]
+        static let TOCNotAgree:[String:String] = [
+            LanguageID.Indonesia : "Anda harus menyetujui syarat dan ketentuan",
+            LanguageID.English : "You must agree to the terms and conditions"
+        ]
     }
     
     struct Profile {
@@ -198,6 +215,7 @@ struct Wording {
         static let RegisterHere:[String:String] = [LanguageID.Indonesia : "Daftar di sini", LanguageID.English : "Sign Up Here"]
         static let Register:[String:String] = [LanguageID.Indonesia : "Daftar", LanguageID.English : "Sign Up"]
         static let Skip:[String:String] = [LanguageID.Indonesia : "Lewati", LanguageID.English : "Skip"]
+        static let ClearCart:[String:String] = [LanguageID.Indonesia : "Kosongkan Keranjang", LanguageID.English : "Clear Cart"]
         static let ForgotPassword:[String:String] = [LanguageID.Indonesia : "Lupa Kata Sandi?", LanguageID.English : "Forgot Password?"]
         static let Login:[String:String] = [LanguageID.Indonesia : "Masuk", LanguageID.English : "Sign In"]
         static let LoginHere:[String:String] = [LanguageID.Indonesia : "Masuk Di Sini", LanguageID.English : "Sign In Here"]
@@ -216,6 +234,8 @@ struct Wording {
         static let YouAreNotLoggedIn:[String:String] = [LanguageID.Indonesia : "Anda belum masuk", LanguageID.English : "You are not logged in"]
         static let HereIsYourShoppingCart:[String:String] = [LanguageID.Indonesia : "Keranjang belanja Anda di sini. Klik setelah selesai belanja", LanguageID.English : "Here is your shopping cart. Click when done shopping"]
         static let YourOrderHasBeenSent:[String:String] = [LanguageID.Indonesia : "Pesanan anda telah terkirim", LanguageID.English : "Your order has been sent"]
+        static let NotAvailable:[String:String] = [LanguageID.Indonesia : "Tidak Tersedia", LanguageID.English : "Not Available"]
+        static let Close:[String:String] = [LanguageID.Indonesia : "Tutup", LanguageID.English : "Close"]
     }
     
     struct Status{
