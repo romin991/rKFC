@@ -1942,7 +1942,9 @@
                                     <constraint firstAttribute="trailing" secondItem="9Bh-ey-M2t" secondAttribute="trailing" id="815-4H-YB0"/>
                                     <constraint firstAttribute="trailing" secondItem="ae7-sh-nlW" secondAttribute="trailing" id="Cod-8a-qub"/>
                                     <constraint firstItem="ae7-sh-nlW" firstAttribute="leading" secondItem="OvV-hh-qHo" secondAttribute="leading" id="TWt-WJ-IsC"/>
-                                    <constraint firstItem="qme-L6-YZP" firstAttribute="top" secondItem="OvV-hh-qHo" secondAttribute="top" id="VW7-7Z-cKV"/>
+                                    <constraint firstItem="qme-L6-YZP" firstAttribute="top" secondItem="OvV-hh-qHo" secondAttribute="top" id="VW7-7Z-cKV">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="30"/>
+                                    </constraint>
                                     <constraint firstAttribute="bottom" secondItem="9Bh-ey-M2t" secondAttribute="bottom" id="VkT-Iq-OwW"/>
                                     <constraint firstItem="qme-L6-YZP" firstAttribute="centerX" secondItem="OvV-hh-qHo" secondAttribute="centerX" id="c6r-qT-b3k"/>
                                     <constraint firstItem="9Bh-ey-M2t" firstAttribute="top" secondItem="ae7-sh-nlW" secondAttribute="bottom" id="nH0-Bp-b7C"/>
@@ -1994,6 +1996,8 @@
                             <constraint firstItem="JS5-Jj-TII" firstAttribute="top" secondItem="3oo-uD-4xS" secondAttribute="top" id="5r6-oE-sBQ"/>
                             <constraint firstAttribute="trailing" secondItem="OvV-hh-qHo" secondAttribute="trailing" id="GXk-U1-jtn"/>
                             <constraint firstItem="OvV-hh-qHo" firstAttribute="centerX" secondItem="3oo-uD-4xS" secondAttribute="centerX" id="Hvy-Bp-BNk"/>
+                            <constraint firstItem="OvV-hh-qHo" firstAttribute="centerY" secondItem="3oo-uD-4xS" secondAttribute="centerY" id="RqH-KD-jUf"/>
+                            <constraint firstItem="OvV-hh-qHo" firstAttribute="top" secondItem="3oo-uD-4xS" secondAttribute="topMargin" constant="150" id="V92-XM-Cya"/>
                             <constraint firstItem="JS5-Jj-TII" firstAttribute="leading" secondItem="3oo-uD-4xS" secondAttribute="leading" id="iZY-RX-lqV"/>
                             <constraint firstItem="OvV-hh-qHo" firstAttribute="leading" secondItem="3oo-uD-4xS" secondAttribute="leading" id="oZ2-aa-96j"/>
                             <constraint firstItem="OvV-hh-qHo" firstAttribute="centerY" secondItem="3oo-uD-4xS" secondAttribute="centerY" id="ovN-jr-74S"/>
@@ -2010,6 +2014,8 @@
                                 <exclude reference="wO3-Y0-2pk"/>
                                 <exclude reference="GXk-U1-jtn"/>
                                 <exclude reference="Hvy-Bp-BNk"/>
+                                <exclude reference="RqH-KD-jUf"/>
+                                <exclude reference="V92-XM-Cya"/>
                                 <exclude reference="oZ2-aa-96j"/>
                                 <exclude reference="ovN-jr-74S"/>
                             </mask>
@@ -2025,6 +2031,8 @@
                                 <include reference="wO3-Y0-2pk"/>
                                 <include reference="GXk-U1-jtn"/>
                                 <include reference="Hvy-Bp-BNk"/>
+                                <include reference="RqH-KD-jUf"/>
+                                <include reference="V92-XM-Cya"/>
                                 <include reference="oZ2-aa-96j"/>
                                 <include reference="ovN-jr-74S"/>
                             </mask>
