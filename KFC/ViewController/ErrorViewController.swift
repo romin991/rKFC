@@ -21,6 +21,8 @@ class ErrorViewController: UIViewController {
         
         self.titleLabel.text = Wording.Warning.Sorry[self.languageId]
         self.subtitleLabel.text = Wording.Warning.LocationOutOfRange[self.languageId]
+        self.subtitleLabel.lineBreakMode = .ByWordWrapping // or NSLineBreakMode.ByWordWrapping
+        self.subtitleLabel.numberOfLines = 0
     }
 
     override func didReceiveMemoryWarning() {
