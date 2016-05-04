@@ -196,10 +196,12 @@ class OrderModel: NSObject {
                 cartModifierParams.addObject(cartModifierParam)
             }
             
+            let descriptor: NSSortDescriptor = NSSortDescriptor(key: "addition_category_id", ascending: true)
+            let sortedCartModifierParams: NSArray = cartModifierParams.sortedArrayUsingDescriptors([descriptor])
             let cartItemParam:[String:AnyObject] = [
                 "product_id" : cartItem.productId!,
                 "quantity" : cartItem.quantity!,
-                "detail" : cartModifierParams
+                "detail" : sortedCartModifierParams
             ]
             cartItemParams.addObject(cartItemParam)
         }

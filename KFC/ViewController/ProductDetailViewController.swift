@@ -342,7 +342,12 @@ class ProductDetailViewController: UIViewController, ModifierParentDelegate {
         totalHeight += 38
         
         let modifier = self.modifiers[indexPath.row]
-        totalHeight += modifier.modifierOptions.count * 38
+        if modifier.modifierOptions.count > 1 {
+            totalHeight += modifier.modifierOptions.count * 38
+        }
+        
+        
+    
         
         return CGFloat(totalHeight)
     }
