@@ -183,7 +183,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             
             let user = UserModel.getUser()
             user.fullname = self.nameField.text
-            user.handphone = self.phoneField.text
+            let replacedPhoneNo = (self.phoneField.text! as NSString).stringByReplacingCharactersInRange(NSMakeRange(0, 1), withString: "62")
+            user.handphone = replacedPhoneNo
             user.birthdate = formatter.dateFromString(self.birthdateField.text!)
             
             if (self.genderMaleButton.selected){
