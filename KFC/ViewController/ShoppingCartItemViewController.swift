@@ -27,7 +27,7 @@ class ShoppingCartItemViewController: UIViewController, ModifierParentDelegate {
     @IBOutlet weak var warningHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var chooseQuantityLabel: UILabel!
-    
+    var totalRow : Int?
     var product : Product!
     var category : Category!
     var modifiers : [Modifier]!
@@ -51,7 +51,12 @@ class ShoppingCartItemViewController: UIViewController, ModifierParentDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
+        totalRow = 0
+        for modifier in self.modifiers {
+            if modifier.modifierOptions.count > 1 {
+                totalRow  = totalRow! + 1;
+            }
+        }
         CustomView.custom(self.quantityView, borderColor: self.quantityView.backgroundColor!, cornerRadius: 22, roundingCorners: UIRectCorner.AllCorners, borderWidth: 1)
 
         self.refreshImageView()
@@ -239,7 +244,7 @@ class ShoppingCartItemViewController: UIViewController, ModifierParentDelegate {
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.modifiers.count
+        return totalRow!
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
