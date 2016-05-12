@@ -257,6 +257,43 @@ class ProductDetailViewController: UIViewController, ModifierParentDelegate {
                             
                             price = price.decimalNumberByAdding(modifierPrice)
                         }
+                        else if(modifierOption.quantity == 0 && modifierOption.selected!)
+                        {
+                            let results = savedCartItem!.cartModifiers.filter{$0.modifierId == modifier.id && $0.modifierOptionId == modifierOption.id}
+                            if (results.isEmpty == false) {
+                                let cartModifier = results.first
+                                
+                                cartModifier?.quantity = (cartModifier?.quantity)! + modifierOption.quantity
+                            } else {
+                                let cartModifier:CartModifier = CartModifier.init(
+                                    guid: nil,
+                                    cartGuid: nil,
+                                    cartItemGuid: nil,
+                                    modifierId: modifier.id,
+                                    modifierOptionId: modifierOption.id,
+                                    quantity: modifier.minimumSelect! * product.quantity
+                                )
+                                cartModifier.names = modifierOption.names
+                                savedCartItem?.cartModifiers.append(cartModifier)
+                                
+                            }
+                            
+                            let modifierPrice:NSDecimalNumber = NSDecimalNumber.init(string: modifierOption.price)
+                            var modifierPPN:NSDecimalNumber = NSDecimalNumber.init(long: 0)
+                            var modifierTax:NSDecimalNumber = NSDecimalNumber.init(long: 0)
+                            
+                            if (modifierOption.taxable == true) {
+                                modifierTax =  NSDecimalNumber.init(string: store.tax).decimalNumberByDividingBy(NSDecimalNumber.init(long:100)).decimalNumberByMultiplyingBy(modifierPrice)
+                                tax = tax.decimalNumberByAdding(modifierTax)
+                            }
+                            if (modifierOption.ppn == true) {
+                                modifierPPN = NSDecimalNumber.init(string: store.ppn).decimalNumberByDividingBy(NSDecimalNumber.init(long:100)).decimalNumberByMultiplyingBy(modifierPrice)
+                                ppn = ppn.decimalNumberByAdding(modifierPPN)
+                            }
+                            
+                            price = price.decimalNumberByAdding(modifierPrice)
+                        }
+
                     }
                 }
                 
@@ -292,6 +329,35 @@ class ProductDetailViewController: UIViewController, ModifierParentDelegate {
                                 modifierId: modifier.id,
                                 modifierOptionId: modifierOption.id,
                                 quantity: modifierOption.quantity
+                            )
+                            cartModifier.names = modifierOption.names
+                            
+                            let modifierPrice:NSDecimalNumber = NSDecimalNumber.init(string: modifierOption.price)
+                            var modifierPPN:NSDecimalNumber = NSDecimalNumber.init(long: 0)
+                            var modifierTax:NSDecimalNumber = NSDecimalNumber.init(long: 0)
+                            
+                            if (modifierOption.taxable == true) {
+                                modifierTax =  NSDecimalNumber.init(string: store.tax).decimalNumberByDividingBy(NSDecimalNumber.init(long:100)).decimalNumberByMultiplyingBy(modifierPrice)
+                                tax = tax.decimalNumberByAdding(modifierTax)
+                            }
+                            if (modifierOption.ppn == true) {
+                                modifierPPN = NSDecimalNumber.init(string: store.ppn).decimalNumberByDividingBy(NSDecimalNumber.init(long:100)).decimalNumberByMultiplyingBy(modifierPrice)
+                                ppn = ppn.decimalNumberByAdding(modifierPPN)
+                            }
+                            
+                            price = price.decimalNumberByAdding(modifierPrice)
+                            
+                            cartModifiers.append(cartModifier)
+                        }
+                        else if (modifierOption.quantity == 0 && modifierOption.selected!)
+                        {
+                            let cartModifier:CartModifier = CartModifier.init(
+                                guid: nil,
+                                cartGuid: nil,
+                                cartItemGuid: nil,
+                                modifierId: modifier.id,
+                                modifierOptionId: modifierOption.id,
+                                quantity: modifier.minimumSelect! * product.quantity
                             )
                             cartModifier.names = modifierOption.names
                             
@@ -364,7 +430,7 @@ class ProductDetailViewController: UIViewController, ModifierParentDelegate {
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return totalRow!
+        return self.totalRow!
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
